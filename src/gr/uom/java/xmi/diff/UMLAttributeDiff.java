@@ -61,4 +61,8 @@ public class UMLAttributeDiff {
 					(addedAttribute.isFinal() ? "final" : "non-final")).append("\n");
 		return sb.toString();
 	}
+
+	public boolean isTypeChanged() {
+		return typeChanged;
+	}
 }

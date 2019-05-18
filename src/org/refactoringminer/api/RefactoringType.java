@@ -1,12 +1,12 @@
 package org.refactoringminer.api;
 
+import org.refactoringminer.util.AstUtils;
+import org.refactoringminer.utils.RefactoringRelationship;
+
 import java.util.Collection;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
-import org.refactoringminer.util.AstUtils;
-import org.refactoringminer.utils.RefactoringRelationship;
 
 public enum RefactoringType {
 
@@ -51,7 +51,8 @@ public enum RefactoringType {
 	CHANGE_RETURN_TYPE("Change Return Type", "Change Return Type (.+) to (.+) in method (.+) from class (.+)"),
 	CHANGE_VARIABLE_TYPE("Change Variable Type", "Change Variable Type (.+) to (.+) in method (.+) from class (.+)"),
 	CHANGE_PARAMETER_TYPE("Change Parameter Type", "Change Parameter Type (.+) to (.+) in method (.+) from class (.+)"),
-	CHANGE_ATTRIBUTE_TYPE("Change Attribute Type", "Change Attribute Type (.+) to (.+) in class (.+)");
+	CHANGE_ATTRIBUTE_TYPE("Change Attribute Type", "Change Attribute Type (.+) to (.+) in class (.+)"),
+    CLASS_DIFF_PROVIDER("Import Statements changed", "");
 
 	private String displayName;
 	private Pattern regex;

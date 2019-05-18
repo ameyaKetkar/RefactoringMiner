@@ -29,3 +29,11 @@ src/META-INF/persistence.xml
 .project
 .classpath
 /.settings/
+.idea/workspace.xml
+.idea/vcs.xml
+.idea/uiDesigner.xml
+.idea/misc.xml
+.idea/gradle.xml
+.idea/encodings.xml
+.idea/dictionaries/ameya.xml
+.idea/compiler.xml

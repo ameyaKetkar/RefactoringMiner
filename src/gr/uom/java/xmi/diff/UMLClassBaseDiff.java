@@ -1,5 +1,9 @@
 package gr.uom.java.xmi.diff;
 
+import org.refactoringminer.api.Refactoring;
+import org.refactoringminer.api.RefactoringMinerTimedOutException;
+import org.refactoringminer.util.PrefixSuffixUtils;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Iterator;
@@ -9,10 +13,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
-
-import org.refactoringminer.api.Refactoring;
-import org.refactoringminer.api.RefactoringMinerTimedOutException;
-import org.refactoringminer.util.PrefixSuffixUtils;
 
 import gr.uom.java.xmi.UMLAnonymousClass;
 import gr.uom.java.xmi.UMLAttribute;
@@ -24,12 +24,12 @@ import gr.uom.java.xmi.decomposition.OperationInvocation;
 import gr.uom.java.xmi.decomposition.StatementObject;
 import gr.uom.java.xmi.decomposition.UMLOperationBodyMapper;
 import gr.uom.java.xmi.decomposition.VariableDeclaration;
+import gr.uom.java.xmi.decomposition.replacement.ConsistentReplacementDetector;
+import gr.uom.java.xmi.decomposition.replacement.MergeVariableReplacement;
 import gr.uom.java.xmi.decomposition.replacement.MethodInvocationReplacement;
 import gr.uom.java.xmi.decomposition.replacement.Replacement;
 import gr.uom.java.xmi.decomposition.replacement.Replacement.ReplacementType;
 import gr.uom.java.xmi.decomposition.replacement.SplitVariableReplacement;
-import gr.uom.java.xmi.decomposition.replacement.ConsistentReplacementDetector;
-import gr.uom.java.xmi.decomposition.replacement.MergeVariableReplacement;
 
 public abstract class UMLClassBaseDiff implements Comparable<UMLClassBaseDiff> {
 
@@ -58,7 +58,7 @@ public abstract class UMLClassBaseDiff implements Comparable<UMLClassBaseDiff> {
 	protected List<UMLAttributeDiff> attributeDiffList;
 	protected List<Refactoring> refactorings;
 	private Set<MethodInvocationReplacement> consistentMethodInvocationRenames;
-	private Set<CandidateAttributeRefactoring> candidateAttributeRenames = new LinkedHashSet<CandidateAttributeRefactoring>();
+	private Set<CandidateAttributeRefactoring> candidateAttributeRenames = new LinkedHashSet<>();
 	private Set<CandidateMergeVariableRefactoring> candidateAttributeMerges = new LinkedHashSet<CandidateMergeVariableRefactoring>();
 	private Set<CandidateSplitVariableRefactoring> candidateAttributeSplits = new LinkedHashSet<CandidateSplitVariableRefactoring>();
 	private UMLModelDiff modelDiff;
@@ -69,18 +69,18 @@ public abstract class UMLClassBaseDiff implements Comparable<UMLClassBaseDiff> {
 		this.visibilityChanged = false;
 		this.abstractionChanged = false;
 		this.superclassChanged = false;
-		this.addedOperations = new ArrayList<UMLOperation>();
-		this.removedOperations = new ArrayList<UMLOperation>();
-		this.addedAttributes = new ArrayList<UMLAttribute>();
-		this.removedAttributes = new ArrayList<UMLAttribute>();
-		this.operationBodyMapperList = new ArrayList<UMLOperationBodyMapper>();
-		this.addedImplementedInterfaces = new ArrayList<UMLType>();
-		this.removedImplementedInterfaces = new ArrayList<UMLType>();
-		this.addedAnonymousClasses = new ArrayList<UMLAnonymousClass>();
-		this.removedAnonymousClasses = new ArrayList<UMLAnonymousClass>();
-		this.operationDiffList = new ArrayList<UMLOperationDiff>();
-		this.attributeDiffList = new ArrayList<UMLAttributeDiff>();
-		this.refactorings = new ArrayList<Refactoring>();
+		this.addedOperations = new ArrayList<>();
+		this.removedOperations = new ArrayList<>();
+		this.addedAttributes = new ArrayList<>();
+		this.removedAttributes = new ArrayList<>();
+		this.operationBodyMapperList = new ArrayList<>();
+		this.addedImplementedInterfaces = new ArrayList<>();
+		this.removedImplementedInterfaces = new ArrayList<>();
+		this.addedAnonymousClasses = new ArrayList<>();
+		this.removedAnonymousClasses = new ArrayList<>();
+		this.operationDiffList = new ArrayList<>();
+		this.attributeDiffList = new ArrayList<>();
+		this.refactorings = new ArrayList<>();
 		this.modelDiff = modelDiff;
 	}
 
@@ -454,10 +454,10 @@ public abstract class UMLClassBaseDiff implements Comparable<UMLClassBaseDiff> {
 	}
 
 	public List<Refactoring> getRefactorings() {
-		List<Refactoring> refactorings = new ArrayList<Refactoring>(this.refactorings);
-		Map<Replacement, Set<CandidateAttributeRefactoring>> map = new LinkedHashMap<Replacement, Set<CandidateAttributeRefactoring>>();
-		Map<MergeVariableReplacement, Set<CandidateMergeVariableRefactoring>> mergeMap = new LinkedHashMap<MergeVariableReplacement, Set<CandidateMergeVariableRefactoring>>();
-		Map<SplitVariableReplacement, Set<CandidateSplitVariableRefactoring>> splitMap = new LinkedHashMap<SplitVariableReplacement, Set<CandidateSplitVariableRefactoring>>();
+		List<Refactoring> refactorings = new ArrayList<>(this.refactorings);
+		Map<Replacement, Set<CandidateAttributeRefactoring>> map = new LinkedHashMap<>();
+		Map<MergeVariableReplacement, Set<CandidateMergeVariableRefactoring>> mergeMap = new LinkedHashMap<>();
+		Map<SplitVariableReplacement, Set<CandidateSplitVariableRefactoring>> splitMap = new LinkedHashMap<>();
 		for(UMLOperationBodyMapper mapper : operationBodyMapperList) {
 			for(Refactoring refactoring : mapper.getRefactorings()) {
 				if(refactorings.contains(refactoring)) {
@@ -613,6 +613,9 @@ public abstract class UMLClassBaseDiff implements Comparable<UMLClassBaseDiff> {
 				}
 			}
 		}
+
+		ClassDiff classDiffProvider = new ClassDiff(originalClass,nextClass);
+		refactorings.add(classDiffProvider);
 		return refactorings;
 	}
 

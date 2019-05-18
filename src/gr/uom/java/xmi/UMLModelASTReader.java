@@ -1,16 +1,5 @@
 package gr.uom.java.xmi;
 
-import java.io.File;
-import java.util.ArrayList;
-import java.util.Enumeration;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.regex.Matcher;
-
-import javax.swing.tree.DefaultMutableTreeNode;
-import javax.swing.tree.TreeNode;
-
 import org.eclipse.jdt.core.JavaCore;
 import org.eclipse.jdt.core.dom.AST;
 import org.eclipse.jdt.core.dom.ASTNode;
@@ -37,6 +26,17 @@ import org.eclipse.jdt.core.dom.Type;
 import org.eclipse.jdt.core.dom.TypeDeclaration;
 import org.eclipse.jdt.core.dom.TypeParameter;
 import org.eclipse.jdt.core.dom.VariableDeclarationFragment;
+
+import java.io.File;
+import java.util.ArrayList;
+import java.util.Enumeration;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.regex.Matcher;
+
+import javax.swing.tree.DefaultMutableTreeNode;
+import javax.swing.tree.TreeNode;
 
 import gr.uom.java.xmi.LocationInfo.CodeElementType;
 import gr.uom.java.xmi.decomposition.OperationBody;
@@ -117,21 +117,25 @@ public class UMLModelASTReader {
 			packageName = "";
 		
 		List<ImportDeclaration> imports = compilationUnit.imports();
-		List<String> importedTypes = new ArrayList<String>();
+		List<String> importedTypes = new ArrayList<>();
+		List<String> importedOnDemandTypes= new ArrayList<>();
 		for(ImportDeclaration importDeclaration : imports) {
 			importedTypes.add(importDeclaration.getName().getFullyQualifiedName());
+			if(importDeclaration.isOnDemand()){
+				importedOnDemandTypes.add(importDeclaration.getName().getFullyQualifiedName());
+			}
 		}
 		List<AbstractTypeDeclaration> topLevelTypeDeclarations = compilationUnit.types();
         for(AbstractTypeDeclaration abstractTypeDeclaration : topLevelTypeDeclarations) {
         	if(abstractTypeDeclaration instanceof TypeDeclaration) {
         		TypeDeclaration topLevelTypeDeclaration = (TypeDeclaration)abstractTypeDeclaration;
-        		processTypeDeclaration(compilationUnit, topLevelTypeDeclaration, packageName, sourceFilePath, importedTypes);
+        		processTypeDeclaration(compilationUnit, topLevelTypeDeclaration, packageName, sourceFilePath, importedTypes, importedOnDemandTypes);
         	}
         }
 	}
 
 	private void processTypeDeclaration(CompilationUnit cu, TypeDeclaration typeDeclaration, String packageName, String sourceFile,
-			List<String> importedTypes) {
+										List<String> importedTypes, List<String> importedOnDemandTypes) {
 		Javadoc javaDoc = typeDeclaration.getJavadoc();
 		if(javaDoc != null) {
 			List<TagElement> tags = javaDoc.tags();
@@ -149,7 +153,7 @@ public class UMLModelASTReader {
 		}
 		String className = typeDeclaration.getName().getFullyQualifiedName();
 		LocationInfo locationInfo = generateLocationInfo(cu, sourceFile, typeDeclaration, CodeElementType.TYPE_DECLARATION);
-		UMLClass umlClass = new UMLClass(packageName, className, locationInfo, typeDeclaration.isPackageMemberTypeDeclaration(), importedTypes);
+		UMLClass umlClass = new UMLClass(packageName, className, locationInfo, typeDeclaration.isPackageMemberTypeDeclaration(), importedTypes, importedOnDemandTypes);
 		
 		if(typeDeclaration.isInterface()) {
 			umlClass.setInterface(true);
@@ -251,7 +255,7 @@ public class UMLModelASTReader {
 		
 		TypeDeclaration[] types = typeDeclaration.getTypes();
 		for(TypeDeclaration type : types) {
-			processTypeDeclaration(cu, type, umlClass.getName(), sourceFile, importedTypes);
+			processTypeDeclaration(cu, type, umlClass.getName(), sourceFile, importedTypes, importedOnDemandTypes);
 		}
 	}
 

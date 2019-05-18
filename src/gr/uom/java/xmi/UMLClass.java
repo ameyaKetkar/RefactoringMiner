@@ -1,7 +1,5 @@
 package gr.uom.java.xmi;
 
-import gr.uom.java.xmi.diff.StringDistance;
-
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
@@ -9,6 +7,8 @@ import java.util.List;
 import java.util.ListIterator;
 import java.util.Map;
 import java.util.Set;
+
+import gr.uom.java.xmi.diff.StringDistance;
 
 public class UMLClass extends UMLAbstractClass implements Comparable<UMLClass>, Serializable, LocationInfoProvider {
 	private String qualifiedName;
@@ -22,9 +22,10 @@ public class UMLClass extends UMLAbstractClass implements Comparable<UMLClass>, 
     private List<UMLType> implementedInterfaces;
     private List<UMLAnonymousClass> anonymousClassList;
     private List<String> importedTypes;
+	private List<String> importedTypesOnDemand;
     private List<UMLTypeParameter> typeParameters;
     
-    public UMLClass(String packageName, String name, LocationInfo locationInfo, boolean topLevel, List<String> importedTypes) {
+    public UMLClass(String packageName, String name, LocationInfo locationInfo, boolean topLevel, List<String> importedTypes, List<String> importedOnDemandTypes) {
     	super();
     	this.locationInfo = locationInfo;
     	this.packageName = packageName;
@@ -70,6 +71,7 @@ public class UMLClass extends UMLAbstractClass implements Comparable<UMLClass>, 
         this.implementedInterfaces = new ArrayList<UMLType>();
         this.anonymousClassList = new ArrayList<UMLAnonymousClass>();
         this.importedTypes = importedTypes;
+		this.importedTypesOnDemand = importedOnDemandTypes;
         this.typeParameters = new ArrayList<UMLTypeParameter>();
     }
 
@@ -146,6 +148,10 @@ public class UMLClass extends UMLAbstractClass implements Comparable<UMLClass>, 
 
 	public List<String> getImportedTypes() {
 		return importedTypes;
+	}
+
+	public List<String> getImportedTypesOnDemand(){
+		return this.importedTypesOnDemand;
 	}
 
 	public List<UMLAnonymousClass> getAnonymousClassList() {

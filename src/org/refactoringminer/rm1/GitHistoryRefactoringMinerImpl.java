@@ -1,38 +1,6 @@
 package org.refactoringminer.rm1;
 
-import gr.uom.java.xmi.UMLModel;
-import gr.uom.java.xmi.UMLModelASTReader;
-
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.io.StringWriter;
-import java.net.URL;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Enumeration;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.LinkedHashMap;
-import java.util.LinkedHashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Properties;
-import java.util.Set;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.Future;
-import java.util.concurrent.TimeUnit;
-import java.util.concurrent.TimeoutException;
-import java.util.regex.Matcher;
-import java.util.zip.ZipEntry;
-import java.util.zip.ZipFile;
+import static java.util.stream.Collectors.toSet;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
@@ -57,6 +25,41 @@ import org.refactoringminer.api.RefactoringType;
 import org.refactoringminer.util.GitServiceImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.io.StringWriter;
+import java.net.URL;
+import java.util.AbstractMap.SimpleImmutableEntry;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Enumeration;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.LinkedHashMap;
+import java.util.LinkedHashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Properties;
+import java.util.Set;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
+import java.util.regex.Matcher;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipFile;
+
+import gr.uom.java.xmi.UMLModel;
+import gr.uom.java.xmi.UMLModelASTReader;
 
 public class GitHistoryRefactoringMinerImpl implements GitHistoryRefactoringMiner {
 
@@ -102,12 +105,14 @@ public class GitHistoryRefactoringMinerImpl implements GitHistoryRefactoringMine
 			RefactoringType.CHANGE_RETURN_TYPE,
 			RefactoringType.CHANGE_VARIABLE_TYPE,
 			RefactoringType.CHANGE_PARAMETER_TYPE,
-			RefactoringType.CHANGE_ATTRIBUTE_TYPE
+			RefactoringType.CHANGE_ATTRIBUTE_TYPE,
+			RefactoringType.CLASS_DIFF_PROVIDER
+
 		);
 	}
 
 	public void setRefactoringTypesToConsider(RefactoringType ... types) {
-		this.refactoringTypesToConsider = new HashSet<RefactoringType>();
+		this.refactoringTypesToConsider = new HashSet<>();
 		for (RefactoringType type : types) {
 			this.refactoringTypesToConsider.add(type);
 		}
@@ -483,4 +488,42 @@ public class GitHistoryRefactoringMinerImpl implements GitHistoryRefactoringMine
 		}
 		return null;
 	}
+
+	public SimpleImmutableEntry<Set<String>, Set<String>> getBeforeAfterFileStruct(GitService gitService, Repository repository, RevCommit currentCommit) throws Exception {
+		List<String> filePathsBefore = new ArrayList<>();
+		List<String> filePathsCurrent = new ArrayList<>();
+		Map<String, String> renamedFilesHint = new HashMap<>();
+		gitService.fileTreeDiff(repository, currentCommit, filePathsBefore, filePathsCurrent, renamedFilesHint);
+
+		try (RevWalk walk = new RevWalk(repository)) {
+			if (!filePathsBefore.isEmpty() && !filePathsCurrent.isEmpty() && currentCommit.getParentCount() > 0) {
+				RevCommit parentCommit = currentCommit.getParent(0);
+				return new SimpleImmutableEntry<>(getB4AfFileStruct(repository, parentCommit), getB4AfFileStruct(repository, currentCommit));
+			}
+			walk.dispose();
+		}catch (Exception e){
+			e.printStackTrace();
+		}
+		return new SimpleImmutableEntry<>(new HashSet<>(), new HashSet<>());
+	}
+
+	Set<String> getB4AfFileStruct(Repository repository, RevCommit commit) {
+		Set<String> repositoryDirectories = new HashSet<>();
+		RevTree parentTree = commit.getTree();
+		try (TreeWalk treeWalk = new TreeWalk(repository)) {
+			treeWalk.addTree(parentTree);
+			treeWalk.setRecursive(true);
+			while (treeWalk.next()) {
+				String pathString = treeWalk.getPathString();
+				if(pathString.endsWith(".java")) {
+					repositoryDirectories.add(pathString.replace(".java",""));
+				}
+			}
+		}
+		catch (Exception e){
+			e.printStackTrace();
+		}
+		return repositoryDirectories.stream().map(x -> x.replace("/",".")).collect(toSet());
+	}
+
 }
