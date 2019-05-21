@@ -33,13 +33,23 @@ public class UMLOperation implements Comparable<UMLOperation>, Serializable, Loc
 	private OperationBody operationBody;
 	private boolean testAnnotation;
 	private List<UMLAnonymousClass> anonymousClassList;
+	private List<UMLTypeParameter> typeParameters;
 	
 	public UMLOperation(String name, LocationInfo locationInfo) {
 		this.locationInfo = locationInfo;
         this.name = name;
         this.parameters = new ArrayList<UMLParameter>();
         this.anonymousClassList = new ArrayList<UMLAnonymousClass>();
+        this.typeParameters = new ArrayList<UMLTypeParameter>();
     }
+
+	public List<UMLTypeParameter> getTypeParameters() {
+		return typeParameters;
+	}
+	
+	public void addTypeParameter(UMLTypeParameter typeParameter) {
+		typeParameters.add(typeParameter);
+	}
 
 	public LocationInfo getLocationInfo() {
 		return locationInfo;
@@ -125,6 +135,12 @@ public class UMLOperation implements Comparable<UMLOperation>, Serializable, Loc
 		if(operationBody != null)
 			return operationBody.getAllVariableDeclarations();
 		return new ArrayList<VariableDeclaration>();
+	}
+
+	public VariableDeclaration getVariableDeclaration(String variableName) {
+		if(operationBody != null)
+			return operationBody.getVariableDeclaration(variableName);
+		return null;
 	}
 
 	public Map<String, UMLType> variableTypeMap() {

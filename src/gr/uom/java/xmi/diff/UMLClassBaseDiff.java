@@ -1015,11 +1015,11 @@ public abstract class UMLClassBaseDiff implements Comparable<UMLClassBaseDiff> {
 
 	private void updateMapperSet(TreeSet<UMLOperationBodyMapper> mapperSet, UMLOperation removedOperation, UMLOperation addedOperation, int differenceInPosition) throws RefactoringMinerTimedOutException {
 		UMLOperationBodyMapper operationBodyMapper = new UMLOperationBodyMapper(removedOperation, addedOperation, this);
-		List<AbstractCodeMapping> totalMappings = operationBodyMapper.getMappings();
+		List<AbstractCodeMapping> totalMappings = new ArrayList<AbstractCodeMapping>(operationBodyMapper.getMappings());
 		int mappings = operationBodyMapper.mappingsWithoutBlocks();
 		if(mappings > 0) {
 			int absoluteDifferenceInPosition = computeAbsoluteDifferenceInPositionWithinClass(removedOperation, addedOperation);
-			if(operationBodyMapper.nonMappedElementsT1() == 0 && operationBodyMapper.nonMappedElementsT2() == 0 && allMappingsAreExactMatches(operationBodyMapper, mappings)) {
+			if(exactMappings(operationBodyMapper, mappings)) {
 				mapperSet.add(operationBodyMapper);
 			}
 			else if(mappedElementsMoreThanNonMappedT1AndT2(mappings, operationBodyMapper) &&
@@ -1062,7 +1062,7 @@ public abstract class UMLClassBaseDiff implements Comparable<UMLClassBaseDiff> {
 		int mappings = operationBodyMapper.mappingsWithoutBlocks();
 		if(mappings > 0) {
 			int absoluteDifferenceInPosition = computeAbsoluteDifferenceInPositionWithinClass(removedOperation, addedOperation);
-			if(operationBodyMapper.nonMappedElementsT1() == 0 && operationBodyMapper.nonMappedElementsT2() == 0 && allMappingsAreExactMatches(operationBodyMapper, mappings)) {
+			if(exactMappings(operationBodyMapper, mappings)) {
 				mapperSet.add(operationBodyMapper);
 			}
 			else if(mappedElementsMoreThanNonMappedT1AndT2(mappings, operationBodyMapper) &&
@@ -1081,6 +1081,48 @@ public abstract class UMLClassBaseDiff implements Comparable<UMLClassBaseDiff> {
 				mapperSet.add(operationBodyMapper);
 			}
 		}
+	}
+
+	private boolean exactMappings(UMLOperationBodyMapper operationBodyMapper, int mappings) {
+		if(allMappingsAreExactMatches(operationBodyMapper, mappings)) {
+			if(operationBodyMapper.nonMappedElementsT1() == 0 && operationBodyMapper.nonMappedElementsT2() == 0)
+				return true;
+			else if(operationBodyMapper.nonMappedElementsT1() > 0 && operationBodyMapper.getNonMappedInnerNodesT1().size() == 0 && operationBodyMapper.nonMappedElementsT2() == 0) {
+				int countableStatements = 0;
+				int parameterizedVariableDeclarationStatements = 0;
+				UMLOperation addedOperation = operationBodyMapper.getOperation2();
+				for(StatementObject statement : operationBodyMapper.getNonMappedLeavesT1()) {
+					if(statement.countableStatement()) {
+						for(String parameterName : addedOperation.getParameterNameList()) {
+							if(statement.getVariableDeclaration(parameterName) != null) {
+								parameterizedVariableDeclarationStatements++;
+								break;
+							}
+						}
+						countableStatements++;
+					}
+				}
+				return countableStatements == parameterizedVariableDeclarationStatements && countableStatements > 0;
+			}
+			else if(operationBodyMapper.nonMappedElementsT1() == 0 && operationBodyMapper.nonMappedElementsT2() > 0 && operationBodyMapper.getNonMappedInnerNodesT2().size() == 0) {
+				int countableStatements = 0;
+				int parameterizedVariableDeclarationStatements = 0;
+				UMLOperation removedOperation = operationBodyMapper.getOperation1();
+				for(StatementObject statement : operationBodyMapper.getNonMappedLeavesT2()) {
+					if(statement.countableStatement()) {
+						for(String parameterName : removedOperation.getParameterNameList()) {
+							if(statement.getVariableDeclaration(parameterName) != null) {
+								parameterizedVariableDeclarationStatements++;
+								break;
+							}
+						}
+						countableStatements++;
+					}
+				}
+				return countableStatements == parameterizedVariableDeclarationStatements && countableStatements > 0;
+			}
+		}
+		return false;
 	}
 
 	private boolean mappedElementsMoreThanNonMappedT1AndT2(int mappings, UMLOperationBodyMapper operationBodyMapper) {

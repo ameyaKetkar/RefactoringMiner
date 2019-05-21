@@ -17,15 +17,18 @@ import org.eclipse.jdt.core.dom.IExtendedModifier;
 import org.eclipse.jdt.core.dom.ImportDeclaration;
 import org.eclipse.jdt.core.dom.Javadoc;
 import org.eclipse.jdt.core.dom.MethodDeclaration;
+import org.eclipse.jdt.core.dom.MethodInvocation;
 import org.eclipse.jdt.core.dom.Modifier;
 import org.eclipse.jdt.core.dom.PackageDeclaration;
 import org.eclipse.jdt.core.dom.SingleVariableDeclaration;
+import org.eclipse.jdt.core.dom.SuperMethodInvocation;
 import org.eclipse.jdt.core.dom.TagElement;
 import org.eclipse.jdt.core.dom.TextElement;
 import org.eclipse.jdt.core.dom.Type;
 import org.eclipse.jdt.core.dom.TypeDeclaration;
 import org.eclipse.jdt.core.dom.TypeParameter;
 import org.eclipse.jdt.core.dom.VariableDeclarationFragment;
+import org.eclipse.jdt.core.dom.VariableDeclarationStatement;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -232,8 +235,9 @@ public class UMLModelASTReader {
     		DefaultMutableTreeNode node = (DefaultMutableTreeNode)enumeration.nextElement();
     		if(node.getUserObject() != null) {
     			AnonymousClassDeclaration anonymous = (AnonymousClassDeclaration)node.getUserObject();
-    			String anonymousName = getAnonymousName(node);
-    			UMLAnonymousClass anonymousClass = processAnonymousClassDeclaration(cu, anonymous, packageName + "." + className, anonymousName, sourceFile);
+    			String anonymousBinaryName = getAnonymousBinaryName(node);
+    			String anonymousCodePath = getAnonymousCodePath(node);
+    			UMLAnonymousClass anonymousClass = processAnonymousClassDeclaration(cu, anonymous, packageName + "." + className, anonymousBinaryName, anonymousCodePath, sourceFile);
     			umlClass.addAnonymousClass(anonymousClass);
     			for(UMLOperation operation : umlClass.getOperations()) {
     				if(operation.getLocationInfo().subsumes(anonymousClass.getLocationInfo())) {
@@ -297,6 +301,17 @@ public class UMLModelASTReader {
 					break;
 				}
 			}
+		}
+		
+		List<TypeParameter> typeParameters = methodDeclaration.typeParameters();
+		for(TypeParameter typeParameter : typeParameters) {
+			UMLTypeParameter umlTypeParameter = new UMLTypeParameter(typeParameter.getName().getFullyQualifiedName());
+			List<Type> typeBounds = typeParameter.typeBounds();
+			for(Type type : typeBounds) {
+				umlTypeParameter.addTypeBound(UMLType.extractTypeObject(type.toString(),
+						generateLocationInfo(cu, sourceFile, type, CodeElementType.TYPE)));
+			}
+			umlOperation.addTypeParameter(umlTypeParameter);
 		}
 		
 		Block block = methodDeclaration.getBody();
@@ -375,24 +390,24 @@ public class UMLModelASTReader {
 		return attributes;
 	}
 	
-	private UMLAnonymousClass processAnonymousClassDeclaration(CompilationUnit cu, AnonymousClassDeclaration anonymous, String packageName, String className, String sourceFile) {
+	private UMLAnonymousClass processAnonymousClassDeclaration(CompilationUnit cu, AnonymousClassDeclaration anonymous, String packageName, String binaryName, String codePath, String sourceFile) {
 		List<BodyDeclaration> bodyDeclarations = anonymous.bodyDeclarations();
 		LocationInfo locationInfo = generateLocationInfo(cu, sourceFile, anonymous, CodeElementType.ANONYMOUS_CLASS_DECLARATION);
-		UMLAnonymousClass anonymousClass = new UMLAnonymousClass(packageName, className, locationInfo);
+		UMLAnonymousClass anonymousClass = new UMLAnonymousClass(packageName, binaryName, codePath, locationInfo);
 		
 		for(BodyDeclaration bodyDeclaration : bodyDeclarations) {
 			if(bodyDeclaration instanceof FieldDeclaration) {
 				FieldDeclaration fieldDeclaration = (FieldDeclaration)bodyDeclaration;
 				List<UMLAttribute> attributes = processFieldDeclaration(cu, fieldDeclaration, false, sourceFile);
 	    		for(UMLAttribute attribute : attributes) {
-	    			attribute.setClassName(anonymousClass.getName());
+	    			attribute.setClassName(anonymousClass.getCodePath());
 	    			anonymousClass.addAttribute(attribute);
 	    		}
 			}
 			else if(bodyDeclaration instanceof MethodDeclaration) {
 				MethodDeclaration methodDeclaration = (MethodDeclaration)bodyDeclaration;
 				UMLOperation operation = processMethodDeclaration(cu, methodDeclaration, packageName, false, sourceFile);
-				operation.setClassName(anonymousClass.getName());
+				operation.setClassName(anonymousClass.getCodePath());
 				anonymousClass.addOperation(operation);
 			}
 		}
@@ -415,8 +430,56 @@ public class UMLModelASTReader {
 		}
 		parentNode.add(childNode);
 	}
-	
-	private String getAnonymousName(DefaultMutableTreeNode node) {
+
+	private String getAnonymousCodePath(DefaultMutableTreeNode node) {
+		AnonymousClassDeclaration anonymous = (AnonymousClassDeclaration)node.getUserObject();
+		String name = "";
+		ASTNode parent = anonymous.getParent();
+		while(parent != null) {
+			if(parent instanceof MethodDeclaration) {
+				String methodName = ((MethodDeclaration)parent).getName().getIdentifier();
+				if(name.isEmpty()) {
+					name = methodName;
+				}
+				else {
+					name = methodName + "." + name;
+				}
+			}
+			else if(parent instanceof VariableDeclarationFragment &&
+					(parent.getParent() instanceof FieldDeclaration ||
+					parent.getParent() instanceof VariableDeclarationStatement)) {
+				String fieldName = ((VariableDeclarationFragment)parent).getName().getIdentifier();
+				if(name.isEmpty()) {
+					name = fieldName;
+				}
+				else {
+					name = fieldName + "." + name;
+				}
+			}
+			else if(parent instanceof MethodInvocation) {
+				String invocationName = ((MethodInvocation)parent).getName().getIdentifier();
+				if(name.isEmpty()) {
+					name = invocationName;
+				}
+				else {
+					name = invocationName + "." + name;
+				}
+			}
+			else if(parent instanceof SuperMethodInvocation) {
+				String invocationName = ((SuperMethodInvocation)parent).getName().getIdentifier();
+				if(name.isEmpty()) {
+					name = invocationName;
+				}
+				else {
+					name = invocationName + "." + name;
+				}
+			}
+			parent = parent.getParent();
+		}
+		return name.toString();
+	}
+
+	private String getAnonymousBinaryName(DefaultMutableTreeNode node) {
 		StringBuilder name = new StringBuilder();
 		TreeNode[] path = node.getPath();
 		for(int i=0; i<path.length; i++) {
