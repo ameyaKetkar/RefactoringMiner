@@ -1,15 +1,16 @@
 package gr.uom.java.xmi;
 
+import java.io.Serializable;
+
 import gr.uom.java.xmi.decomposition.VariableDeclaration;
 import gr.uom.java.xmi.diff.CodeRange;
 import gr.uom.java.xmi.diff.StringDistance;
-
-import java.io.Serializable;
 
 public class UMLAttribute implements Comparable<UMLAttribute>, Serializable, LocationInfoProvider, VariableDeclarationProvider {
 	private LocationInfo locationInfo;
 	private String name;
 	private UMLType type;
+	private DetailedType dt;
 	private String visibility;
 	private String className;
 	private boolean isFinal;
@@ -20,6 +21,13 @@ public class UMLAttribute implements Comparable<UMLAttribute>, Serializable, Loc
 		this.locationInfo = locationInfo;
 		this.name = name;
 		this.type = type;
+	}
+
+	public UMLAttribute(String fieldName, UMLType type, LocationInfo locationInfo, DetailedType detailedType) {
+		this.locationInfo = locationInfo;
+		this.name = name;
+		this.type = type;
+		this.dt = detailedType;
 	}
 
 	public LocationInfo getLocationInfo() {

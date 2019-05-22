@@ -7,6 +7,7 @@ import gr.uom.java.xmi.decomposition.VariableDeclaration;
 public class UMLParameter implements Serializable, VariableDeclarationProvider {
 	private String name;
 	private UMLType type;
+	private DetailedType dType;
 	private String kind;
 	private boolean varargs;
 	private VariableDeclaration variableDeclaration;
@@ -16,6 +17,14 @@ public class UMLParameter implements Serializable, VariableDeclarationProvider {
 		this.type = type;
 		this.kind = kind;
 		this.varargs = varargs;
+	}
+
+	public UMLParameter(String aReturn, UMLType type, String aReturn1, boolean b, DetailedType detailedType) {
+		this.name = name;
+		this.type = type;
+		this.kind = kind;
+		this.varargs = varargs;
+		this.dType = detailedType;
 	}
 
 	public UMLType getType() {

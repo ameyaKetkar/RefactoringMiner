@@ -1,5 +1,7 @@
 package gr.uom.java.xmi.decomposition;
 
+import static gr.uom.java.xmi.DetailedType.getDetailedType;
+
 import org.eclipse.jdt.core.dom.ASTNode;
 import org.eclipse.jdt.core.dom.CompilationUnit;
 import org.eclipse.jdt.core.dom.FieldDeclaration;
@@ -9,6 +11,7 @@ import org.eclipse.jdt.core.dom.VariableDeclarationExpression;
 import org.eclipse.jdt.core.dom.VariableDeclarationFragment;
 import org.eclipse.jdt.core.dom.VariableDeclarationStatement;
 
+import gr.uom.java.xmi.DetailedType;
 import gr.uom.java.xmi.LocationInfo;
 import gr.uom.java.xmi.LocationInfo.CodeElementType;
 import gr.uom.java.xmi.LocationInfoProvider;
@@ -25,6 +28,7 @@ public class VariableDeclaration implements LocationInfoProvider, VariableDeclar
 	private boolean isParameter;
 	private boolean isAttribute;
 	private VariableScope scope;
+	private DetailedType typeParams;
 	
 	public VariableDeclaration(CompilationUnit cu, String filePath, VariableDeclarationFragment fragment) {
 		this.locationInfo = new LocationInfo(cu, filePath, fragment, extractVariableDeclarationType(fragment));
@@ -44,6 +48,7 @@ public class VariableDeclaration implements LocationInfoProvider, VariableDeclar
 		}
 		int endOffset = scopeNode.getStartPosition() + scopeNode.getLength();
 		this.scope = new VariableScope(cu, filePath, startOffset, endOffset);
+		this.typeParams = getTypeParam(fragment);
 	}
 
 	public VariableDeclaration(CompilationUnit cu, String filePath, SingleVariableDeclaration fragment) {
@@ -58,6 +63,13 @@ public class VariableDeclaration implements LocationInfoProvider, VariableDeclar
 		int endOffset = scopeNode.getStartPosition() + scopeNode.getLength();
 		this.scope = new VariableScope(cu, filePath, startOffset, endOffset);
 	}
+
+	private DetailedType getTypeParam(org.eclipse.jdt.core.dom.VariableDeclaration v){
+		Type t = extractType(v);
+		return getDetailedType(t);
+	}
+
+
 
 	public VariableDeclaration(CompilationUnit cu, String filePath, SingleVariableDeclaration fragment, boolean varargs) {
 		this(cu, filePath, fragment);

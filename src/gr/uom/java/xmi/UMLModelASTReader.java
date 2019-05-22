@@ -330,7 +330,7 @@ public class UMLModelASTReader {
 		if(returnType != null) {
 			UMLType type = UMLType.extractTypeObject(UMLType.getTypeName(returnType, 0),
 					generateLocationInfo(cu, sourceFile, returnType, CodeElementType.TYPE));
-			UMLParameter returnParameter = new UMLParameter("return", type, "return", false);
+			UMLParameter returnParameter = new UMLParameter("return", type, "return", false,DetailedType.getDetailedType(returnType));
 			umlOperation.addParameter(returnParameter);
 		}
 		List<SingleVariableDeclaration> parameters = methodDeclaration.parameters();
@@ -343,7 +343,7 @@ public class UMLModelASTReader {
 			}
 			UMLType type = UMLType.extractTypeObject(typeName,
 					generateLocationInfo(cu, sourceFile, parameterType, CodeElementType.TYPE));
-			UMLParameter umlParameter = new UMLParameter(parameterName, type, "in", parameter.isVarargs());
+			UMLParameter umlParameter = new UMLParameter(parameterName, type, "in", parameter.isVarargs(), DetailedType.getDetailedType(parameterType));
 			VariableDeclaration variableDeclaration = new VariableDeclaration(cu, sourceFile, parameter, parameter.isVarargs());
 			variableDeclaration.setParameter(true);
 			umlParameter.setVariableDeclaration(variableDeclaration);
@@ -362,7 +362,8 @@ public class UMLModelASTReader {
 					generateLocationInfo(cu, sourceFile, fieldType, CodeElementType.TYPE));
 			String fieldName = fragment.getName().getFullyQualifiedName();
 			LocationInfo locationInfo = generateLocationInfo(cu, sourceFile, fragment, CodeElementType.FIELD_DECLARATION);
-			UMLAttribute umlAttribute = new UMLAttribute(fieldName, type, locationInfo);
+
+			UMLAttribute umlAttribute = new UMLAttribute(fieldName, type, locationInfo, DetailedType.getDetailedType(fieldDeclaration.getType()));
 			VariableDeclaration variableDeclaration = new VariableDeclaration(cu, sourceFile, fragment);
 			variableDeclaration.setAttribute(true);
 			umlAttribute.setVariableDeclaration(variableDeclaration);
