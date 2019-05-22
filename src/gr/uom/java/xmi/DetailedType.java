@@ -36,15 +36,29 @@ public abstract class DetailedType {
         public String asStr(){
             return name;
         }
+
+        public String getName(){
+            return this.name;
+        }
     }
 
     public static class ParameterizedTyp extends DetailedType{
+
+
         private String name;
         private List<DetailedType> params;
 
         public ParameterizedTyp(String name, List<DetailedType> params) {
             this.name = name;
             this.params = params;
+        }
+
+        public String getName() {
+            return name;
+        }
+
+        public List<DetailedType> getParams() {
+            return params;
         }
 
         @Override
@@ -59,12 +73,15 @@ public abstract class DetailedType {
     }
 
     public static class WildCardTyp extends DetailedType{
-        private ImmutablePair<String,Optional<DetailedType>> t;
+        private ImmutablePair<String,Optional<DetailedType>> bound;
 
         public WildCardTyp(ImmutablePair<String, Optional<DetailedType>> t) {
-            this.t = t;
+            this.bound = t;
         }
 
+        public ImmutablePair<String, Optional<DetailedType>> getBound() {
+            return bound;
+        }
 
         @Override
         public TypeKind getTypeKind() {
@@ -73,15 +90,19 @@ public abstract class DetailedType {
 
         @Override
         public String asStr() {
-            return "? " + t.getLeft() + " " + t.getRight();
+            return "? " + bound.getLeft() + " " + bound.getRight();
         }
     }
 
     public static class PrimitiveTyp extends DetailedType{
-        private String t;
+        private String prmtv;
 
         public PrimitiveTyp(String t) {
-            this.t = t;
+            this.prmtv = t;
+        }
+
+        public String getPrmtv() {
+            return prmtv;
         }
 
         @Override
@@ -91,17 +112,25 @@ public abstract class DetailedType {
 
         @Override
         public String asStr() {
-            return t;
+            return prmtv;
         }
     }
 
     public static class ArrayTyp extends DetailedType{
-        private DetailedType t;
+        private DetailedType type;
         private int dim;
 
-        public ArrayTyp(DetailedType t, int dim) {
-            this.t = t;
+        public ArrayTyp(DetailedType type, int dim) {
+            this.type = type;
             this.dim = dim;
+        }
+
+        public DetailedType getType() {
+            return type;
+        }
+
+        public int getDim() {
+            return dim;
         }
 
         @Override
@@ -111,15 +140,21 @@ public abstract class DetailedType {
 
         @Override
         public String asStr() {
-            return t + IntStream.range(0, dim).mapToObj(i -> "[]").collect(joining(","));
+            return type + IntStream.range(0, dim).mapToObj(i -> "[]").collect(joining(","));
         }
     }
 
     public static class InterSectionTyp extends DetailedType{
-        private List<DetailedType> t;
+
+
+        private List<DetailedType> intxnTyps;
 
         public InterSectionTyp(List<DetailedType> t) {
-            this.t = t;
+            this.intxnTyps = t;
+        }
+
+        public List<DetailedType> getIntxnTyps() {
+            return intxnTyps;
         }
 
         @Override
@@ -129,15 +164,17 @@ public abstract class DetailedType {
 
         @Override
         public String asStr() {
-            return t.stream().map(DetailedType::asStr).collect(joining("&"));
+            return intxnTyps.stream().map(DetailedType::asStr).collect(joining("&"));
         }
     }
 
     public static class UnionTyp extends DetailedType{
-        private List<DetailedType> t;
+
+
+        private List<DetailedType> unionTyps;
 
         public UnionTyp(List<DetailedType> t) {
-            this.t = t;
+            this.unionTyps = t;
         }
 
         @Override
@@ -147,11 +184,15 @@ public abstract class DetailedType {
 
         @Override
         public String asStr() {
-            return t.stream().map(DetailedType::asStr).collect(joining("|"));
+            return unionTyps.stream().map(DetailedType::asStr).collect(joining("|"));
+        }
+
+        public List<DetailedType> getUnionTyps() {
+            return unionTyps;
         }
     }
 
-    enum TypeKind{
+    public enum TypeKind{
         SimpleType,
         ParameterizedType,
         UnionType,

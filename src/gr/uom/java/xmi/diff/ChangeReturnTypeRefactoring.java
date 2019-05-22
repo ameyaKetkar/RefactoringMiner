@@ -1,17 +1,20 @@
 package gr.uom.java.xmi.diff;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import org.refactoringminer.api.Refactoring;
 import org.refactoringminer.api.RefactoringType;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import gr.uom.java.xmi.DetailedType;
 import gr.uom.java.xmi.UMLOperation;
 import gr.uom.java.xmi.UMLType;
 
 public class ChangeReturnTypeRefactoring implements Refactoring {
 	private UMLType originalType;
 	private UMLType changedType;
+	private DetailedType dtB4;
+	private DetailedType dtAftr;
 	private UMLOperation operationBefore;
 	private UMLOperation operationAfter;
 
@@ -21,6 +24,15 @@ public class ChangeReturnTypeRefactoring implements Refactoring {
 		this.changedType = changedType;
 		this.operationBefore = operationBefore;
 		this.operationAfter = operationAfter;
+	}
+
+
+	public void setDetailedTypeB4(DetailedType b4){
+		this.dtB4 = b4;
+	}
+
+	public void setDetailedTypeAfter(DetailedType aftr){
+		this.dtAftr = aftr;
 	}
 
 	public RefactoringType getRefactoringType() {
@@ -131,5 +143,13 @@ public class ChangeReturnTypeRefactoring implements Refactoring {
 				.setDescription("changed return type")
 				.setCodeElement(changedType.toString()));
 		return ranges;
+	}
+
+	public DetailedType getDtB4() {
+		return dtB4;
+	}
+
+	public DetailedType getDtAftr() {
+		return dtAftr;
 	}
 }

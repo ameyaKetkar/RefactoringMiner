@@ -30,6 +30,10 @@ public class UMLAttribute implements Comparable<UMLAttribute>, Serializable, Loc
 		this.dt = detailedType;
 	}
 
+	public DetailedType getDetailedType(){
+		return this.dt;
+	}
+
 	public LocationInfo getLocationInfo() {
 		return locationInfo;
 	}

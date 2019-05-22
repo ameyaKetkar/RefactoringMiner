@@ -1,9 +1,6 @@
 package gr.uom.java.xmi.diff;
 
-import gr.uom.java.xmi.UMLOperation;
-import gr.uom.java.xmi.UMLParameter;
-import gr.uom.java.xmi.decomposition.AbstractCodeMapping;
-import gr.uom.java.xmi.decomposition.VariableDeclaration;
+import org.refactoringminer.api.Refactoring;
 
 import java.util.AbstractMap.SimpleEntry;
 import java.util.ArrayList;
@@ -12,7 +9,10 @@ import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
 
-import org.refactoringminer.api.Refactoring;
+import gr.uom.java.xmi.UMLOperation;
+import gr.uom.java.xmi.UMLParameter;
+import gr.uom.java.xmi.decomposition.AbstractCodeMapping;
+import gr.uom.java.xmi.decomposition.VariableDeclaration;
 
 public class UMLOperationDiff {
 	private UMLOperation removedOperation;
@@ -204,7 +204,10 @@ public class UMLOperationDiff {
 			UMLParameter removedOperationReturnParameter = removedOperation.getReturnParameter();
 			UMLParameter addedOperationReturnParameter = addedOperation.getReturnParameter();
 			if(removedOperationReturnParameter != null && addedOperationReturnParameter != null) {
-				ChangeReturnTypeRefactoring refactoring = new ChangeReturnTypeRefactoring(removedOperationReturnParameter.getType(), addedOperationReturnParameter.getType(), removedOperation, addedOperation);
+				ChangeReturnTypeRefactoring refactoring = new ChangeReturnTypeRefactoring(removedOperationReturnParameter.getType(),
+						addedOperationReturnParameter.getType(), removedOperation, addedOperation);
+				refactoring.setDetailedTypeB4(removedOperationReturnParameter.getDetailedType());
+				refactoring.setDetailedTypeAfter(addedOperationReturnParameter.getDetailedType());
 				refactorings.add(refactoring);
 			}
 		}

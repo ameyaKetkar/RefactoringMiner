@@ -28,7 +28,7 @@ public class VariableDeclaration implements LocationInfoProvider, VariableDeclar
 	private boolean isParameter;
 	private boolean isAttribute;
 	private VariableScope scope;
-	private DetailedType typeParams;
+	private DetailedType dt;
 	
 	public VariableDeclaration(CompilationUnit cu, String filePath, VariableDeclarationFragment fragment) {
 		this.locationInfo = new LocationInfo(cu, filePath, fragment, extractVariableDeclarationType(fragment));
@@ -48,7 +48,7 @@ public class VariableDeclaration implements LocationInfoProvider, VariableDeclar
 		}
 		int endOffset = scopeNode.getStartPosition() + scopeNode.getLength();
 		this.scope = new VariableScope(cu, filePath, startOffset, endOffset);
-		this.typeParams = getTypeParam(fragment);
+		this.dt = getTypeParam(fragment);
 	}
 
 	public VariableDeclaration(CompilationUnit cu, String filePath, SingleVariableDeclaration fragment) {
@@ -215,5 +215,9 @@ public class VariableDeclaration implements LocationInfoProvider, VariableDeclar
 
 	public VariableDeclaration getVariableDeclaration() {
 		return this;
+	}
+
+	public DetailedType getDt() {
+		return dt;
 	}
 }
