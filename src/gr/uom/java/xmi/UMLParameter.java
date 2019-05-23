@@ -19,7 +19,7 @@ public class UMLParameter implements Serializable, VariableDeclarationProvider {
 		this.varargs = varargs;
 	}
 
-	public UMLParameter(String aReturn, UMLType type, String aReturn1, boolean b, DetailedType detailedType) {
+	public UMLParameter(String name, UMLType type, String kind, boolean varargs, DetailedType detailedType) {
 		this.name = name;
 		this.type = type;
 		this.kind = kind;

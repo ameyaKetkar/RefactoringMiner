@@ -62,6 +62,7 @@ public class VariableDeclaration implements LocationInfoProvider, VariableDeclar
 		ASTNode scopeNode = getScopeNode(fragment);
 		int endOffset = scopeNode.getStartPosition() + scopeNode.getLength();
 		this.scope = new VariableScope(cu, filePath, startOffset, endOffset);
+		this.dt = getTypeParam(fragment);
 	}
 
 	private DetailedType getTypeParam(org.eclipse.jdt.core.dom.VariableDeclaration v){

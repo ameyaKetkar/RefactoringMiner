@@ -87,9 +87,6 @@ public class UMLClass extends UMLAbstractClass implements Comparable<UMLClass>, 
     	anonymousClassList.add(anonymousClass);
     }
 
-    public List<UMLTypeParameter> getTypeParameters(){
-    	return typeParameters;
-	}
 
     public String getPackageName() {
 		return this.packageName;

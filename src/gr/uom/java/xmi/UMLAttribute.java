@@ -23,7 +23,7 @@ public class UMLAttribute implements Comparable<UMLAttribute>, Serializable, Loc
 		this.type = type;
 	}
 
-	public UMLAttribute(String fieldName, UMLType type, LocationInfo locationInfo, DetailedType detailedType) {
+	public UMLAttribute(String name, UMLType type, LocationInfo locationInfo, DetailedType detailedType) {
 		this.locationInfo = locationInfo;
 		this.name = name;
 		this.type = type;

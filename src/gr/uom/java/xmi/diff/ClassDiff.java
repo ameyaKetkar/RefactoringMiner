@@ -55,4 +55,12 @@ public class ClassDiff<U,V> implements Refactoring {
     public ImmutablePair<UMLClass,UMLClass> getClassDiff(){
         return new ImmutablePair<>(b4,aftr);
     }
+
+    public UMLClass getClsB4(){
+        return b4;
+    }
+
+    public UMLClass getClsAftr(){
+        return aftr;
+    }
 }
