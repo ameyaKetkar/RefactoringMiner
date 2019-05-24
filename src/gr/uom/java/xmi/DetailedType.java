@@ -5,6 +5,7 @@ import static java.util.stream.Collectors.joining;
 import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.eclipse.jdt.core.dom.Annotation;
 import org.eclipse.jdt.core.dom.ArrayType;
+import org.eclipse.jdt.core.dom.Dimension;
 import org.eclipse.jdt.core.dom.IntersectionType;
 import org.eclipse.jdt.core.dom.NameQualifiedType;
 import org.eclipse.jdt.core.dom.ParameterizedType;
@@ -15,6 +16,7 @@ import org.eclipse.jdt.core.dom.Type;
 import org.eclipse.jdt.core.dom.UnionType;
 import org.eclipse.jdt.core.dom.WildcardType;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -26,19 +28,17 @@ public abstract class DetailedType {
     public abstract String asStr();
 
     public static class SimpleTyp extends DetailedType{
-        private String name;
-        private List<String> annotation;
-
+        private final String name;
+        public final List<String> annotation;
+        public final boolean isQualified;
         public SimpleTyp(SimpleType st) {
-
+            isQualified = st.getName().isQualifiedName();
             List<Annotation> ann = st.annotations();
             annotation = ann.stream().map(a -> "@" + a.getTypeName().getFullyQualifiedName())
                     .collect(Collectors.toList());
             this.name = st.getName().getFullyQualifiedName();
         }
-        public SimpleTyp(String name, boolean isQualified){
-            this.name = name;
-        }
+
 
         @Override
         public TypeKind getTypeKind() {
@@ -46,17 +46,15 @@ public abstract class DetailedType {
         }
 
         public String asStr(){
-            return name;
+            return name  + String.join(" ", annotation);
         }
 
         public String getName(){
-            return this.name + String.join(" ", annotation);
+            return this.name;
         }
     }
 
     public static class ParameterizedTyp extends DetailedType{
-
-
         private DetailedType name;
         private List<DetailedType> params;
 
@@ -86,7 +84,7 @@ public abstract class DetailedType {
     }
 
     public static class WildCardTyp extends DetailedType{
-        private final List<String> annotation;
+        public final List<String> annotation;
         private ImmutablePair<String,Optional<DetailedType>> bound;
 
 
@@ -118,7 +116,7 @@ public abstract class DetailedType {
     }
 
     public static class PrimitiveTyp extends DetailedType{
-        private final List<String> annotation;
+        public final List<String> annotation;
         private String prmtv;
 
         public PrimitiveTyp(PrimitiveType pt) {
@@ -146,8 +144,18 @@ public abstract class DetailedType {
     public static class ArrayTyp extends DetailedType{
         private DetailedType type;
         private int dim;
+        public List<String> annotation = new ArrayList<>();
 
         public ArrayTyp(ArrayType at) {
+            List<Dimension> ds = at.dimensions();
+
+            for(Dimension d : ds){
+                List<Annotation> aa = d.annotations();
+                for(Annotation a: aa){
+                    annotation.add("@" + a.getTypeName().getFullyQualifiedName());
+                }
+            }
+
             this.type = getDetailedType(at.getElementType());
             this.dim = at.dimensions().size();
         }
@@ -167,7 +175,8 @@ public abstract class DetailedType {
 
         @Override
         public String asStr() {
-            return type.asStr() + IntStream.range(0, dim).mapToObj(i -> "[]").collect(joining(","));
+            return type.asStr() + IntStream.range(0, dim).mapToObj(i -> "[]").collect(joining(","))
+                    + String.join(" ", annotation);
         }
     }
 
@@ -223,9 +232,9 @@ public abstract class DetailedType {
     public static class QualifiedTyp extends DetailedType{
 
 
-        private final List<String> annotation;
-        private String qName;
-        private DetailedType qualifier;
+        public final List<String> annotation;
+        public final String qName;
+        public final DetailedType qualifier;
 
         public QualifiedTyp(QualifiedType q) {
             qName = q.getName().getIdentifier();
@@ -248,9 +257,9 @@ public abstract class DetailedType {
     }
 
     public static class NameQualifiedTyp extends DetailedType{
-        private final List<String> annotation;
-        private String name;
-        private String qn ;
+        public final List<String> annotation;
+        public String name;
+        public String qn ;
 
         public NameQualifiedTyp(NameQualifiedType nq) {
             name = nq.getName().getIdentifier();
@@ -262,7 +271,7 @@ public abstract class DetailedType {
 
         @Override
         public TypeKind getTypeKind() {
-            return TypeKind.UnionType;
+            return TypeKind.NameQualifiedType;
         }
 
         @Override
@@ -285,8 +294,12 @@ public abstract class DetailedType {
     }
 
     public static DetailedType getDetailedType(Type t) {
-        if(t.isSimpleType())
-            return new SimpleTyp( (SimpleType) t);
+        if(t.isQualifiedType())
+            return new QualifiedTyp((QualifiedType) t);
+        else if(t.isNameQualifiedType())
+            return new NameQualifiedTyp((NameQualifiedType) t);
+        else if(t.isSimpleType())
+            return new SimpleTyp((SimpleType) t);
         else if(t.isParameterizedType())
             return new ParameterizedTyp((ParameterizedType) t);
         else if(t.isWildcardType())
@@ -299,11 +312,8 @@ public abstract class DetailedType {
             return new InterSectionTyp((IntersectionType) t);
         else if(t.isUnionType())
             return new UnionTyp((UnionType) t);
-        else if(t.isQualifiedType())
-            return new QualifiedTyp((QualifiedType) t);
-        else if(t.isNameQualifiedType())
-            return new NameQualifiedTyp((NameQualifiedType) t);
         else
-            return new SimpleTyp(t.toString(), false);
+            throw new RuntimeException("Could not figure out type");
+
     }
 }
