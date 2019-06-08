@@ -1,11 +1,6 @@
 package gr.uom.java.xmi.diff;
 
-import gr.uom.java.xmi.UMLOperation;
-import gr.uom.java.xmi.UMLParameter;
-import gr.uom.java.xmi.decomposition.AbstractCodeFragment;
-import gr.uom.java.xmi.decomposition.AbstractCodeMapping;
-import gr.uom.java.xmi.decomposition.VariableDeclaration;
-import gr.uom.java.xmi.decomposition.VariableScope;
+import org.refactoringminer.api.Refactoring;
 
 import java.util.AbstractMap.SimpleEntry;
 import java.util.ArrayList;
@@ -16,8 +11,10 @@ import java.util.Set;
 
 import gr.uom.java.xmi.UMLOperation;
 import gr.uom.java.xmi.UMLParameter;
+import gr.uom.java.xmi.decomposition.AbstractCodeFragment;
 import gr.uom.java.xmi.decomposition.AbstractCodeMapping;
 import gr.uom.java.xmi.decomposition.VariableDeclaration;
+import gr.uom.java.xmi.decomposition.VariableScope;
 
 public class UMLOperationDiff {
 	private UMLOperation removedOperation;

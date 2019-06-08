@@ -1,5 +1,8 @@
 package gr.uom.java.xmi;
 
+
+import org.refactoringminer.Models.DetailedTypeOuterClass.DetailedType;
+
 import java.io.Serializable;
 
 import gr.uom.java.xmi.decomposition.VariableDeclaration;

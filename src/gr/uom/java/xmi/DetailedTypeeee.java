@@ -22,12 +22,12 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
-public abstract class DetailedType {
+public abstract class DetailedTypeeee {
 
     public abstract TypeKind getTypeKind();
     public abstract String asStr();
 
-    public static class SimpleTyp extends DetailedType{
+    public static class SimpleTyp extends DetailedTypeeee{
         private final String name;
         public final List<String> annotation;
         public final boolean isQualified;
@@ -54,21 +54,21 @@ public abstract class DetailedType {
         }
     }
 
-    public static class ParameterizedTyp extends DetailedType{
-        private DetailedType name;
-        private List<DetailedType> params;
+    public static class ParameterizedTyp extends DetailedTypeeee{
+        private DetailedTypeeee name;
+        private List<DetailedTypeeee> params;
 
         public ParameterizedTyp(ParameterizedType pt) {
-            this.name = DetailedType.getDetailedType(pt.getType());
+            this.name = DetailedTypeeee.getDetailedTypeeee(pt.getType());
             List<Type> ps = pt.typeArguments();
-            this.params = ps.stream().map(DetailedType::getDetailedType).collect(Collectors.toList());
+            this.params = ps.stream().map(DetailedTypeeee::getDetailedTypeeee).collect(Collectors.toList());
         }
 
-        public DetailedType getName() {
+        public DetailedTypeeee getName() {
             return name;
         }
 
-        public List<DetailedType> getParams() {
+        public List<DetailedTypeeee> getParams() {
             return params;
         }
 
@@ -83,19 +83,19 @@ public abstract class DetailedType {
         }
     }
 
-    public static class WildCardTyp extends DetailedType{
+    public static class WildCardTyp extends DetailedTypeeee{
         public final List<String> annotation;
-        private ImmutablePair<String,Optional<DetailedType>> bound;
+        private ImmutablePair<String,Optional<DetailedTypeeee>> bound;
 
 
         public WildCardTyp(WildcardType wt) {
-            this.bound = ImmutablePair.of(wt.isUpperBound()?"super":"extends", Optional.ofNullable(wt.getBound()).map(DetailedType::getDetailedType));
+            this.bound = ImmutablePair.of(wt.isUpperBound()?"super":"extends", Optional.ofNullable(wt.getBound()).map(DetailedTypeeee::getDetailedTypeeee));
             List<Annotation> ann = wt.annotations();
             annotation = ann.stream().map(a -> "@" + a.getTypeName().getFullyQualifiedName())
                     .collect(Collectors.toList());
         }
 
-        public ImmutablePair<String, Optional<DetailedType>> getBound() {
+        public ImmutablePair<String, Optional<DetailedTypeeee>> getBound() {
             return bound;
         }
 
@@ -115,7 +115,7 @@ public abstract class DetailedType {
         }
     }
 
-    public static class PrimitiveTyp extends DetailedType{
+    public static class PrimitiveTyp extends DetailedTypeeee{
         public final List<String> annotation;
         private String prmtv;
 
@@ -141,8 +141,8 @@ public abstract class DetailedType {
         }
     }
 
-    public static class ArrayTyp extends DetailedType{
-        private DetailedType type;
+    public static class ArrayTyp extends DetailedTypeeee{
+        private DetailedTypeeee type;
         private int dim;
         public List<String> annotation = new ArrayList<>();
 
@@ -156,11 +156,11 @@ public abstract class DetailedType {
                 }
             }
 
-            this.type = getDetailedType(at.getElementType());
+            this.type = getDetailedTypeeee(at.getElementType());
             this.dim = at.dimensions().size();
         }
 
-        public DetailedType getType() {
+        public DetailedTypeeee getType() {
             return type;
         }
 
@@ -180,16 +180,16 @@ public abstract class DetailedType {
         }
     }
 
-    public static class InterSectionTyp extends DetailedType{
+    public static class InterSectionTyp extends DetailedTypeeee{
 
-        private List<DetailedType> intxnTyps;
+        private List<DetailedTypeeee> intxnTyps;
 
         public InterSectionTyp(IntersectionType it) {
             List<Type> ts = it.types();
-            this.intxnTyps = ts.stream().map(z->getDetailedType(z)).collect(Collectors.toList());
+            this.intxnTyps = ts.stream().map(z->getDetailedTypeeee(z)).collect(Collectors.toList());
         }
 
-        public List<DetailedType> getIntxnTyps() {
+        public List<DetailedTypeeee> getIntxnTyps() {
             return intxnTyps;
         }
 
@@ -200,18 +200,18 @@ public abstract class DetailedType {
 
         @Override
         public String asStr() {
-            return intxnTyps.stream().map(DetailedType::asStr).collect(joining("&"));
+            return intxnTyps.stream().map(DetailedTypeeee::asStr).collect(joining("&"));
         }
     }
 
-    public static class UnionTyp extends DetailedType{
+    public static class UnionTyp extends DetailedTypeeee{
 
 
-        private List<DetailedType> unionTyps;
+        private List<DetailedTypeeee> unionTyps;
 
         public UnionTyp(UnionType ut) {
             List<Type> ts = ut.types();
-            this.unionTyps = ts.stream().map(z->getDetailedType(z)).collect(Collectors.toList());
+            this.unionTyps = ts.stream().map(z->getDetailedTypeeee(z)).collect(Collectors.toList());
         }
 
         @Override
@@ -221,24 +221,24 @@ public abstract class DetailedType {
 
         @Override
         public String asStr() {
-            return unionTyps.stream().map(DetailedType::asStr).collect(joining("|"));
+            return unionTyps.stream().map(DetailedTypeeee::asStr).collect(joining("|"));
         }
 
-        public List<DetailedType> getUnionTyps() {
+        public List<DetailedTypeeee> getUnionTyps() {
             return unionTyps;
         }
     }
 
-    public static class QualifiedTyp extends DetailedType{
+    public static class QualifiedTyp extends DetailedTypeeee{
 
 
         public final List<String> annotation;
         public final String qName;
-        public final DetailedType qualifier;
+        public final DetailedTypeeee qualifier;
 
         public QualifiedTyp(QualifiedType q) {
             qName = q.getName().getIdentifier();
-            qualifier = DetailedType.getDetailedType(q.getQualifier());
+            qualifier = DetailedTypeeee.getDetailedTypeeee(q.getQualifier());
             List<Annotation> ann = q.annotations();
             annotation = ann.stream().map(a -> "@" + a.getTypeName().getFullyQualifiedName())
                     .collect(Collectors.toList());
@@ -256,7 +256,7 @@ public abstract class DetailedType {
 
     }
 
-    public static class NameQualifiedTyp extends DetailedType{
+    public static class NameQualifiedTyp extends DetailedTypeeee{
         public final List<String> annotation;
         public String name;
         public String qn ;
@@ -293,7 +293,7 @@ public abstract class DetailedType {
 
     }
 
-    public static DetailedType getDetailedType(Type t) {
+    public static DetailedTypeeee getDetailedTypeeee(Type t) {
         if(t.isQualifiedType())
             return new QualifiedTyp((QualifiedType) t);
         else if(t.isNameQualifiedType())

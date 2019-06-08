@@ -1,0 +1,82 @@
+syntax = "proto2";
+
+package Models;
+
+option java_package = "org.refactoringminer.Models";
+
+message DetailedType {
+      oneof typ{
+         SimplType simpleType = 1;
+         ParamType paramType = 2;
+         WildCrdType wildCrd = 4;
+         Prmtv prmtv = 5;
+         ArryTyp arryTyp = 6;
+         IntersxnTyp intxnTyp = 7;
+         UnionTyp unionTyp = 8;
+         QualifiedTyp qualTyp = 9;
+      //   NameQualifiedTyp nameQualTyp = 10;
+      };
+      optional string pretty = 3;
+
+   message SimplType {
+      required string name = 1;
+      repeated string annotations = 4;
+      optional TypeOfType typeOfType = 11;
+   }
+
+   message ParamType {
+      required DetailedType name = 1;
+      repeated DetailedType params = 2;
+   }
+
+   message WildCrdType {
+      optional DetailedType bound = 1;
+      optional string supOrext = 2;
+      repeated string annotations = 4;
+   }
+
+   message Prmtv {
+      required string name = 1;
+      repeated string annotations = 4;
+      optional TypeOfType typeOfType = 11;
+   }
+
+   message ArryTyp {
+      required DetailedType name =1 ;
+      required int32 dim = 2;
+      repeated string annotations = 4;
+   }
+
+   message IntersxnTyp {
+      repeated DetailedType types = 1;
+   }
+
+   message UnionTyp {
+      repeated DetailedType types = 1;
+   }
+   message QualifiedTyp{
+      required string name = 1;
+      optional DetailedType qualifier = 2;
+      repeated string annotations = 4;
+   }
+//   message NameQualifiedTyp{
+//      required string name = 1;
+//      required string qulifier = 2;
+//      repeated string annotations = 4;
+//      optional TypeOfType typeOfType = 11;
+//   }
+
+
+   enum TypeOfType {
+      TypeVariable  = 1;
+      Jdk = 2;
+      External = 3;
+      Internal = 4;
+      Primitive = 6;
+      DontKnow = 5;
+      WildCard = 7;
+   }
+  //protoc -I=/Users/ameya/RefactoringMiner/src/Protos --java_out=/Users/ameya/T2R/src/ /Users/ameya/T2R/src/Protos/*
+
+}
+//protoc -I=/Users/ameya/RefactoringMiner/src/Protos --java_out=/Users/ameya/RefactoringMiner/src/ /Users/ameya/RefactoringMiner/src/Protos/*

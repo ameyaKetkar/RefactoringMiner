@@ -1,17 +1,19 @@
 package gr.uom.java.xmi.diff;
 
+import org.refactoringminer.Models.RMinedOuterClass.RMined.TypeChange;
+import org.refactoringminer.api.Refactoring;
+import org.refactoringminer.api.RefactoringType;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
-
-import org.refactoringminer.api.Refactoring;
-import org.refactoringminer.api.RefactoringType;
 
 import gr.uom.java.xmi.UMLOperation;
 import gr.uom.java.xmi.decomposition.AbstractCodeMapping;
 import gr.uom.java.xmi.decomposition.VariableDeclaration;
 
 public class ChangeVariableTypeRefactoring implements Refactoring {
+	private final TypeChange typeChange;
 	private VariableDeclaration originalVariable;
 	private VariableDeclaration changedTypeVariable;
 	private UMLOperation operationBefore;
@@ -25,7 +27,20 @@ public class ChangeVariableTypeRefactoring implements Refactoring {
 		this.operationBefore = operationBefore;
 		this.operationAfter = operationAfter;
 		this.variableReferences = variableReferences;
+		this.typeChange = TypeChange.newBuilder()
+				.setNameb4(originalVariable.getVariableName())
+				.setNameaftr(changedTypeVariable.getVariableName())
+				.setDtB4(originalVariable.getDt())
+				.setDtAftr(changedTypeVariable.getDt())
+				.setClassb4(operationBefore.getClassName())
+				.setClassAftr(operationAfter.getClassName())
+				.setRefactoringType(
+						originalVariable.isParameter() && changedTypeVariable.isParameter()
+						? RefactoringType.CHANGE_PARAMETER_TYPE.toString()
+								: RefactoringType.CHANGE_VARIABLE_TYPE.toString())
+				.build();
 	}
+
 
 	public RefactoringType getRefactoringType() {
 		if(originalVariable.isParameter() && changedTypeVariable.isParameter())
@@ -140,5 +155,9 @@ public class ChangeVariableTypeRefactoring implements Refactoring {
 				.setDescription("changed-type variable declaration")
 				.setCodeElement(changedTypeVariable.toString()));
 		return ranges;
+	}
+
+	public TypeChange getTypeChange() {
+		return typeChange;
 	}
 }

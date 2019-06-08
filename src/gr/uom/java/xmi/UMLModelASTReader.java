@@ -1,5 +1,7 @@
 package gr.uom.java.xmi;
 
+import static gr.uom.java.xmi.DetailedTypeUtil.getDetailedType;
+
 import org.eclipse.jdt.core.JavaCore;
 import org.eclipse.jdt.core.dom.AST;
 import org.eclipse.jdt.core.dom.ASTNode;
@@ -267,6 +269,7 @@ public class UMLModelASTReader {
 		String methodName = methodDeclaration.getName().getFullyQualifiedName();
 		LocationInfo locationInfo = generateLocationInfo(cu, sourceFile, methodDeclaration, CodeElementType.METHOD_DECLARATION);
 		UMLOperation umlOperation = new UMLOperation(methodName, locationInfo);
+
 		
 		if(methodDeclaration.isConstructor())
 			umlOperation.setConstructor(true);
@@ -330,7 +333,7 @@ public class UMLModelASTReader {
 		if(returnType != null) {
 			UMLType type = UMLType.extractTypeObject(UMLType.getTypeName(returnType, 0),
 					generateLocationInfo(cu, sourceFile, returnType, CodeElementType.TYPE));
-			UMLParameter returnParameter = new UMLParameter("return", type, "return", false,DetailedType.getDetailedType(returnType));
+			UMLParameter returnParameter = new UMLParameter("return", type, "return", false,getDetailedType(returnType));
 			umlOperation.addParameter(returnParameter);
 		}
 		List<SingleVariableDeclaration> parameters = methodDeclaration.parameters();
@@ -343,7 +346,7 @@ public class UMLModelASTReader {
 			}
 			UMLType type = UMLType.extractTypeObject(typeName,
 					generateLocationInfo(cu, sourceFile, parameterType, CodeElementType.TYPE));
-			UMLParameter umlParameter = new UMLParameter(parameterName, type, "in", parameter.isVarargs(), DetailedType.getDetailedType(parameterType));
+			UMLParameter umlParameter = new UMLParameter(parameterName, type, "in", parameter.isVarargs(), getDetailedType(parameterType));
 			VariableDeclaration variableDeclaration = new VariableDeclaration(cu, sourceFile, parameter, parameter.isVarargs());
 			variableDeclaration.setParameter(true);
 			umlParameter.setVariableDeclaration(variableDeclaration);
@@ -363,7 +366,7 @@ public class UMLModelASTReader {
 			String fieldName = fragment.getName().getFullyQualifiedName();
 			LocationInfo locationInfo = generateLocationInfo(cu, sourceFile, fragment, CodeElementType.FIELD_DECLARATION);
 
-			UMLAttribute umlAttribute = new UMLAttribute(fieldName, type, locationInfo, DetailedType.getDetailedType(fieldDeclaration.getType()));
+			UMLAttribute umlAttribute = new UMLAttribute(fieldName, type, locationInfo, getDetailedType(fieldDeclaration.getType()));
 			VariableDeclaration variableDeclaration = new VariableDeclaration(cu, sourceFile, fragment);
 			variableDeclaration.setAttribute(true);
 			umlAttribute.setVariableDeclaration(variableDeclaration);

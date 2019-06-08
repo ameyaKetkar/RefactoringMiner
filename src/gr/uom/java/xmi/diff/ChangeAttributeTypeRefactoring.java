@@ -1,10 +1,11 @@
 package gr.uom.java.xmi.diff;
 
-import java.util.ArrayList;
-import java.util.List;
-
+import org.refactoringminer.Models.RMinedOuterClass.RMined.TypeChange;
 import org.refactoringminer.api.Refactoring;
 import org.refactoringminer.api.RefactoringType;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import gr.uom.java.xmi.decomposition.VariableDeclaration;
 
@@ -13,6 +14,7 @@ public class ChangeAttributeTypeRefactoring implements Refactoring {
 	private VariableDeclaration changedTypeAttribute;
 	private String classNameBefore;
 	private String classNameAfter;
+	private final TypeChange typeChange;
 	
 	public ChangeAttributeTypeRefactoring(VariableDeclaration originalAttribute,
 			VariableDeclaration changedTypeAttribute, String classNameBefore, String classNameAfter) {
@@ -20,6 +22,15 @@ public class ChangeAttributeTypeRefactoring implements Refactoring {
 		this.changedTypeAttribute = changedTypeAttribute;
 		this.classNameBefore = classNameBefore;
 		this.classNameAfter = classNameAfter;
+		this.typeChange = TypeChange.newBuilder()
+				.setNameb4(originalAttribute.getVariableName())
+				.setNameaftr(changedTypeAttribute.getVariableName())
+				.setDtB4(originalAttribute.getDt())
+				.setDtAftr(changedTypeAttribute.getDt())
+				.setClassb4(classNameBefore)
+				.setClassAftr(classNameAfter)
+				.setRefactoringType(RefactoringType.CHANGE_ATTRIBUTE_TYPE.toString())
+				.build();
 	}
 
 	public VariableDeclaration getOriginalAttribute() {
@@ -132,4 +143,9 @@ public class ChangeAttributeTypeRefactoring implements Refactoring {
 				.setCodeElement(changedTypeAttribute.toString()));
 		return ranges;
 	}
+
+	public TypeChange getTypeChange() {
+		return typeChange;
+	}
+
 }

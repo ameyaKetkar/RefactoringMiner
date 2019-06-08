@@ -1,0 +1,35 @@
+syntax = "proto2";
+
+package Models;
+
+import "DetailedType.proto";
+
+option java_package = "org.refactoringminer.Models";
+
+message TypeWorld{
+
+   required string project = 1;
+   required string commit = 2;
+   repeated string allFiles = 5;
+   map<string,CompilationUnitWorld> cus = 3;
+
+   message CompilationUnitWorld{
+      required string package = 5;
+      repeated string importsStatements = 2;
+      repeated string importsOnDemand = 3;
+      optional string file = 4;
+      repeated ClassWorld classes=1;
+      repeated DetailedType usedTypes = 6;
+
+   }
+
+   message ClassWorld {
+      required string name = 2;
+      repeated string modifiers = 5;
+      repeated ClassWorld nestedClasses = 1;
+      repeated DetailedType superTypes = 3;
+      repeated string typeParameters = 6;
+      repeated DetailedType composeTypes = 7;
+   }
+
+}

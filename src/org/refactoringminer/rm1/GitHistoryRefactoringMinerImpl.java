@@ -1,9 +1,24 @@
 package org.refactoringminer.rm1;
 
+import static gr.uom.java.xmi.DetailedTypeUtil.getDetailedType;
+import static java.util.stream.Collectors.toList;
 import static java.util.stream.Collectors.toSet;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
+import org.eclipse.jdt.core.JavaCore;
+import org.eclipse.jdt.core.dom.AST;
+import org.eclipse.jdt.core.dom.ASTParser;
+import org.eclipse.jdt.core.dom.ASTVisitor;
+import org.eclipse.jdt.core.dom.AbstractTypeDeclaration;
+import org.eclipse.jdt.core.dom.CompilationUnit;
+import org.eclipse.jdt.core.dom.EnumDeclaration;
+import org.eclipse.jdt.core.dom.ImportDeclaration;
+import org.eclipse.jdt.core.dom.MethodDeclaration;
+import org.eclipse.jdt.core.dom.Type;
+import org.eclipse.jdt.core.dom.TypeDeclaration;
+import org.eclipse.jdt.core.dom.TypeParameter;
+import org.eclipse.jdt.core.dom.VariableDeclarationExpression;
 import org.eclipse.jgit.errors.MissingObjectException;
 import org.eclipse.jgit.lib.ObjectId;
 import org.eclipse.jgit.lib.ObjectLoader;
@@ -15,6 +30,11 @@ import org.eclipse.jgit.treewalk.TreeWalk;
 import org.kohsuke.github.GHCommit;
 import org.kohsuke.github.GHRepository;
 import org.kohsuke.github.GitHub;
+import org.refactoringminer.Models.DetailedTypeOuterClass.DetailedType;
+import org.refactoringminer.Models.TypeWorldOuterClass.TypeWorld;
+import org.refactoringminer.Models.TypeWorldOuterClass.TypeWorld.ClassWorld;
+import org.refactoringminer.Models.TypeWorldOuterClass.TypeWorld.ClassWorld.Builder;
+import org.refactoringminer.Models.TypeWorldOuterClass.TypeWorld.CompilationUnitWorld;
 import org.refactoringminer.api.Churn;
 import org.refactoringminer.api.GitHistoryRefactoringMiner;
 import org.refactoringminer.api.GitService;
@@ -36,6 +56,7 @@ import java.io.StringWriter;
 import java.net.URL;
 import java.util.AbstractMap.SimpleImmutableEntry;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Enumeration;
@@ -46,6 +67,8 @@ import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
+import java.util.Optional;
 import java.util.Properties;
 import java.util.Set;
 import java.util.concurrent.ExecutionException;
@@ -507,6 +530,30 @@ public class GitHistoryRefactoringMinerImpl implements GitHistoryRefactoringMine
 		return new SimpleImmutableEntry<>(new HashSet<>(), new HashSet<>());
 	}
 
+	public Optional<TypeWorld> getTypeWorld(GitService gitService, Repository repository, RevCommit currentCommit, String projectName)  {
+
+		try {
+			List<String> filePathsBefore = new ArrayList<>();
+			List<String> filePathsCurrent = new ArrayList<>();
+			Map<String, String> renamedFilesHint = new HashMap<>();
+			gitService.fileTreeDiff(repository, currentCommit, filePathsBefore, filePathsCurrent, renamedFilesHint);
+
+			try (RevWalk walk = new RevWalk(repository)) {
+				if (!filePathsCurrent.isEmpty() && currentCommit.getParentCount() > 0) {
+					return Optional.ofNullable(createTypeWorld(repository, currentCommit, projectName));
+				}
+				walk.dispose();
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}catch (Exception e){
+			e.printStackTrace();
+		}
+		return Optional.empty();
+	}
+
+
+
 	Set<String> getB4AfFileStruct(Repository repository, RevCommit commit) {
 		Set<String> repositoryDirectories = new HashSet<>();
 		RevTree parentTree = commit.getTree();
@@ -526,4 +573,186 @@ public class GitHistoryRefactoringMinerImpl implements GitHistoryRefactoringMine
 		return repositoryDirectories.stream().map(x -> x.replace("/",".")).collect(toSet());
 	}
 
+
+	public static TypeWorld createTypeWorld(Repository repository, RevCommit commit, String projectName) {
+		Set<String> repositoryDirectories = new HashSet<>();
+		TypeWorld.Builder tw = TypeWorld.newBuilder().addAllAllFiles(repositoryDirectories)
+				.setCommit(commit.getId().getName())
+				.setProject(projectName);
+		RevTree parentTree = commit.getTree();
+		try (TreeWalk treeWalk = new TreeWalk(repository)) {
+			treeWalk.addTree(parentTree);
+			treeWalk.setRecursive(true);
+			while (treeWalk.next()) {
+				String pathString = treeWalk.getPathString();
+				if(pathString.endsWith(".java")) {
+					String fileName = pathString.replace(".java", "");
+					tw.putCus(fileName, getCompilationUnitWorld(getCuFor(getFileContent(repository, treeWalk)), fileName));
+					repositoryDirectories.add(fileName);
+				}
+			}
+		}
+		catch (Exception e){
+			e.printStackTrace();
+		}
+		return tw.build();
+	}
+
+
+	public static Map<String,CompilationUnitWorld> getCompilationUnitWorldFor(Repository repository, RevCommit commit, List<String> path){
+		final RevTree parentTree = commit.getTree();
+		Map<String, CompilationUnitWorld> cus = new HashMap<>();
+		try (TreeWalk treeWalk = new TreeWalk(repository)) {
+			treeWalk.addTree(parentTree);
+			treeWalk.setRecursive(true);
+			while (treeWalk.next()) {
+				String pathString = treeWalk.getPathString();
+				if(pathString.endsWith(".java") &&
+						path.stream().anyMatch(pathString::contains)) {
+					final String fileName = pathString.replace(".java", "");
+					cus.put(fileName,getCompilationUnitWorld(getCuFor(getFileContent(repository, treeWalk)), fileName));
+				}
+			}
+		}catch(Exception e){
+			e.printStackTrace();
+		}
+		return cus;
+	}
+
+	public static CompilationUnitWorld getCompilationUnitWorld(CompilationUnit cu, String fileName){
+		CompilationUnitWorld.Builder cuw = CompilationUnitWorld.newBuilder();
+		List<ImportDeclaration> imports = cu.imports();
+		cuw.addAllImportsStatements(imports.stream().filter(x->!x.isOnDemand()).map(x->x.getName().getFullyQualifiedName()).collect(toList()));
+		cuw.addAllImportsOnDemand(imports.stream().filter(x->x.isOnDemand()).map(x->x.getName().getFullyQualifiedName()).collect(toList()));
+		cuw.setPackage(cu.getPackage().getName().getFullyQualifiedName());
+		cuw.setFile(fileName);
+		cuw.addAllUsedTypes(getAllDetailedTypesInCu(cu));
+		final List<AbstractTypeDeclaration> typeDeclarations = cu.types();
+		for(AbstractTypeDeclaration a : typeDeclarations){
+			if(a instanceof TypeDeclaration){
+				cuw.addClasses(getClassWorld((TypeDeclaration) a));
+			}
+			if (a instanceof EnumDeclaration){
+				cuw.addClasses(getClassWorld((EnumDeclaration) a));
+			}
+		}
+		return cuw.build();
+
+	}
+
+
+	public static Set<DetailedType> getAllDetailedTypesInCu(CompilationUnit cu){
+
+		class GetAllUsedVariableTypes extends ASTVisitor {
+			Set<DetailedType> dt = new HashSet<>();
+			@Override
+			public boolean visit(VariableDeclarationExpression node) {
+				dt.add(getDetailedType(node.getType()));
+				return true;
+			}
+		}
+		GetAllUsedVariableTypes x = new GetAllUsedVariableTypes();
+		cu.accept(x);
+		return x.dt;
+	}
+
+	static ClassWorld getClassWorld(EnumDeclaration ed){
+		return ClassWorld.newBuilder().setName(ed.getName().getIdentifier()).build();
+	}
+
+	static ClassWorld getClassWorld(TypeDeclaration td){
+		Builder clsBldr = ClassWorld.newBuilder().setName(td.getName().getIdentifier());
+		List<TypeParameter> tps = new ArrayList<>();
+		if(!td.typeParameters().isEmpty())
+			tps.addAll(td.typeParameters());
+
+		clsBldr.addAllTypeParameters(tps.stream()
+				.map(x->x.getName().getIdentifier())
+				.collect(toList()));
+
+		Optional.ofNullable(td.getSuperclassType())
+				.ifPresent(t -> clsBldr.addSuperTypes(getDetailedType(t)));
+
+		if(!td.superInterfaceTypes().isEmpty()){
+			List<Type> interfaces = td.superInterfaceTypes();
+			clsBldr.addAllSuperTypes(interfaces.stream().map(x->getDetailedType(x)).collect(toList()));
+		}
+
+		clsBldr.addAllNestedClasses(Arrays.stream(td.getTypes()).map(x->getClassWorld(x)).collect(toList()));
+
+		class NestedEmnumVisitor extends ASTVisitor{
+			public List<EnumDeclaration> localEnums = new ArrayList<>();
+			@Override
+			public boolean visit(EnumDeclaration node) {
+				localEnums.add(node);
+				return super.visit(node);
+			}
+		}
+
+		NestedEmnumVisitor nev = new NestedEmnumVisitor();
+		td.accept(nev);
+		if(!nev.localEnums.isEmpty()){
+			clsBldr.addAllNestedClasses(nev.localEnums.stream().map(x->getClassWorld(x)).collect(toList()));
+		}
+
+		class localClassVisitor extends ASTVisitor{
+			public List<TypeDeclaration> localClasses = new ArrayList<>();
+			@Override
+			public boolean visit(TypeDeclaration node) {
+				localClasses.add(node);
+				return super.visit(node);
+			}
+		}
+
+		for(MethodDeclaration md : td.getMethods()){
+			localClassVisitor lc = new localClassVisitor();
+			if(md.getBody()!=null) {
+				md.getBody().accept(lc);
+				if (!lc.localClasses.isEmpty())
+					clsBldr.addAllNestedClasses(lc.localClasses.stream().map(x -> getClassWorld(x)).collect(toList()));
+			}
+		}
+
+
+		if(td.getFields().length > 0){
+			clsBldr.addAllComposeTypes( Arrays.stream(td.getFields()).map(x->getDetailedType(x.getType())).collect(toList()));
+		}
+
+		if(td.getMethods().length > 0){
+			clsBldr.addAllComposeTypes(Arrays.stream(td.getMethods())
+					.map(x->x.getReturnType2())
+					.filter(Objects::nonNull)
+					.map(x->getDetailedType(x))
+					.collect(toList()));
+		}
+
+
+		return clsBldr.build();
+
+	}
+
+
+
+	private static String getFileContent(Repository repository, TreeWalk treeWalk) throws IOException {
+		ObjectId objectId = treeWalk.getObjectId(0);
+		ObjectLoader loader = repository.open(objectId);
+		StringWriter writer = new StringWriter();
+		IOUtils.copy(loader.openStream(), writer);
+		return Optional.ofNullable(writer.toString()).orElse("");
+	}
+
+
+	public static CompilationUnit getCuFor(String content){
+		ASTParser parser = ASTParser.newParser(AST.JLS11);
+		Map<String, String> options = JavaCore.getOptions();
+		options.put(JavaCore.COMPILER_CODEGEN_TARGET_PLATFORM, JavaCore.VERSION_1_8);
+		options.put(JavaCore.COMPILER_SOURCE, JavaCore.VERSION_1_8);
+		options.put(JavaCore.COMPILER_COMPLIANCE, JavaCore.VERSION_1_8);
+		parser.setCompilerOptions(options);
+		parser.setResolveBindings(false);
+		parser.setKind(ASTParser.K_COMPILATION_UNIT);
+		parser.setStatementsRecovery(true);
+		parser.setSource(content.toCharArray());
+		return  (CompilationUnit)parser.createAST(null);
+	}
 }

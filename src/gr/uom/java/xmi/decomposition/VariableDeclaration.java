@@ -1,6 +1,6 @@
 package gr.uom.java.xmi.decomposition;
 
-import static gr.uom.java.xmi.DetailedType.getDetailedType;
+import static gr.uom.java.xmi.DetailedTypeUtil.getDetailedType;
 
 import org.eclipse.jdt.core.dom.ASTNode;
 import org.eclipse.jdt.core.dom.CompilationUnit;
@@ -10,8 +10,8 @@ import org.eclipse.jdt.core.dom.Type;
 import org.eclipse.jdt.core.dom.VariableDeclarationExpression;
 import org.eclipse.jdt.core.dom.VariableDeclarationFragment;
 import org.eclipse.jdt.core.dom.VariableDeclarationStatement;
+import org.refactoringminer.Models.DetailedTypeOuterClass.DetailedType;
 
-import gr.uom.java.xmi.DetailedType;
 import gr.uom.java.xmi.LocationInfo;
 import gr.uom.java.xmi.LocationInfo.CodeElementType;
 import gr.uom.java.xmi.LocationInfoProvider;

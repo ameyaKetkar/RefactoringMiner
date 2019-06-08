@@ -1,0 +1,139 @@
+syntax = "proto2";
+
+package Models;
+
+import "DetailedType.proto";
+
+option java_package = "org.refactoringminer.Models";
+
+message RMined{
+
+   required string project = 4;
+   required string commit = 5;
+   repeated RefactoringMined refactorings = 1;
+   repeated TypeChangeAnalysis typeChangeAnalysis = 3;
+   repeated OtherRefactoringAnalysis otherRefactoringAnalysis = 6;
+
+   message RefactoringMined{
+      required string refactoringType = 4;
+      repeated string name = 5;
+      repeated string classesB4 = 2;
+      repeated string classesAftr=1;
+      optional TypeChange typeChange = 3;
+   }
+
+   message TypeChange {
+      optional DetailedType dtB4 = 1;
+      optional DetailedType dtAftr = 2;
+      required string nameb4 = 5;
+      required string nameaftr =6;
+      required string classb4 = 7;
+      required string classAftr = 8;
+      required string refactoringType = 3;
+      optional bool renamed = 9;
+   }
+
+   // to handle renamed/&moved classes
+   message OtherRefactoringAnalysis {
+      optional string nameb4 = 1;
+      optional string nameAftr = 2;
+      required bool classRenamed = 3;
+      required bool classMoved = 4;
+      optional string qualifierb4 = 5;
+      optional string qualifierAftr = 6;
+   }
+
+   message TypeChangeAnalysis {
+      required DetailedType b4 = 1;
+      required DetailedType aftr = 2;
+      repeated NameSpaceAnalysis nameSpaceAnalysis = 4;
+      optional SyntacticTypeChange syntacticAnalysis = 3;
+      repeated DetailedType appliedSpaceAnalysis = 6;
+      optional TypeRelationshipAnalysis typeRelationshipAnalysis = 8;
+
+      message TypeRelationshipAnalysis {
+         optional bool TisSubTypeR = 3;
+         optional bool TisSuperTypeR = 1;
+         optional string TRcommonSuperType = 2;
+         optional bool TcomposesR = 4;
+         optional bool RcomposesT = 5;
+         optional bool TnestsR = 6;
+         optional bool RnestsT = 7;
+      }
+
+      message AppliedSpaceAnalysis {
+         required bool isTypeMigration =2;
+         required int32 numberOfTypeChanges = 1;
+      }
+
+      message NameSpaceAnalysis {
+         required NameSpace nameSpaceB4 = 1;
+         required NameSpace nameSpaceAftr = 2;
+         optional bool autoboxing = 3;
+         repeated NameSpace nameSpaceAdded = 7;
+         repeated NameSpace nameSpaceRemoved = 8;
+
+         message NameSpace {
+            required string typeOfType = 1;
+            required DetailedType dt = 2;
+         }
+      }
+
+      message SyntacticTypeChange {
+         required SyntacticChangeKind kind = 5;
+
+         optional DetailedType b4 = 7;
+         optional DetailedType aftr = 8;
+
+         oneof syntacticTypeChange{
+            Update upd = 1;
+            Augment aug = 3;
+            Enhance enh = 4;
+            Change chng = 10;
+         }
+
+         enum SyntacticChangeKind {
+            // similar syntactic structure
+            // param -> param , simple -> simple , Type kind are equal
+            // change in name, or change in some sub-tree
+            Upd =1 ;
+
+            // completely different syntactical structures.
+            // No types from T are used in R
+            Repl = 2;
+
+            // Completely different syntactical structure
+            // All types from T are used in R
+            Aug = 4;
+
+            // Different syntactical structures
+            // only some types from T are used in R
+            Enh = 3;
+
+            Chng = 7;
+
+            NoChange = 5;
+         }
+         message Update {
+            map<string,SyntacticTypeChange> syntypchng= 1;
+         }
+
+         message Change{
+            optional string from = 3;
+            optional string to = 4;
+            repeated string addedAnnotations = 5;
+            repeated string removedAnnotations = 6;
+         }
+
+         message Augment {
+            repeated DetailedType reuses = 3;
+            repeated DetailedType added = 4;
+         }
+         message Enhance {
+            repeated DetailedType reuses = 3;
+            repeated DetailedType added= 4;
+            repeated DetailedType removed = 5;
+         }
+      }
+   }
+}
