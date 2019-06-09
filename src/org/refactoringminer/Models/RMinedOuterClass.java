@@ -4660,30 +4660,6 @@ public final class RMinedOuterClass {
       org.refactoringminer.Models.RMinedOuterClass.RMined.TypeChangeAnalysis.SyntacticTypeChangeOrBuilder getSyntacticAnalysisOrBuilder();
 
       /**
-       * <code>repeated .Models.DetailedType appliedSpaceAnalysis = 6;</code>
-       */
-      java.util.List<org.refactoringminer.Models.DetailedTypeOuterClass.DetailedType> 
-          getAppliedSpaceAnalysisList();
-      /**
-       * <code>repeated .Models.DetailedType appliedSpaceAnalysis = 6;</code>
-       */
-      org.refactoringminer.Models.DetailedTypeOuterClass.DetailedType getAppliedSpaceAnalysis(int index);
-      /**
-       * <code>repeated .Models.DetailedType appliedSpaceAnalysis = 6;</code>
-       */
-      int getAppliedSpaceAnalysisCount();
-      /**
-       * <code>repeated .Models.DetailedType appliedSpaceAnalysis = 6;</code>
-       */
-      java.util.List<? extends org.refactoringminer.Models.DetailedTypeOuterClass.DetailedTypeOrBuilder> 
-          getAppliedSpaceAnalysisOrBuilderList();
-      /**
-       * <code>repeated .Models.DetailedType appliedSpaceAnalysis = 6;</code>
-       */
-      org.refactoringminer.Models.DetailedTypeOuterClass.DetailedTypeOrBuilder getAppliedSpaceAnalysisOrBuilder(
-          int index);
-
-      /**
        * <code>optional .Models.RMined.TypeChangeAnalysis.TypeRelationshipAnalysis typeRelationshipAnalysis = 8;</code>
        */
       boolean hasTypeRelationshipAnalysis();
@@ -4695,6 +4671,30 @@ public final class RMinedOuterClass {
        * <code>optional .Models.RMined.TypeChangeAnalysis.TypeRelationshipAnalysis typeRelationshipAnalysis = 8;</code>
        */
       org.refactoringminer.Models.RMinedOuterClass.RMined.TypeChangeAnalysis.TypeRelationshipAnalysisOrBuilder getTypeRelationshipAnalysisOrBuilder();
+
+      /**
+       * <code>repeated .Models.RMined.TypeChangeAnalysis.AppliedSpaceAnalysis appliedSpaceAnalysis = 9;</code>
+       */
+      java.util.List<org.refactoringminer.Models.RMinedOuterClass.RMined.TypeChangeAnalysis.AppliedSpaceAnalysis> 
+          getAppliedSpaceAnalysisList();
+      /**
+       * <code>repeated .Models.RMined.TypeChangeAnalysis.AppliedSpaceAnalysis appliedSpaceAnalysis = 9;</code>
+       */
+      org.refactoringminer.Models.RMinedOuterClass.RMined.TypeChangeAnalysis.AppliedSpaceAnalysis getAppliedSpaceAnalysis(int index);
+      /**
+       * <code>repeated .Models.RMined.TypeChangeAnalysis.AppliedSpaceAnalysis appliedSpaceAnalysis = 9;</code>
+       */
+      int getAppliedSpaceAnalysisCount();
+      /**
+       * <code>repeated .Models.RMined.TypeChangeAnalysis.AppliedSpaceAnalysis appliedSpaceAnalysis = 9;</code>
+       */
+      java.util.List<? extends org.refactoringminer.Models.RMinedOuterClass.RMined.TypeChangeAnalysis.AppliedSpaceAnalysisOrBuilder> 
+          getAppliedSpaceAnalysisOrBuilderList();
+      /**
+       * <code>repeated .Models.RMined.TypeChangeAnalysis.AppliedSpaceAnalysis appliedSpaceAnalysis = 9;</code>
+       */
+      org.refactoringminer.Models.RMinedOuterClass.RMined.TypeChangeAnalysis.AppliedSpaceAnalysisOrBuilder getAppliedSpaceAnalysisOrBuilder(
+          int index);
     }
     /**
      * Protobuf type {@code Models.RMined.TypeChangeAnalysis}
@@ -4792,15 +4792,6 @@ public final class RMinedOuterClass {
                     input.readMessage(org.refactoringminer.Models.RMinedOuterClass.RMined.TypeChangeAnalysis.NameSpaceAnalysis.PARSER, extensionRegistry));
                 break;
               }
-              case 50: {
-                if (!((mutable_bitField0_ & 0x00000010) == 0x00000010)) {
-                  appliedSpaceAnalysis_ = new java.util.ArrayList<org.refactoringminer.Models.DetailedTypeOuterClass.DetailedType>();
-                  mutable_bitField0_ |= 0x00000010;
-                }
-                appliedSpaceAnalysis_.add(
-                    input.readMessage(org.refactoringminer.Models.DetailedTypeOuterClass.DetailedType.PARSER, extensionRegistry));
-                break;
-              }
               case 66: {
                 org.refactoringminer.Models.RMinedOuterClass.RMined.TypeChangeAnalysis.TypeRelationshipAnalysis.Builder subBuilder = null;
                 if (((bitField0_ & 0x00000008) == 0x00000008)) {
@@ -4814,6 +4805,15 @@ public final class RMinedOuterClass {
                 bitField0_ |= 0x00000008;
                 break;
               }
+              case 74: {
+                if (!((mutable_bitField0_ & 0x00000020) == 0x00000020)) {
+                  appliedSpaceAnalysis_ = new java.util.ArrayList<org.refactoringminer.Models.RMinedOuterClass.RMined.TypeChangeAnalysis.AppliedSpaceAnalysis>();
+                  mutable_bitField0_ |= 0x00000020;
+                }
+                appliedSpaceAnalysis_.add(
+                    input.readMessage(org.refactoringminer.Models.RMinedOuterClass.RMined.TypeChangeAnalysis.AppliedSpaceAnalysis.PARSER, extensionRegistry));
+                break;
+              }
             }
           }
         } catch (com.google.protobuf.InvalidProtocolBufferException e) {
@@ -4825,7 +4825,7 @@ public final class RMinedOuterClass {
           if (((mutable_bitField0_ & 0x00000004) == 0x00000004)) {
             nameSpaceAnalysis_ = java.util.Collections.unmodifiableList(nameSpaceAnalysis_);
           }
-          if (((mutable_bitField0_ & 0x00000010) == 0x00000010)) {
+          if (((mutable_bitField0_ & 0x00000020) == 0x00000020)) {
             appliedSpaceAnalysis_ = java.util.Collections.unmodifiableList(appliedSpaceAnalysis_);
           }
           this.unknownFields = unknownFields.build();
@@ -5935,6 +5935,19 @@ public final class RMinedOuterClass {
           com.google.protobuf.MessageOrBuilder {
 
         /**
+         * <code>required .Models.DetailedType removed = 3;</code>
+         */
+        boolean hasRemoved();
+        /**
+         * <code>required .Models.DetailedType removed = 3;</code>
+         */
+        org.refactoringminer.Models.DetailedTypeOuterClass.DetailedType getRemoved();
+        /**
+         * <code>required .Models.DetailedType removed = 3;</code>
+         */
+        org.refactoringminer.Models.DetailedTypeOuterClass.DetailedTypeOrBuilder getRemovedOrBuilder();
+
+        /**
          * <code>required bool isTypeMigration = 2;</code>
          */
         boolean hasIsTypeMigration();
@@ -5942,15 +5955,6 @@ public final class RMinedOuterClass {
          * <code>required bool isTypeMigration = 2;</code>
          */
         boolean getIsTypeMigration();
-
-        /**
-         * <code>required int32 numberOfTypeChanges = 1;</code>
-         */
-        boolean hasNumberOfTypeChanges();
-        /**
-         * <code>required int32 numberOfTypeChanges = 1;</code>
-         */
-        int getNumberOfTypeChanges();
       }
       /**
        * Protobuf type {@code Models.RMined.TypeChangeAnalysis.AppliedSpaceAnalysis}
@@ -5966,7 +5970,6 @@ public final class RMinedOuterClass {
         }
         private AppliedSpaceAnalysis() {
           isTypeMigration_ = false;
-          numberOfTypeChanges_ = 0;
         }
 
         @java.lang.Override
@@ -6000,14 +6003,22 @@ public final class RMinedOuterClass {
                   }
                   break;
                 }
-                case 8: {
+                case 16: {
                   bitField0_ |= 0x00000002;
-                  numberOfTypeChanges_ = input.readInt32();
+                  isTypeMigration_ = input.readBool();
                   break;
                 }
-                case 16: {
+                case 26: {
+                  org.refactoringminer.Models.DetailedTypeOuterClass.DetailedType.Builder subBuilder = null;
+                  if (((bitField0_ & 0x00000001) == 0x00000001)) {
+                    subBuilder = removed_.toBuilder();
+                  }
+                  removed_ = input.readMessage(org.refactoringminer.Models.DetailedTypeOuterClass.DetailedType.PARSER, extensionRegistry);
+                  if (subBuilder != null) {
+                    subBuilder.mergeFrom(removed_);
+                    removed_ = subBuilder.buildPartial();
+                  }
                   bitField0_ |= 0x00000001;
-                  isTypeMigration_ = input.readBool();
                   break;
                 }
               }
@@ -6035,13 +6046,34 @@ public final class RMinedOuterClass {
         }
 
         private int bitField0_;
+        public static final int REMOVED_FIELD_NUMBER = 3;
+        private org.refactoringminer.Models.DetailedTypeOuterClass.DetailedType removed_;
+        /**
+         * <code>required .Models.DetailedType removed = 3;</code>
+         */
+        public boolean hasRemoved() {
+          return ((bitField0_ & 0x00000001) == 0x00000001);
+        }
+        /**
+         * <code>required .Models.DetailedType removed = 3;</code>
+         */
+        public org.refactoringminer.Models.DetailedTypeOuterClass.DetailedType getRemoved() {
+          return removed_ == null ? org.refactoringminer.Models.DetailedTypeOuterClass.DetailedType.getDefaultInstance() : removed_;
+        }
+        /**
+         * <code>required .Models.DetailedType removed = 3;</code>
+         */
+        public org.refactoringminer.Models.DetailedTypeOuterClass.DetailedTypeOrBuilder getRemovedOrBuilder() {
+          return removed_ == null ? org.refactoringminer.Models.DetailedTypeOuterClass.DetailedType.getDefaultInstance() : removed_;
+        }
+
         public static final int ISTYPEMIGRATION_FIELD_NUMBER = 2;
         private boolean isTypeMigration_;
         /**
          * <code>required bool isTypeMigration = 2;</code>
          */
         public boolean hasIsTypeMigration() {
-          return ((bitField0_ & 0x00000001) == 0x00000001);
+          return ((bitField0_ & 0x00000002) == 0x00000002);
         }
         /**
          * <code>required bool isTypeMigration = 2;</code>
@@ -6050,32 +6082,21 @@ public final class RMinedOuterClass {
           return isTypeMigration_;
         }
 
-        public static final int NUMBEROFTYPECHANGES_FIELD_NUMBER = 1;
-        private int numberOfTypeChanges_;
-        /**
-         * <code>required int32 numberOfTypeChanges = 1;</code>
-         */
-        public boolean hasNumberOfTypeChanges() {
-          return ((bitField0_ & 0x00000002) == 0x00000002);
-        }
-        /**
-         * <code>required int32 numberOfTypeChanges = 1;</code>
-         */
-        public int getNumberOfTypeChanges() {
-          return numberOfTypeChanges_;
-        }
-
         private byte memoizedIsInitialized = -1;
         public final boolean isInitialized() {
           byte isInitialized = memoizedIsInitialized;
           if (isInitialized == 1) return true;
           if (isInitialized == 0) return false;
 
+          if (!hasRemoved()) {
+            memoizedIsInitialized = 0;
+            return false;
+          }
           if (!hasIsTypeMigration()) {
             memoizedIsInitialized = 0;
             return false;
           }
-          if (!hasNumberOfTypeChanges()) {
+          if (!getRemoved().isInitialized()) {
             memoizedIsInitialized = 0;
             return false;
           }
@@ -6086,10 +6107,10 @@ public final class RMinedOuterClass {
         public void writeTo(com.google.protobuf.CodedOutputStream output)
                             throws java.io.IOException {
           if (((bitField0_ & 0x00000002) == 0x00000002)) {
-            output.writeInt32(1, numberOfTypeChanges_);
+            output.writeBool(2, isTypeMigration_);
           }
           if (((bitField0_ & 0x00000001) == 0x00000001)) {
-            output.writeBool(2, isTypeMigration_);
+            output.writeMessage(3, getRemoved());
           }
           unknownFields.writeTo(output);
         }
@@ -6101,11 +6122,11 @@ public final class RMinedOuterClass {
           size = 0;
           if (((bitField0_ & 0x00000002) == 0x00000002)) {
             size += com.google.protobuf.CodedOutputStream
-              .computeInt32Size(1, numberOfTypeChanges_);
+              .computeBoolSize(2, isTypeMigration_);
           }
           if (((bitField0_ & 0x00000001) == 0x00000001)) {
             size += com.google.protobuf.CodedOutputStream
-              .computeBoolSize(2, isTypeMigration_);
+              .computeMessageSize(3, getRemoved());
           }
           size += unknownFields.getSerializedSize();
           memoizedSize = size;
@@ -6123,15 +6144,15 @@ public final class RMinedOuterClass {
           org.refactoringminer.Models.RMinedOuterClass.RMined.TypeChangeAnalysis.AppliedSpaceAnalysis other = (org.refactoringminer.Models.RMinedOuterClass.RMined.TypeChangeAnalysis.AppliedSpaceAnalysis) obj;
 
           boolean result = true;
+          result = result && (hasRemoved() == other.hasRemoved());
+          if (hasRemoved()) {
+            result = result && getRemoved()
+                .equals(other.getRemoved());
+          }
           result = result && (hasIsTypeMigration() == other.hasIsTypeMigration());
           if (hasIsTypeMigration()) {
             result = result && (getIsTypeMigration()
                 == other.getIsTypeMigration());
-          }
-          result = result && (hasNumberOfTypeChanges() == other.hasNumberOfTypeChanges());
-          if (hasNumberOfTypeChanges()) {
-            result = result && (getNumberOfTypeChanges()
-                == other.getNumberOfTypeChanges());
           }
           result = result && unknownFields.equals(other.unknownFields);
           return result;
@@ -6144,14 +6165,14 @@ public final class RMinedOuterClass {
           }
           int hash = 41;
           hash = (19 * hash) + getDescriptor().hashCode();
+          if (hasRemoved()) {
+            hash = (37 * hash) + REMOVED_FIELD_NUMBER;
+            hash = (53 * hash) + getRemoved().hashCode();
+          }
           if (hasIsTypeMigration()) {
             hash = (37 * hash) + ISTYPEMIGRATION_FIELD_NUMBER;
             hash = (53 * hash) + com.google.protobuf.Internal.hashBoolean(
                 getIsTypeMigration());
-          }
-          if (hasNumberOfTypeChanges()) {
-            hash = (37 * hash) + NUMBEROFTYPECHANGES_FIELD_NUMBER;
-            hash = (53 * hash) + getNumberOfTypeChanges();
           }
           hash = (29 * hash) + unknownFields.hashCode();
           memoizedHashCode = hash;
@@ -6278,13 +6299,18 @@ public final class RMinedOuterClass {
           private void maybeForceBuilderInitialization() {
             if (com.google.protobuf.GeneratedMessageV3
                     .alwaysUseFieldBuilders) {
+              getRemovedFieldBuilder();
             }
           }
           public Builder clear() {
             super.clear();
-            isTypeMigration_ = false;
+            if (removedBuilder_ == null) {
+              removed_ = null;
+            } else {
+              removedBuilder_.clear();
+            }
             bitField0_ = (bitField0_ & ~0x00000001);
-            numberOfTypeChanges_ = 0;
+            isTypeMigration_ = false;
             bitField0_ = (bitField0_ & ~0x00000002);
             return this;
           }
@@ -6313,11 +6339,15 @@ public final class RMinedOuterClass {
             if (((from_bitField0_ & 0x00000001) == 0x00000001)) {
               to_bitField0_ |= 0x00000001;
             }
-            result.isTypeMigration_ = isTypeMigration_;
+            if (removedBuilder_ == null) {
+              result.removed_ = removed_;
+            } else {
+              result.removed_ = removedBuilder_.build();
+            }
             if (((from_bitField0_ & 0x00000002) == 0x00000002)) {
               to_bitField0_ |= 0x00000002;
             }
-            result.numberOfTypeChanges_ = numberOfTypeChanges_;
+            result.isTypeMigration_ = isTypeMigration_;
             result.bitField0_ = to_bitField0_;
             onBuilt();
             return result;
@@ -6360,11 +6390,11 @@ public final class RMinedOuterClass {
 
           public Builder mergeFrom(org.refactoringminer.Models.RMinedOuterClass.RMined.TypeChangeAnalysis.AppliedSpaceAnalysis other) {
             if (other == org.refactoringminer.Models.RMinedOuterClass.RMined.TypeChangeAnalysis.AppliedSpaceAnalysis.getDefaultInstance()) return this;
+            if (other.hasRemoved()) {
+              mergeRemoved(other.getRemoved());
+            }
             if (other.hasIsTypeMigration()) {
               setIsTypeMigration(other.getIsTypeMigration());
-            }
-            if (other.hasNumberOfTypeChanges()) {
-              setNumberOfTypeChanges(other.getNumberOfTypeChanges());
             }
             this.mergeUnknownFields(other.unknownFields);
             onChanged();
@@ -6372,10 +6402,13 @@ public final class RMinedOuterClass {
           }
 
           public final boolean isInitialized() {
+            if (!hasRemoved()) {
+              return false;
+            }
             if (!hasIsTypeMigration()) {
               return false;
             }
-            if (!hasNumberOfTypeChanges()) {
+            if (!getRemoved().isInitialized()) {
               return false;
             }
             return true;
@@ -6400,12 +6433,130 @@ public final class RMinedOuterClass {
           }
           private int bitField0_;
 
+          private org.refactoringminer.Models.DetailedTypeOuterClass.DetailedType removed_ = null;
+          private com.google.protobuf.SingleFieldBuilderV3<
+              org.refactoringminer.Models.DetailedTypeOuterClass.DetailedType, org.refactoringminer.Models.DetailedTypeOuterClass.DetailedType.Builder, org.refactoringminer.Models.DetailedTypeOuterClass.DetailedTypeOrBuilder> removedBuilder_;
+          /**
+           * <code>required .Models.DetailedType removed = 3;</code>
+           */
+          public boolean hasRemoved() {
+            return ((bitField0_ & 0x00000001) == 0x00000001);
+          }
+          /**
+           * <code>required .Models.DetailedType removed = 3;</code>
+           */
+          public org.refactoringminer.Models.DetailedTypeOuterClass.DetailedType getRemoved() {
+            if (removedBuilder_ == null) {
+              return removed_ == null ? org.refactoringminer.Models.DetailedTypeOuterClass.DetailedType.getDefaultInstance() : removed_;
+            } else {
+              return removedBuilder_.getMessage();
+            }
+          }
+          /**
+           * <code>required .Models.DetailedType removed = 3;</code>
+           */
+          public Builder setRemoved(org.refactoringminer.Models.DetailedTypeOuterClass.DetailedType value) {
+            if (removedBuilder_ == null) {
+              if (value == null) {
+                throw new NullPointerException();
+              }
+              removed_ = value;
+              onChanged();
+            } else {
+              removedBuilder_.setMessage(value);
+            }
+            bitField0_ |= 0x00000001;
+            return this;
+          }
+          /**
+           * <code>required .Models.DetailedType removed = 3;</code>
+           */
+          public Builder setRemoved(
+              org.refactoringminer.Models.DetailedTypeOuterClass.DetailedType.Builder builderForValue) {
+            if (removedBuilder_ == null) {
+              removed_ = builderForValue.build();
+              onChanged();
+            } else {
+              removedBuilder_.setMessage(builderForValue.build());
+            }
+            bitField0_ |= 0x00000001;
+            return this;
+          }
+          /**
+           * <code>required .Models.DetailedType removed = 3;</code>
+           */
+          public Builder mergeRemoved(org.refactoringminer.Models.DetailedTypeOuterClass.DetailedType value) {
+            if (removedBuilder_ == null) {
+              if (((bitField0_ & 0x00000001) == 0x00000001) &&
+                  removed_ != null &&
+                  removed_ != org.refactoringminer.Models.DetailedTypeOuterClass.DetailedType.getDefaultInstance()) {
+                removed_ =
+                  org.refactoringminer.Models.DetailedTypeOuterClass.DetailedType.newBuilder(removed_).mergeFrom(value).buildPartial();
+              } else {
+                removed_ = value;
+              }
+              onChanged();
+            } else {
+              removedBuilder_.mergeFrom(value);
+            }
+            bitField0_ |= 0x00000001;
+            return this;
+          }
+          /**
+           * <code>required .Models.DetailedType removed = 3;</code>
+           */
+          public Builder clearRemoved() {
+            if (removedBuilder_ == null) {
+              removed_ = null;
+              onChanged();
+            } else {
+              removedBuilder_.clear();
+            }
+            bitField0_ = (bitField0_ & ~0x00000001);
+            return this;
+          }
+          /**
+           * <code>required .Models.DetailedType removed = 3;</code>
+           */
+          public org.refactoringminer.Models.DetailedTypeOuterClass.DetailedType.Builder getRemovedBuilder() {
+            bitField0_ |= 0x00000001;
+            onChanged();
+            return getRemovedFieldBuilder().getBuilder();
+          }
+          /**
+           * <code>required .Models.DetailedType removed = 3;</code>
+           */
+          public org.refactoringminer.Models.DetailedTypeOuterClass.DetailedTypeOrBuilder getRemovedOrBuilder() {
+            if (removedBuilder_ != null) {
+              return removedBuilder_.getMessageOrBuilder();
+            } else {
+              return removed_ == null ?
+                  org.refactoringminer.Models.DetailedTypeOuterClass.DetailedType.getDefaultInstance() : removed_;
+            }
+          }
+          /**
+           * <code>required .Models.DetailedType removed = 3;</code>
+           */
+          private com.google.protobuf.SingleFieldBuilderV3<
+              org.refactoringminer.Models.DetailedTypeOuterClass.DetailedType, org.refactoringminer.Models.DetailedTypeOuterClass.DetailedType.Builder, org.refactoringminer.Models.DetailedTypeOuterClass.DetailedTypeOrBuilder> 
+              getRemovedFieldBuilder() {
+            if (removedBuilder_ == null) {
+              removedBuilder_ = new com.google.protobuf.SingleFieldBuilderV3<
+                  org.refactoringminer.Models.DetailedTypeOuterClass.DetailedType, org.refactoringminer.Models.DetailedTypeOuterClass.DetailedType.Builder, org.refactoringminer.Models.DetailedTypeOuterClass.DetailedTypeOrBuilder>(
+                      getRemoved(),
+                      getParentForChildren(),
+                      isClean());
+              removed_ = null;
+            }
+            return removedBuilder_;
+          }
+
           private boolean isTypeMigration_ ;
           /**
            * <code>required bool isTypeMigration = 2;</code>
            */
           public boolean hasIsTypeMigration() {
-            return ((bitField0_ & 0x00000001) == 0x00000001);
+            return ((bitField0_ & 0x00000002) == 0x00000002);
           }
           /**
            * <code>required bool isTypeMigration = 2;</code>
@@ -6417,7 +6568,7 @@ public final class RMinedOuterClass {
            * <code>required bool isTypeMigration = 2;</code>
            */
           public Builder setIsTypeMigration(boolean value) {
-            bitField0_ |= 0x00000001;
+            bitField0_ |= 0x00000002;
             isTypeMigration_ = value;
             onChanged();
             return this;
@@ -6426,40 +6577,8 @@ public final class RMinedOuterClass {
            * <code>required bool isTypeMigration = 2;</code>
            */
           public Builder clearIsTypeMigration() {
-            bitField0_ = (bitField0_ & ~0x00000001);
-            isTypeMigration_ = false;
-            onChanged();
-            return this;
-          }
-
-          private int numberOfTypeChanges_ ;
-          /**
-           * <code>required int32 numberOfTypeChanges = 1;</code>
-           */
-          public boolean hasNumberOfTypeChanges() {
-            return ((bitField0_ & 0x00000002) == 0x00000002);
-          }
-          /**
-           * <code>required int32 numberOfTypeChanges = 1;</code>
-           */
-          public int getNumberOfTypeChanges() {
-            return numberOfTypeChanges_;
-          }
-          /**
-           * <code>required int32 numberOfTypeChanges = 1;</code>
-           */
-          public Builder setNumberOfTypeChanges(int value) {
-            bitField0_ |= 0x00000002;
-            numberOfTypeChanges_ = value;
-            onChanged();
-            return this;
-          }
-          /**
-           * <code>required int32 numberOfTypeChanges = 1;</code>
-           */
-          public Builder clearNumberOfTypeChanges() {
             bitField0_ = (bitField0_ & ~0x00000002);
-            numberOfTypeChanges_ = 0;
+            isTypeMigration_ = false;
             onChanged();
             return this;
           }
@@ -15584,41 +15703,6 @@ public final class RMinedOuterClass {
         return syntacticAnalysis_ == null ? org.refactoringminer.Models.RMinedOuterClass.RMined.TypeChangeAnalysis.SyntacticTypeChange.getDefaultInstance() : syntacticAnalysis_;
       }
 
-      public static final int APPLIEDSPACEANALYSIS_FIELD_NUMBER = 6;
-      private java.util.List<org.refactoringminer.Models.DetailedTypeOuterClass.DetailedType> appliedSpaceAnalysis_;
-      /**
-       * <code>repeated .Models.DetailedType appliedSpaceAnalysis = 6;</code>
-       */
-      public java.util.List<org.refactoringminer.Models.DetailedTypeOuterClass.DetailedType> getAppliedSpaceAnalysisList() {
-        return appliedSpaceAnalysis_;
-      }
-      /**
-       * <code>repeated .Models.DetailedType appliedSpaceAnalysis = 6;</code>
-       */
-      public java.util.List<? extends org.refactoringminer.Models.DetailedTypeOuterClass.DetailedTypeOrBuilder> 
-          getAppliedSpaceAnalysisOrBuilderList() {
-        return appliedSpaceAnalysis_;
-      }
-      /**
-       * <code>repeated .Models.DetailedType appliedSpaceAnalysis = 6;</code>
-       */
-      public int getAppliedSpaceAnalysisCount() {
-        return appliedSpaceAnalysis_.size();
-      }
-      /**
-       * <code>repeated .Models.DetailedType appliedSpaceAnalysis = 6;</code>
-       */
-      public org.refactoringminer.Models.DetailedTypeOuterClass.DetailedType getAppliedSpaceAnalysis(int index) {
-        return appliedSpaceAnalysis_.get(index);
-      }
-      /**
-       * <code>repeated .Models.DetailedType appliedSpaceAnalysis = 6;</code>
-       */
-      public org.refactoringminer.Models.DetailedTypeOuterClass.DetailedTypeOrBuilder getAppliedSpaceAnalysisOrBuilder(
-          int index) {
-        return appliedSpaceAnalysis_.get(index);
-      }
-
       public static final int TYPERELATIONSHIPANALYSIS_FIELD_NUMBER = 8;
       private org.refactoringminer.Models.RMinedOuterClass.RMined.TypeChangeAnalysis.TypeRelationshipAnalysis typeRelationshipAnalysis_;
       /**
@@ -15638,6 +15722,41 @@ public final class RMinedOuterClass {
        */
       public org.refactoringminer.Models.RMinedOuterClass.RMined.TypeChangeAnalysis.TypeRelationshipAnalysisOrBuilder getTypeRelationshipAnalysisOrBuilder() {
         return typeRelationshipAnalysis_ == null ? org.refactoringminer.Models.RMinedOuterClass.RMined.TypeChangeAnalysis.TypeRelationshipAnalysis.getDefaultInstance() : typeRelationshipAnalysis_;
+      }
+
+      public static final int APPLIEDSPACEANALYSIS_FIELD_NUMBER = 9;
+      private java.util.List<org.refactoringminer.Models.RMinedOuterClass.RMined.TypeChangeAnalysis.AppliedSpaceAnalysis> appliedSpaceAnalysis_;
+      /**
+       * <code>repeated .Models.RMined.TypeChangeAnalysis.AppliedSpaceAnalysis appliedSpaceAnalysis = 9;</code>
+       */
+      public java.util.List<org.refactoringminer.Models.RMinedOuterClass.RMined.TypeChangeAnalysis.AppliedSpaceAnalysis> getAppliedSpaceAnalysisList() {
+        return appliedSpaceAnalysis_;
+      }
+      /**
+       * <code>repeated .Models.RMined.TypeChangeAnalysis.AppliedSpaceAnalysis appliedSpaceAnalysis = 9;</code>
+       */
+      public java.util.List<? extends org.refactoringminer.Models.RMinedOuterClass.RMined.TypeChangeAnalysis.AppliedSpaceAnalysisOrBuilder> 
+          getAppliedSpaceAnalysisOrBuilderList() {
+        return appliedSpaceAnalysis_;
+      }
+      /**
+       * <code>repeated .Models.RMined.TypeChangeAnalysis.AppliedSpaceAnalysis appliedSpaceAnalysis = 9;</code>
+       */
+      public int getAppliedSpaceAnalysisCount() {
+        return appliedSpaceAnalysis_.size();
+      }
+      /**
+       * <code>repeated .Models.RMined.TypeChangeAnalysis.AppliedSpaceAnalysis appliedSpaceAnalysis = 9;</code>
+       */
+      public org.refactoringminer.Models.RMinedOuterClass.RMined.TypeChangeAnalysis.AppliedSpaceAnalysis getAppliedSpaceAnalysis(int index) {
+        return appliedSpaceAnalysis_.get(index);
+      }
+      /**
+       * <code>repeated .Models.RMined.TypeChangeAnalysis.AppliedSpaceAnalysis appliedSpaceAnalysis = 9;</code>
+       */
+      public org.refactoringminer.Models.RMinedOuterClass.RMined.TypeChangeAnalysis.AppliedSpaceAnalysisOrBuilder getAppliedSpaceAnalysisOrBuilder(
+          int index) {
+        return appliedSpaceAnalysis_.get(index);
       }
 
       private byte memoizedIsInitialized = -1;
@@ -15698,11 +15817,11 @@ public final class RMinedOuterClass {
         for (int i = 0; i < nameSpaceAnalysis_.size(); i++) {
           output.writeMessage(4, nameSpaceAnalysis_.get(i));
         }
-        for (int i = 0; i < appliedSpaceAnalysis_.size(); i++) {
-          output.writeMessage(6, appliedSpaceAnalysis_.get(i));
-        }
         if (((bitField0_ & 0x00000008) == 0x00000008)) {
           output.writeMessage(8, getTypeRelationshipAnalysis());
+        }
+        for (int i = 0; i < appliedSpaceAnalysis_.size(); i++) {
+          output.writeMessage(9, appliedSpaceAnalysis_.get(i));
         }
         unknownFields.writeTo(output);
       }
@@ -15728,13 +15847,13 @@ public final class RMinedOuterClass {
           size += com.google.protobuf.CodedOutputStream
             .computeMessageSize(4, nameSpaceAnalysis_.get(i));
         }
-        for (int i = 0; i < appliedSpaceAnalysis_.size(); i++) {
-          size += com.google.protobuf.CodedOutputStream
-            .computeMessageSize(6, appliedSpaceAnalysis_.get(i));
-        }
         if (((bitField0_ & 0x00000008) == 0x00000008)) {
           size += com.google.protobuf.CodedOutputStream
             .computeMessageSize(8, getTypeRelationshipAnalysis());
+        }
+        for (int i = 0; i < appliedSpaceAnalysis_.size(); i++) {
+          size += com.google.protobuf.CodedOutputStream
+            .computeMessageSize(9, appliedSpaceAnalysis_.get(i));
         }
         size += unknownFields.getSerializedSize();
         memoizedSize = size;
@@ -15769,13 +15888,13 @@ public final class RMinedOuterClass {
           result = result && getSyntacticAnalysis()
               .equals(other.getSyntacticAnalysis());
         }
-        result = result && getAppliedSpaceAnalysisList()
-            .equals(other.getAppliedSpaceAnalysisList());
         result = result && (hasTypeRelationshipAnalysis() == other.hasTypeRelationshipAnalysis());
         if (hasTypeRelationshipAnalysis()) {
           result = result && getTypeRelationshipAnalysis()
               .equals(other.getTypeRelationshipAnalysis());
         }
+        result = result && getAppliedSpaceAnalysisList()
+            .equals(other.getAppliedSpaceAnalysisList());
         result = result && unknownFields.equals(other.unknownFields);
         return result;
       }
@@ -15803,13 +15922,13 @@ public final class RMinedOuterClass {
           hash = (37 * hash) + SYNTACTICANALYSIS_FIELD_NUMBER;
           hash = (53 * hash) + getSyntacticAnalysis().hashCode();
         }
-        if (getAppliedSpaceAnalysisCount() > 0) {
-          hash = (37 * hash) + APPLIEDSPACEANALYSIS_FIELD_NUMBER;
-          hash = (53 * hash) + getAppliedSpaceAnalysisList().hashCode();
-        }
         if (hasTypeRelationshipAnalysis()) {
           hash = (37 * hash) + TYPERELATIONSHIPANALYSIS_FIELD_NUMBER;
           hash = (53 * hash) + getTypeRelationshipAnalysis().hashCode();
+        }
+        if (getAppliedSpaceAnalysisCount() > 0) {
+          hash = (37 * hash) + APPLIEDSPACEANALYSIS_FIELD_NUMBER;
+          hash = (53 * hash) + getAppliedSpaceAnalysisList().hashCode();
         }
         hash = (29 * hash) + unknownFields.hashCode();
         memoizedHashCode = hash;
@@ -15940,8 +16059,8 @@ public final class RMinedOuterClass {
             getAftrFieldBuilder();
             getNameSpaceAnalysisFieldBuilder();
             getSyntacticAnalysisFieldBuilder();
-            getAppliedSpaceAnalysisFieldBuilder();
             getTypeRelationshipAnalysisFieldBuilder();
+            getAppliedSpaceAnalysisFieldBuilder();
           }
         }
         public Builder clear() {
@@ -15970,18 +16089,18 @@ public final class RMinedOuterClass {
             syntacticAnalysisBuilder_.clear();
           }
           bitField0_ = (bitField0_ & ~0x00000008);
-          if (appliedSpaceAnalysisBuilder_ == null) {
-            appliedSpaceAnalysis_ = java.util.Collections.emptyList();
-            bitField0_ = (bitField0_ & ~0x00000010);
-          } else {
-            appliedSpaceAnalysisBuilder_.clear();
-          }
           if (typeRelationshipAnalysisBuilder_ == null) {
             typeRelationshipAnalysis_ = null;
           } else {
             typeRelationshipAnalysisBuilder_.clear();
           }
-          bitField0_ = (bitField0_ & ~0x00000020);
+          bitField0_ = (bitField0_ & ~0x00000010);
+          if (appliedSpaceAnalysisBuilder_ == null) {
+            appliedSpaceAnalysis_ = java.util.Collections.emptyList();
+            bitField0_ = (bitField0_ & ~0x00000020);
+          } else {
+            appliedSpaceAnalysisBuilder_.clear();
+          }
           return this;
         }
 
@@ -16039,22 +16158,22 @@ public final class RMinedOuterClass {
           } else {
             result.syntacticAnalysis_ = syntacticAnalysisBuilder_.build();
           }
-          if (appliedSpaceAnalysisBuilder_ == null) {
-            if (((bitField0_ & 0x00000010) == 0x00000010)) {
-              appliedSpaceAnalysis_ = java.util.Collections.unmodifiableList(appliedSpaceAnalysis_);
-              bitField0_ = (bitField0_ & ~0x00000010);
-            }
-            result.appliedSpaceAnalysis_ = appliedSpaceAnalysis_;
-          } else {
-            result.appliedSpaceAnalysis_ = appliedSpaceAnalysisBuilder_.build();
-          }
-          if (((from_bitField0_ & 0x00000020) == 0x00000020)) {
+          if (((from_bitField0_ & 0x00000010) == 0x00000010)) {
             to_bitField0_ |= 0x00000008;
           }
           if (typeRelationshipAnalysisBuilder_ == null) {
             result.typeRelationshipAnalysis_ = typeRelationshipAnalysis_;
           } else {
             result.typeRelationshipAnalysis_ = typeRelationshipAnalysisBuilder_.build();
+          }
+          if (appliedSpaceAnalysisBuilder_ == null) {
+            if (((bitField0_ & 0x00000020) == 0x00000020)) {
+              appliedSpaceAnalysis_ = java.util.Collections.unmodifiableList(appliedSpaceAnalysis_);
+              bitField0_ = (bitField0_ & ~0x00000020);
+            }
+            result.appliedSpaceAnalysis_ = appliedSpaceAnalysis_;
+          } else {
+            result.appliedSpaceAnalysis_ = appliedSpaceAnalysisBuilder_.build();
           }
           result.bitField0_ = to_bitField0_;
           onBuilt();
@@ -16133,11 +16252,14 @@ public final class RMinedOuterClass {
           if (other.hasSyntacticAnalysis()) {
             mergeSyntacticAnalysis(other.getSyntacticAnalysis());
           }
+          if (other.hasTypeRelationshipAnalysis()) {
+            mergeTypeRelationshipAnalysis(other.getTypeRelationshipAnalysis());
+          }
           if (appliedSpaceAnalysisBuilder_ == null) {
             if (!other.appliedSpaceAnalysis_.isEmpty()) {
               if (appliedSpaceAnalysis_.isEmpty()) {
                 appliedSpaceAnalysis_ = other.appliedSpaceAnalysis_;
-                bitField0_ = (bitField0_ & ~0x00000010);
+                bitField0_ = (bitField0_ & ~0x00000020);
               } else {
                 ensureAppliedSpaceAnalysisIsMutable();
                 appliedSpaceAnalysis_.addAll(other.appliedSpaceAnalysis_);
@@ -16150,7 +16272,7 @@ public final class RMinedOuterClass {
                 appliedSpaceAnalysisBuilder_.dispose();
                 appliedSpaceAnalysisBuilder_ = null;
                 appliedSpaceAnalysis_ = other.appliedSpaceAnalysis_;
-                bitField0_ = (bitField0_ & ~0x00000010);
+                bitField0_ = (bitField0_ & ~0x00000020);
                 appliedSpaceAnalysisBuilder_ = 
                   com.google.protobuf.GeneratedMessageV3.alwaysUseFieldBuilders ?
                      getAppliedSpaceAnalysisFieldBuilder() : null;
@@ -16158,9 +16280,6 @@ public final class RMinedOuterClass {
                 appliedSpaceAnalysisBuilder_.addAllMessages(other.appliedSpaceAnalysis_);
               }
             }
-          }
-          if (other.hasTypeRelationshipAnalysis()) {
-            mergeTypeRelationshipAnalysis(other.getTypeRelationshipAnalysis());
           }
           this.mergeUnknownFields(other.unknownFields);
           onChanged();
@@ -16811,246 +16930,6 @@ public final class RMinedOuterClass {
           return syntacticAnalysisBuilder_;
         }
 
-        private java.util.List<org.refactoringminer.Models.DetailedTypeOuterClass.DetailedType> appliedSpaceAnalysis_ =
-          java.util.Collections.emptyList();
-        private void ensureAppliedSpaceAnalysisIsMutable() {
-          if (!((bitField0_ & 0x00000010) == 0x00000010)) {
-            appliedSpaceAnalysis_ = new java.util.ArrayList<org.refactoringminer.Models.DetailedTypeOuterClass.DetailedType>(appliedSpaceAnalysis_);
-            bitField0_ |= 0x00000010;
-           }
-        }
-
-        private com.google.protobuf.RepeatedFieldBuilderV3<
-            org.refactoringminer.Models.DetailedTypeOuterClass.DetailedType, org.refactoringminer.Models.DetailedTypeOuterClass.DetailedType.Builder, org.refactoringminer.Models.DetailedTypeOuterClass.DetailedTypeOrBuilder> appliedSpaceAnalysisBuilder_;
-
-        /**
-         * <code>repeated .Models.DetailedType appliedSpaceAnalysis = 6;</code>
-         */
-        public java.util.List<org.refactoringminer.Models.DetailedTypeOuterClass.DetailedType> getAppliedSpaceAnalysisList() {
-          if (appliedSpaceAnalysisBuilder_ == null) {
-            return java.util.Collections.unmodifiableList(appliedSpaceAnalysis_);
-          } else {
-            return appliedSpaceAnalysisBuilder_.getMessageList();
-          }
-        }
-        /**
-         * <code>repeated .Models.DetailedType appliedSpaceAnalysis = 6;</code>
-         */
-        public int getAppliedSpaceAnalysisCount() {
-          if (appliedSpaceAnalysisBuilder_ == null) {
-            return appliedSpaceAnalysis_.size();
-          } else {
-            return appliedSpaceAnalysisBuilder_.getCount();
-          }
-        }
-        /**
-         * <code>repeated .Models.DetailedType appliedSpaceAnalysis = 6;</code>
-         */
-        public org.refactoringminer.Models.DetailedTypeOuterClass.DetailedType getAppliedSpaceAnalysis(int index) {
-          if (appliedSpaceAnalysisBuilder_ == null) {
-            return appliedSpaceAnalysis_.get(index);
-          } else {
-            return appliedSpaceAnalysisBuilder_.getMessage(index);
-          }
-        }
-        /**
-         * <code>repeated .Models.DetailedType appliedSpaceAnalysis = 6;</code>
-         */
-        public Builder setAppliedSpaceAnalysis(
-            int index, org.refactoringminer.Models.DetailedTypeOuterClass.DetailedType value) {
-          if (appliedSpaceAnalysisBuilder_ == null) {
-            if (value == null) {
-              throw new NullPointerException();
-            }
-            ensureAppliedSpaceAnalysisIsMutable();
-            appliedSpaceAnalysis_.set(index, value);
-            onChanged();
-          } else {
-            appliedSpaceAnalysisBuilder_.setMessage(index, value);
-          }
-          return this;
-        }
-        /**
-         * <code>repeated .Models.DetailedType appliedSpaceAnalysis = 6;</code>
-         */
-        public Builder setAppliedSpaceAnalysis(
-            int index, org.refactoringminer.Models.DetailedTypeOuterClass.DetailedType.Builder builderForValue) {
-          if (appliedSpaceAnalysisBuilder_ == null) {
-            ensureAppliedSpaceAnalysisIsMutable();
-            appliedSpaceAnalysis_.set(index, builderForValue.build());
-            onChanged();
-          } else {
-            appliedSpaceAnalysisBuilder_.setMessage(index, builderForValue.build());
-          }
-          return this;
-        }
-        /**
-         * <code>repeated .Models.DetailedType appliedSpaceAnalysis = 6;</code>
-         */
-        public Builder addAppliedSpaceAnalysis(org.refactoringminer.Models.DetailedTypeOuterClass.DetailedType value) {
-          if (appliedSpaceAnalysisBuilder_ == null) {
-            if (value == null) {
-              throw new NullPointerException();
-            }
-            ensureAppliedSpaceAnalysisIsMutable();
-            appliedSpaceAnalysis_.add(value);
-            onChanged();
-          } else {
-            appliedSpaceAnalysisBuilder_.addMessage(value);
-          }
-          return this;
-        }
-        /**
-         * <code>repeated .Models.DetailedType appliedSpaceAnalysis = 6;</code>
-         */
-        public Builder addAppliedSpaceAnalysis(
-            int index, org.refactoringminer.Models.DetailedTypeOuterClass.DetailedType value) {
-          if (appliedSpaceAnalysisBuilder_ == null) {
-            if (value == null) {
-              throw new NullPointerException();
-            }
-            ensureAppliedSpaceAnalysisIsMutable();
-            appliedSpaceAnalysis_.add(index, value);
-            onChanged();
-          } else {
-            appliedSpaceAnalysisBuilder_.addMessage(index, value);
-          }
-          return this;
-        }
-        /**
-         * <code>repeated .Models.DetailedType appliedSpaceAnalysis = 6;</code>
-         */
-        public Builder addAppliedSpaceAnalysis(
-            org.refactoringminer.Models.DetailedTypeOuterClass.DetailedType.Builder builderForValue) {
-          if (appliedSpaceAnalysisBuilder_ == null) {
-            ensureAppliedSpaceAnalysisIsMutable();
-            appliedSpaceAnalysis_.add(builderForValue.build());
-            onChanged();
-          } else {
-            appliedSpaceAnalysisBuilder_.addMessage(builderForValue.build());
-          }
-          return this;
-        }
-        /**
-         * <code>repeated .Models.DetailedType appliedSpaceAnalysis = 6;</code>
-         */
-        public Builder addAppliedSpaceAnalysis(
-            int index, org.refactoringminer.Models.DetailedTypeOuterClass.DetailedType.Builder builderForValue) {
-          if (appliedSpaceAnalysisBuilder_ == null) {
-            ensureAppliedSpaceAnalysisIsMutable();
-            appliedSpaceAnalysis_.add(index, builderForValue.build());
-            onChanged();
-          } else {
-            appliedSpaceAnalysisBuilder_.addMessage(index, builderForValue.build());
-          }
-          return this;
-        }
-        /**
-         * <code>repeated .Models.DetailedType appliedSpaceAnalysis = 6;</code>
-         */
-        public Builder addAllAppliedSpaceAnalysis(
-            java.lang.Iterable<? extends org.refactoringminer.Models.DetailedTypeOuterClass.DetailedType> values) {
-          if (appliedSpaceAnalysisBuilder_ == null) {
-            ensureAppliedSpaceAnalysisIsMutable();
-            com.google.protobuf.AbstractMessageLite.Builder.addAll(
-                values, appliedSpaceAnalysis_);
-            onChanged();
-          } else {
-            appliedSpaceAnalysisBuilder_.addAllMessages(values);
-          }
-          return this;
-        }
-        /**
-         * <code>repeated .Models.DetailedType appliedSpaceAnalysis = 6;</code>
-         */
-        public Builder clearAppliedSpaceAnalysis() {
-          if (appliedSpaceAnalysisBuilder_ == null) {
-            appliedSpaceAnalysis_ = java.util.Collections.emptyList();
-            bitField0_ = (bitField0_ & ~0x00000010);
-            onChanged();
-          } else {
-            appliedSpaceAnalysisBuilder_.clear();
-          }
-          return this;
-        }
-        /**
-         * <code>repeated .Models.DetailedType appliedSpaceAnalysis = 6;</code>
-         */
-        public Builder removeAppliedSpaceAnalysis(int index) {
-          if (appliedSpaceAnalysisBuilder_ == null) {
-            ensureAppliedSpaceAnalysisIsMutable();
-            appliedSpaceAnalysis_.remove(index);
-            onChanged();
-          } else {
-            appliedSpaceAnalysisBuilder_.remove(index);
-          }
-          return this;
-        }
-        /**
-         * <code>repeated .Models.DetailedType appliedSpaceAnalysis = 6;</code>
-         */
-        public org.refactoringminer.Models.DetailedTypeOuterClass.DetailedType.Builder getAppliedSpaceAnalysisBuilder(
-            int index) {
-          return getAppliedSpaceAnalysisFieldBuilder().getBuilder(index);
-        }
-        /**
-         * <code>repeated .Models.DetailedType appliedSpaceAnalysis = 6;</code>
-         */
-        public org.refactoringminer.Models.DetailedTypeOuterClass.DetailedTypeOrBuilder getAppliedSpaceAnalysisOrBuilder(
-            int index) {
-          if (appliedSpaceAnalysisBuilder_ == null) {
-            return appliedSpaceAnalysis_.get(index);  } else {
-            return appliedSpaceAnalysisBuilder_.getMessageOrBuilder(index);
-          }
-        }
-        /**
-         * <code>repeated .Models.DetailedType appliedSpaceAnalysis = 6;</code>
-         */
-        public java.util.List<? extends org.refactoringminer.Models.DetailedTypeOuterClass.DetailedTypeOrBuilder> 
-             getAppliedSpaceAnalysisOrBuilderList() {
-          if (appliedSpaceAnalysisBuilder_ != null) {
-            return appliedSpaceAnalysisBuilder_.getMessageOrBuilderList();
-          } else {
-            return java.util.Collections.unmodifiableList(appliedSpaceAnalysis_);
-          }
-        }
-        /**
-         * <code>repeated .Models.DetailedType appliedSpaceAnalysis = 6;</code>
-         */
-        public org.refactoringminer.Models.DetailedTypeOuterClass.DetailedType.Builder addAppliedSpaceAnalysisBuilder() {
-          return getAppliedSpaceAnalysisFieldBuilder().addBuilder(
-              org.refactoringminer.Models.DetailedTypeOuterClass.DetailedType.getDefaultInstance());
-        }
-        /**
-         * <code>repeated .Models.DetailedType appliedSpaceAnalysis = 6;</code>
-         */
-        public org.refactoringminer.Models.DetailedTypeOuterClass.DetailedType.Builder addAppliedSpaceAnalysisBuilder(
-            int index) {
-          return getAppliedSpaceAnalysisFieldBuilder().addBuilder(
-              index, org.refactoringminer.Models.DetailedTypeOuterClass.DetailedType.getDefaultInstance());
-        }
-        /**
-         * <code>repeated .Models.DetailedType appliedSpaceAnalysis = 6;</code>
-         */
-        public java.util.List<org.refactoringminer.Models.DetailedTypeOuterClass.DetailedType.Builder> 
-             getAppliedSpaceAnalysisBuilderList() {
-          return getAppliedSpaceAnalysisFieldBuilder().getBuilderList();
-        }
-        private com.google.protobuf.RepeatedFieldBuilderV3<
-            org.refactoringminer.Models.DetailedTypeOuterClass.DetailedType, org.refactoringminer.Models.DetailedTypeOuterClass.DetailedType.Builder, org.refactoringminer.Models.DetailedTypeOuterClass.DetailedTypeOrBuilder> 
-            getAppliedSpaceAnalysisFieldBuilder() {
-          if (appliedSpaceAnalysisBuilder_ == null) {
-            appliedSpaceAnalysisBuilder_ = new com.google.protobuf.RepeatedFieldBuilderV3<
-                org.refactoringminer.Models.DetailedTypeOuterClass.DetailedType, org.refactoringminer.Models.DetailedTypeOuterClass.DetailedType.Builder, org.refactoringminer.Models.DetailedTypeOuterClass.DetailedTypeOrBuilder>(
-                    appliedSpaceAnalysis_,
-                    ((bitField0_ & 0x00000010) == 0x00000010),
-                    getParentForChildren(),
-                    isClean());
-            appliedSpaceAnalysis_ = null;
-          }
-          return appliedSpaceAnalysisBuilder_;
-        }
-
         private org.refactoringminer.Models.RMinedOuterClass.RMined.TypeChangeAnalysis.TypeRelationshipAnalysis typeRelationshipAnalysis_ = null;
         private com.google.protobuf.SingleFieldBuilderV3<
             org.refactoringminer.Models.RMinedOuterClass.RMined.TypeChangeAnalysis.TypeRelationshipAnalysis, org.refactoringminer.Models.RMinedOuterClass.RMined.TypeChangeAnalysis.TypeRelationshipAnalysis.Builder, org.refactoringminer.Models.RMinedOuterClass.RMined.TypeChangeAnalysis.TypeRelationshipAnalysisOrBuilder> typeRelationshipAnalysisBuilder_;
@@ -17058,7 +16937,7 @@ public final class RMinedOuterClass {
          * <code>optional .Models.RMined.TypeChangeAnalysis.TypeRelationshipAnalysis typeRelationshipAnalysis = 8;</code>
          */
         public boolean hasTypeRelationshipAnalysis() {
-          return ((bitField0_ & 0x00000020) == 0x00000020);
+          return ((bitField0_ & 0x00000010) == 0x00000010);
         }
         /**
          * <code>optional .Models.RMined.TypeChangeAnalysis.TypeRelationshipAnalysis typeRelationshipAnalysis = 8;</code>
@@ -17083,7 +16962,7 @@ public final class RMinedOuterClass {
           } else {
             typeRelationshipAnalysisBuilder_.setMessage(value);
           }
-          bitField0_ |= 0x00000020;
+          bitField0_ |= 0x00000010;
           return this;
         }
         /**
@@ -17097,7 +16976,7 @@ public final class RMinedOuterClass {
           } else {
             typeRelationshipAnalysisBuilder_.setMessage(builderForValue.build());
           }
-          bitField0_ |= 0x00000020;
+          bitField0_ |= 0x00000010;
           return this;
         }
         /**
@@ -17105,7 +16984,7 @@ public final class RMinedOuterClass {
          */
         public Builder mergeTypeRelationshipAnalysis(org.refactoringminer.Models.RMinedOuterClass.RMined.TypeChangeAnalysis.TypeRelationshipAnalysis value) {
           if (typeRelationshipAnalysisBuilder_ == null) {
-            if (((bitField0_ & 0x00000020) == 0x00000020) &&
+            if (((bitField0_ & 0x00000010) == 0x00000010) &&
                 typeRelationshipAnalysis_ != null &&
                 typeRelationshipAnalysis_ != org.refactoringminer.Models.RMinedOuterClass.RMined.TypeChangeAnalysis.TypeRelationshipAnalysis.getDefaultInstance()) {
               typeRelationshipAnalysis_ =
@@ -17117,7 +16996,7 @@ public final class RMinedOuterClass {
           } else {
             typeRelationshipAnalysisBuilder_.mergeFrom(value);
           }
-          bitField0_ |= 0x00000020;
+          bitField0_ |= 0x00000010;
           return this;
         }
         /**
@@ -17130,14 +17009,14 @@ public final class RMinedOuterClass {
           } else {
             typeRelationshipAnalysisBuilder_.clear();
           }
-          bitField0_ = (bitField0_ & ~0x00000020);
+          bitField0_ = (bitField0_ & ~0x00000010);
           return this;
         }
         /**
          * <code>optional .Models.RMined.TypeChangeAnalysis.TypeRelationshipAnalysis typeRelationshipAnalysis = 8;</code>
          */
         public org.refactoringminer.Models.RMinedOuterClass.RMined.TypeChangeAnalysis.TypeRelationshipAnalysis.Builder getTypeRelationshipAnalysisBuilder() {
-          bitField0_ |= 0x00000020;
+          bitField0_ |= 0x00000010;
           onChanged();
           return getTypeRelationshipAnalysisFieldBuilder().getBuilder();
         }
@@ -17167,6 +17046,246 @@ public final class RMinedOuterClass {
             typeRelationshipAnalysis_ = null;
           }
           return typeRelationshipAnalysisBuilder_;
+        }
+
+        private java.util.List<org.refactoringminer.Models.RMinedOuterClass.RMined.TypeChangeAnalysis.AppliedSpaceAnalysis> appliedSpaceAnalysis_ =
+          java.util.Collections.emptyList();
+        private void ensureAppliedSpaceAnalysisIsMutable() {
+          if (!((bitField0_ & 0x00000020) == 0x00000020)) {
+            appliedSpaceAnalysis_ = new java.util.ArrayList<org.refactoringminer.Models.RMinedOuterClass.RMined.TypeChangeAnalysis.AppliedSpaceAnalysis>(appliedSpaceAnalysis_);
+            bitField0_ |= 0x00000020;
+           }
+        }
+
+        private com.google.protobuf.RepeatedFieldBuilderV3<
+            org.refactoringminer.Models.RMinedOuterClass.RMined.TypeChangeAnalysis.AppliedSpaceAnalysis, org.refactoringminer.Models.RMinedOuterClass.RMined.TypeChangeAnalysis.AppliedSpaceAnalysis.Builder, org.refactoringminer.Models.RMinedOuterClass.RMined.TypeChangeAnalysis.AppliedSpaceAnalysisOrBuilder> appliedSpaceAnalysisBuilder_;
+
+        /**
+         * <code>repeated .Models.RMined.TypeChangeAnalysis.AppliedSpaceAnalysis appliedSpaceAnalysis = 9;</code>
+         */
+        public java.util.List<org.refactoringminer.Models.RMinedOuterClass.RMined.TypeChangeAnalysis.AppliedSpaceAnalysis> getAppliedSpaceAnalysisList() {
+          if (appliedSpaceAnalysisBuilder_ == null) {
+            return java.util.Collections.unmodifiableList(appliedSpaceAnalysis_);
+          } else {
+            return appliedSpaceAnalysisBuilder_.getMessageList();
+          }
+        }
+        /**
+         * <code>repeated .Models.RMined.TypeChangeAnalysis.AppliedSpaceAnalysis appliedSpaceAnalysis = 9;</code>
+         */
+        public int getAppliedSpaceAnalysisCount() {
+          if (appliedSpaceAnalysisBuilder_ == null) {
+            return appliedSpaceAnalysis_.size();
+          } else {
+            return appliedSpaceAnalysisBuilder_.getCount();
+          }
+        }
+        /**
+         * <code>repeated .Models.RMined.TypeChangeAnalysis.AppliedSpaceAnalysis appliedSpaceAnalysis = 9;</code>
+         */
+        public org.refactoringminer.Models.RMinedOuterClass.RMined.TypeChangeAnalysis.AppliedSpaceAnalysis getAppliedSpaceAnalysis(int index) {
+          if (appliedSpaceAnalysisBuilder_ == null) {
+            return appliedSpaceAnalysis_.get(index);
+          } else {
+            return appliedSpaceAnalysisBuilder_.getMessage(index);
+          }
+        }
+        /**
+         * <code>repeated .Models.RMined.TypeChangeAnalysis.AppliedSpaceAnalysis appliedSpaceAnalysis = 9;</code>
+         */
+        public Builder setAppliedSpaceAnalysis(
+            int index, org.refactoringminer.Models.RMinedOuterClass.RMined.TypeChangeAnalysis.AppliedSpaceAnalysis value) {
+          if (appliedSpaceAnalysisBuilder_ == null) {
+            if (value == null) {
+              throw new NullPointerException();
+            }
+            ensureAppliedSpaceAnalysisIsMutable();
+            appliedSpaceAnalysis_.set(index, value);
+            onChanged();
+          } else {
+            appliedSpaceAnalysisBuilder_.setMessage(index, value);
+          }
+          return this;
+        }
+        /**
+         * <code>repeated .Models.RMined.TypeChangeAnalysis.AppliedSpaceAnalysis appliedSpaceAnalysis = 9;</code>
+         */
+        public Builder setAppliedSpaceAnalysis(
+            int index, org.refactoringminer.Models.RMinedOuterClass.RMined.TypeChangeAnalysis.AppliedSpaceAnalysis.Builder builderForValue) {
+          if (appliedSpaceAnalysisBuilder_ == null) {
+            ensureAppliedSpaceAnalysisIsMutable();
+            appliedSpaceAnalysis_.set(index, builderForValue.build());
+            onChanged();
+          } else {
+            appliedSpaceAnalysisBuilder_.setMessage(index, builderForValue.build());
+          }
+          return this;
+        }
+        /**
+         * <code>repeated .Models.RMined.TypeChangeAnalysis.AppliedSpaceAnalysis appliedSpaceAnalysis = 9;</code>
+         */
+        public Builder addAppliedSpaceAnalysis(org.refactoringminer.Models.RMinedOuterClass.RMined.TypeChangeAnalysis.AppliedSpaceAnalysis value) {
+          if (appliedSpaceAnalysisBuilder_ == null) {
+            if (value == null) {
+              throw new NullPointerException();
+            }
+            ensureAppliedSpaceAnalysisIsMutable();
+            appliedSpaceAnalysis_.add(value);
+            onChanged();
+          } else {
+            appliedSpaceAnalysisBuilder_.addMessage(value);
+          }
+          return this;
+        }
+        /**
+         * <code>repeated .Models.RMined.TypeChangeAnalysis.AppliedSpaceAnalysis appliedSpaceAnalysis = 9;</code>
+         */
+        public Builder addAppliedSpaceAnalysis(
+            int index, org.refactoringminer.Models.RMinedOuterClass.RMined.TypeChangeAnalysis.AppliedSpaceAnalysis value) {
+          if (appliedSpaceAnalysisBuilder_ == null) {
+            if (value == null) {
+              throw new NullPointerException();
+            }
+            ensureAppliedSpaceAnalysisIsMutable();
+            appliedSpaceAnalysis_.add(index, value);
+            onChanged();
+          } else {
+            appliedSpaceAnalysisBuilder_.addMessage(index, value);
+          }
+          return this;
+        }
+        /**
+         * <code>repeated .Models.RMined.TypeChangeAnalysis.AppliedSpaceAnalysis appliedSpaceAnalysis = 9;</code>
+         */
+        public Builder addAppliedSpaceAnalysis(
+            org.refactoringminer.Models.RMinedOuterClass.RMined.TypeChangeAnalysis.AppliedSpaceAnalysis.Builder builderForValue) {
+          if (appliedSpaceAnalysisBuilder_ == null) {
+            ensureAppliedSpaceAnalysisIsMutable();
+            appliedSpaceAnalysis_.add(builderForValue.build());
+            onChanged();
+          } else {
+            appliedSpaceAnalysisBuilder_.addMessage(builderForValue.build());
+          }
+          return this;
+        }
+        /**
+         * <code>repeated .Models.RMined.TypeChangeAnalysis.AppliedSpaceAnalysis appliedSpaceAnalysis = 9;</code>
+         */
+        public Builder addAppliedSpaceAnalysis(
+            int index, org.refactoringminer.Models.RMinedOuterClass.RMined.TypeChangeAnalysis.AppliedSpaceAnalysis.Builder builderForValue) {
+          if (appliedSpaceAnalysisBuilder_ == null) {
+            ensureAppliedSpaceAnalysisIsMutable();
+            appliedSpaceAnalysis_.add(index, builderForValue.build());
+            onChanged();
+          } else {
+            appliedSpaceAnalysisBuilder_.addMessage(index, builderForValue.build());
+          }
+          return this;
+        }
+        /**
+         * <code>repeated .Models.RMined.TypeChangeAnalysis.AppliedSpaceAnalysis appliedSpaceAnalysis = 9;</code>
+         */
+        public Builder addAllAppliedSpaceAnalysis(
+            java.lang.Iterable<? extends org.refactoringminer.Models.RMinedOuterClass.RMined.TypeChangeAnalysis.AppliedSpaceAnalysis> values) {
+          if (appliedSpaceAnalysisBuilder_ == null) {
+            ensureAppliedSpaceAnalysisIsMutable();
+            com.google.protobuf.AbstractMessageLite.Builder.addAll(
+                values, appliedSpaceAnalysis_);
+            onChanged();
+          } else {
+            appliedSpaceAnalysisBuilder_.addAllMessages(values);
+          }
+          return this;
+        }
+        /**
+         * <code>repeated .Models.RMined.TypeChangeAnalysis.AppliedSpaceAnalysis appliedSpaceAnalysis = 9;</code>
+         */
+        public Builder clearAppliedSpaceAnalysis() {
+          if (appliedSpaceAnalysisBuilder_ == null) {
+            appliedSpaceAnalysis_ = java.util.Collections.emptyList();
+            bitField0_ = (bitField0_ & ~0x00000020);
+            onChanged();
+          } else {
+            appliedSpaceAnalysisBuilder_.clear();
+          }
+          return this;
+        }
+        /**
+         * <code>repeated .Models.RMined.TypeChangeAnalysis.AppliedSpaceAnalysis appliedSpaceAnalysis = 9;</code>
+         */
+        public Builder removeAppliedSpaceAnalysis(int index) {
+          if (appliedSpaceAnalysisBuilder_ == null) {
+            ensureAppliedSpaceAnalysisIsMutable();
+            appliedSpaceAnalysis_.remove(index);
+            onChanged();
+          } else {
+            appliedSpaceAnalysisBuilder_.remove(index);
+          }
+          return this;
+        }
+        /**
+         * <code>repeated .Models.RMined.TypeChangeAnalysis.AppliedSpaceAnalysis appliedSpaceAnalysis = 9;</code>
+         */
+        public org.refactoringminer.Models.RMinedOuterClass.RMined.TypeChangeAnalysis.AppliedSpaceAnalysis.Builder getAppliedSpaceAnalysisBuilder(
+            int index) {
+          return getAppliedSpaceAnalysisFieldBuilder().getBuilder(index);
+        }
+        /**
+         * <code>repeated .Models.RMined.TypeChangeAnalysis.AppliedSpaceAnalysis appliedSpaceAnalysis = 9;</code>
+         */
+        public org.refactoringminer.Models.RMinedOuterClass.RMined.TypeChangeAnalysis.AppliedSpaceAnalysisOrBuilder getAppliedSpaceAnalysisOrBuilder(
+            int index) {
+          if (appliedSpaceAnalysisBuilder_ == null) {
+            return appliedSpaceAnalysis_.get(index);  } else {
+            return appliedSpaceAnalysisBuilder_.getMessageOrBuilder(index);
+          }
+        }
+        /**
+         * <code>repeated .Models.RMined.TypeChangeAnalysis.AppliedSpaceAnalysis appliedSpaceAnalysis = 9;</code>
+         */
+        public java.util.List<? extends org.refactoringminer.Models.RMinedOuterClass.RMined.TypeChangeAnalysis.AppliedSpaceAnalysisOrBuilder> 
+             getAppliedSpaceAnalysisOrBuilderList() {
+          if (appliedSpaceAnalysisBuilder_ != null) {
+            return appliedSpaceAnalysisBuilder_.getMessageOrBuilderList();
+          } else {
+            return java.util.Collections.unmodifiableList(appliedSpaceAnalysis_);
+          }
+        }
+        /**
+         * <code>repeated .Models.RMined.TypeChangeAnalysis.AppliedSpaceAnalysis appliedSpaceAnalysis = 9;</code>
+         */
+        public org.refactoringminer.Models.RMinedOuterClass.RMined.TypeChangeAnalysis.AppliedSpaceAnalysis.Builder addAppliedSpaceAnalysisBuilder() {
+          return getAppliedSpaceAnalysisFieldBuilder().addBuilder(
+              org.refactoringminer.Models.RMinedOuterClass.RMined.TypeChangeAnalysis.AppliedSpaceAnalysis.getDefaultInstance());
+        }
+        /**
+         * <code>repeated .Models.RMined.TypeChangeAnalysis.AppliedSpaceAnalysis appliedSpaceAnalysis = 9;</code>
+         */
+        public org.refactoringminer.Models.RMinedOuterClass.RMined.TypeChangeAnalysis.AppliedSpaceAnalysis.Builder addAppliedSpaceAnalysisBuilder(
+            int index) {
+          return getAppliedSpaceAnalysisFieldBuilder().addBuilder(
+              index, org.refactoringminer.Models.RMinedOuterClass.RMined.TypeChangeAnalysis.AppliedSpaceAnalysis.getDefaultInstance());
+        }
+        /**
+         * <code>repeated .Models.RMined.TypeChangeAnalysis.AppliedSpaceAnalysis appliedSpaceAnalysis = 9;</code>
+         */
+        public java.util.List<org.refactoringminer.Models.RMinedOuterClass.RMined.TypeChangeAnalysis.AppliedSpaceAnalysis.Builder> 
+             getAppliedSpaceAnalysisBuilderList() {
+          return getAppliedSpaceAnalysisFieldBuilder().getBuilderList();
+        }
+        private com.google.protobuf.RepeatedFieldBuilderV3<
+            org.refactoringminer.Models.RMinedOuterClass.RMined.TypeChangeAnalysis.AppliedSpaceAnalysis, org.refactoringminer.Models.RMinedOuterClass.RMined.TypeChangeAnalysis.AppliedSpaceAnalysis.Builder, org.refactoringminer.Models.RMinedOuterClass.RMined.TypeChangeAnalysis.AppliedSpaceAnalysisOrBuilder> 
+            getAppliedSpaceAnalysisFieldBuilder() {
+          if (appliedSpaceAnalysisBuilder_ == null) {
+            appliedSpaceAnalysisBuilder_ = new com.google.protobuf.RepeatedFieldBuilderV3<
+                org.refactoringminer.Models.RMinedOuterClass.RMined.TypeChangeAnalysis.AppliedSpaceAnalysis, org.refactoringminer.Models.RMinedOuterClass.RMined.TypeChangeAnalysis.AppliedSpaceAnalysis.Builder, org.refactoringminer.Models.RMinedOuterClass.RMined.TypeChangeAnalysis.AppliedSpaceAnalysisOrBuilder>(
+                    appliedSpaceAnalysis_,
+                    ((bitField0_ & 0x00000020) == 0x00000020),
+                    getParentForChildren(),
+                    isClean());
+            appliedSpaceAnalysis_ = null;
+          }
+          return appliedSpaceAnalysisBuilder_;
         }
         public final Builder setUnknownFields(
             final com.google.protobuf.UnknownFieldSet unknownFields) {
@@ -18946,7 +19065,7 @@ public final class RMinedOuterClass {
   static {
     java.lang.String[] descriptorData = {
       "\n\014RMined.proto\022\006Models\032\022DetailedType.pro" +
-      "to\"\214\027\n\006RMined\022\017\n\007project\030\004 \002(\t\022\016\n\006commit" +
+      "to\"\270\027\n\006RMined\022\017\n\007project\030\004 \002(\t\022\016\n\006commit" +
       "\030\005 \002(\t\0225\n\014refactorings\030\001 \003(\0132\037.Models.RM" +
       "ined.RefactoringMined\022=\n\022typeChangeAnaly" +
       "sis\030\003 \003(\0132!.Models.RMined.TypeChangeAnal" +
@@ -18964,63 +19083,64 @@ public final class RMinedOuterClass {
       "actoringAnalysis\022\016\n\006nameb4\030\001 \001(\t\022\020\n\010name" +
       "Aftr\030\002 \001(\t\022\024\n\014classRenamed\030\003 \002(\010\022\022\n\nclas" +
       "sMoved\030\004 \002(\010\022\023\n\013qualifierb4\030\005 \001(\t\022\025\n\rqua" +
-      "lifierAftr\030\006 \001(\t\032\256\021\n\022TypeChangeAnalysis\022" +
+      "lifierAftr\030\006 \001(\t\032\332\021\n\022TypeChangeAnalysis\022" +
       " \n\002b4\030\001 \002(\0132\024.Models.DetailedType\022\"\n\004aft" +
       "r\030\002 \002(\0132\024.Models.DetailedType\022N\n\021nameSpa" +
       "ceAnalysis\030\004 \003(\01323.Models.RMined.TypeCha" +
       "ngeAnalysis.NameSpaceAnalysis\022P\n\021syntact" +
       "icAnalysis\030\003 \001(\01325.Models.RMined.TypeCha" +
-      "ngeAnalysis.SyntacticTypeChange\0222\n\024appli" +
-      "edSpaceAnalysis\030\006 \003(\0132\024.Models.DetailedT" +
-      "ype\022\\\n\030typeRelationshipAnalysis\030\010 \001(\0132:." +
-      "Models.RMined.TypeChangeAnalysis.TypeRel" +
-      "ationshipAnalysis\032\253\001\n\030TypeRelationshipAn" +
-      "alysis\022\023\n\013TisSubTypeR\030\003 \001(\010\022\025\n\rTisSuperT" +
-      "ypeR\030\001 \001(\010\022\031\n\021TRcommonSuperType\030\002 \001(\t\022\022\n" +
-      "\nTcomposesR\030\004 \001(\010\022\022\n\nRcomposesT\030\005 \001(\010\022\017\n" +
-      "\007TnestsR\030\006 \001(\010\022\017\n\007RnestsT\030\007 \001(\010\032L\n\024Appli" +
-      "edSpaceAnalysis\022\027\n\017isTypeMigration\030\002 \002(\010" +
-      "\022\033\n\023numberOfTypeChanges\030\001 \002(\005\032\304\003\n\021NameSp" +
-      "aceAnalysis\022R\n\013nameSpaceB4\030\001 \002(\0132=.Model" +
-      "s.RMined.TypeChangeAnalysis.NameSpaceAna" +
-      "lysis.NameSpace\022T\n\rnameSpaceAftr\030\002 \002(\0132=" +
+      "ngeAnalysis.SyntacticTypeChange\022\\\n\030typeR" +
+      "elationshipAnalysis\030\010 \001(\0132:.Models.RMine" +
+      "d.TypeChangeAnalysis.TypeRelationshipAna" +
+      "lysis\022T\n\024appliedSpaceAnalysis\030\t \003(\01326.Mo" +
+      "dels.RMined.TypeChangeAnalysis.AppliedSp" +
+      "aceAnalysis\032\253\001\n\030TypeRelationshipAnalysis" +
+      "\022\023\n\013TisSubTypeR\030\003 \001(\010\022\025\n\rTisSuperTypeR\030\001" +
+      " \001(\010\022\031\n\021TRcommonSuperType\030\002 \001(\t\022\022\n\nTcomp" +
+      "osesR\030\004 \001(\010\022\022\n\nRcomposesT\030\005 \001(\010\022\017\n\007Tnest" +
+      "sR\030\006 \001(\010\022\017\n\007RnestsT\030\007 \001(\010\032V\n\024AppliedSpac" +
+      "eAnalysis\022%\n\007removed\030\003 \002(\0132\024.Models.Deta" +
+      "iledType\022\027\n\017isTypeMigration\030\002 \002(\010\032\304\003\n\021Na" +
+      "meSpaceAnalysis\022R\n\013nameSpaceB4\030\001 \002(\0132=.M" +
+      "odels.RMined.TypeChangeAnalysis.NameSpac" +
+      "eAnalysis.NameSpace\022T\n\rnameSpaceAftr\030\002 \002" +
+      "(\0132=.Models.RMined.TypeChangeAnalysis.Na" +
+      "meSpaceAnalysis.NameSpace\022\022\n\nautoboxing\030" +
+      "\003 \001(\010\022U\n\016nameSpaceAdded\030\007 \003(\0132=.Models.R" +
+      "Mined.TypeChangeAnalysis.NameSpaceAnalys" +
+      "is.NameSpace\022W\n\020nameSpaceRemoved\030\010 \003(\0132=" +
       ".Models.RMined.TypeChangeAnalysis.NameSp" +
-      "aceAnalysis.NameSpace\022\022\n\nautoboxing\030\003 \001(" +
-      "\010\022U\n\016nameSpaceAdded\030\007 \003(\0132=.Models.RMine" +
-      "d.TypeChangeAnalysis.NameSpaceAnalysis.N" +
-      "ameSpace\022W\n\020nameSpaceRemoved\030\010 \003(\0132=.Mod" +
-      "els.RMined.TypeChangeAnalysis.NameSpaceA" +
-      "nalysis.NameSpace\032A\n\tNameSpace\022\022\n\ntypeOf" +
-      "Type\030\001 \002(\t\022 \n\002dt\030\002 \002(\0132\024.Models.Detailed" +
-      "Type\032\332\010\n\023SyntacticTypeChange\022W\n\004kind\030\005 \002" +
-      "(\0162I.Models.RMined.TypeChangeAnalysis.Sy" +
-      "ntacticTypeChange.SyntacticChangeKind\022 \n" +
-      "\002b4\030\007 \001(\0132\024.Models.DetailedType\022\"\n\004aftr\030" +
-      "\010 \001(\0132\024.Models.DetailedType\022K\n\003upd\030\001 \001(\013" +
-      "2<.Models.RMined.TypeChangeAnalysis.Synt" +
-      "acticTypeChange.UpdateH\000\022L\n\003aug\030\003 \001(\0132=." +
-      "Models.RMined.TypeChangeAnalysis.Syntact" +
-      "icTypeChange.AugmentH\000\022L\n\003enh\030\004 \001(\0132=.Mo" +
-      "dels.RMined.TypeChangeAnalysis.Syntactic" +
-      "TypeChange.EnhanceH\000\022L\n\004chng\030\n \001(\0132<.Mod" +
-      "els.RMined.TypeChangeAnalysis.SyntacticT" +
-      "ypeChange.ChangeH\000\032\324\001\n\006Update\022`\n\nsyntypc" +
-      "hng\030\001 \003(\0132L.Models.RMined.TypeChangeAnal" +
-      "ysis.SyntacticTypeChange.Update.Syntypch" +
-      "ngEntry\032h\n\017SyntypchngEntry\022\013\n\003key\030\001 \001(\t\022" +
-      "D\n\005value\030\002 \001(\01325.Models.RMined.TypeChang" +
-      "eAnalysis.SyntacticTypeChange:\0028\001\032X\n\006Cha" +
-      "nge\022\014\n\004from\030\003 \001(\t\022\n\n\002to\030\004 \001(\t\022\030\n\020addedAn" +
-      "notations\030\005 \003(\t\022\032\n\022removedAnnotations\030\006 " +
-      "\003(\t\032T\n\007Augment\022$\n\006reuses\030\003 \003(\0132\024.Models." +
-      "DetailedType\022#\n\005added\030\004 \003(\0132\024.Models.Det" +
-      "ailedType\032{\n\007Enhance\022$\n\006reuses\030\003 \003(\0132\024.M" +
-      "odels.DetailedType\022#\n\005added\030\004 \003(\0132\024.Mode" +
-      "ls.DetailedType\022%\n\007removed\030\005 \003(\0132\024.Model" +
-      "s.DetailedType\"R\n\023SyntacticChangeKind\022\007\n" +
-      "\003Upd\020\001\022\010\n\004Repl\020\002\022\007\n\003Aug\020\004\022\007\n\003Enh\020\003\022\010\n\004Ch" +
-      "ng\020\007\022\014\n\010NoChange\020\005B\025\n\023syntacticTypeChang" +
-      "eB\035\n\033org.refactoringminer.Models"
+      "aceAnalysis.NameSpace\032A\n\tNameSpace\022\022\n\nty" +
+      "peOfType\030\001 \002(\t\022 \n\002dt\030\002 \002(\0132\024.Models.Deta" +
+      "iledType\032\332\010\n\023SyntacticTypeChange\022W\n\004kind" +
+      "\030\005 \002(\0162I.Models.RMined.TypeChangeAnalysi" +
+      "s.SyntacticTypeChange.SyntacticChangeKin" +
+      "d\022 \n\002b4\030\007 \001(\0132\024.Models.DetailedType\022\"\n\004a" +
+      "ftr\030\010 \001(\0132\024.Models.DetailedType\022K\n\003upd\030\001" +
+      " \001(\0132<.Models.RMined.TypeChangeAnalysis." +
+      "SyntacticTypeChange.UpdateH\000\022L\n\003aug\030\003 \001(" +
+      "\0132=.Models.RMined.TypeChangeAnalysis.Syn" +
+      "tacticTypeChange.AugmentH\000\022L\n\003enh\030\004 \001(\0132" +
+      "=.Models.RMined.TypeChangeAnalysis.Synta" +
+      "cticTypeChange.EnhanceH\000\022L\n\004chng\030\n \001(\0132<" +
+      ".Models.RMined.TypeChangeAnalysis.Syntac" +
+      "ticTypeChange.ChangeH\000\032\324\001\n\006Update\022`\n\nsyn" +
+      "typchng\030\001 \003(\0132L.Models.RMined.TypeChange" +
+      "Analysis.SyntacticTypeChange.Update.Synt" +
+      "ypchngEntry\032h\n\017SyntypchngEntry\022\013\n\003key\030\001 " +
+      "\001(\t\022D\n\005value\030\002 \001(\01325.Models.RMined.TypeC" +
+      "hangeAnalysis.SyntacticTypeChange:\0028\001\032X\n" +
+      "\006Change\022\014\n\004from\030\003 \001(\t\022\n\n\002to\030\004 \001(\t\022\030\n\020add" +
+      "edAnnotations\030\005 \003(\t\022\032\n\022removedAnnotation" +
+      "s\030\006 \003(\t\032T\n\007Augment\022$\n\006reuses\030\003 \003(\0132\024.Mod" +
+      "els.DetailedType\022#\n\005added\030\004 \003(\0132\024.Models" +
+      ".DetailedType\032{\n\007Enhance\022$\n\006reuses\030\003 \003(\013" +
+      "2\024.Models.DetailedType\022#\n\005added\030\004 \003(\0132\024." +
+      "Models.DetailedType\022%\n\007removed\030\005 \003(\0132\024.M" +
+      "odels.DetailedType\"R\n\023SyntacticChangeKin" +
+      "d\022\007\n\003Upd\020\001\022\010\n\004Repl\020\002\022\007\n\003Aug\020\004\022\007\n\003Enh\020\003\022\010" +
+      "\n\004Chng\020\007\022\014\n\010NoChange\020\005B\025\n\023syntacticTypeC" +
+      "hangeB\035\n\033org.refactoringminer.Models"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
         new com.google.protobuf.Descriptors.FileDescriptor.    InternalDescriptorAssigner() {
@@ -19064,7 +19184,7 @@ public final class RMinedOuterClass {
     internal_static_Models_RMined_TypeChangeAnalysis_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_Models_RMined_TypeChangeAnalysis_descriptor,
-        new java.lang.String[] { "B4", "Aftr", "NameSpaceAnalysis", "SyntacticAnalysis", "AppliedSpaceAnalysis", "TypeRelationshipAnalysis", });
+        new java.lang.String[] { "B4", "Aftr", "NameSpaceAnalysis", "SyntacticAnalysis", "TypeRelationshipAnalysis", "AppliedSpaceAnalysis", });
     internal_static_Models_RMined_TypeChangeAnalysis_TypeRelationshipAnalysis_descriptor =
       internal_static_Models_RMined_TypeChangeAnalysis_descriptor.getNestedTypes().get(0);
     internal_static_Models_RMined_TypeChangeAnalysis_TypeRelationshipAnalysis_fieldAccessorTable = new
@@ -19076,7 +19196,7 @@ public final class RMinedOuterClass {
     internal_static_Models_RMined_TypeChangeAnalysis_AppliedSpaceAnalysis_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_Models_RMined_TypeChangeAnalysis_AppliedSpaceAnalysis_descriptor,
-        new java.lang.String[] { "IsTypeMigration", "NumberOfTypeChanges", });
+        new java.lang.String[] { "Removed", "IsTypeMigration", });
     internal_static_Models_RMined_TypeChangeAnalysis_NameSpaceAnalysis_descriptor =
       internal_static_Models_RMined_TypeChangeAnalysis_descriptor.getNestedTypes().get(2);
     internal_static_Models_RMined_TypeChangeAnalysis_NameSpaceAnalysis_fieldAccessorTable = new

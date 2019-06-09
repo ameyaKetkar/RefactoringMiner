@@ -48,8 +48,8 @@ message RMined{
       required DetailedType aftr = 2;
       repeated NameSpaceAnalysis nameSpaceAnalysis = 4;
       optional SyntacticTypeChange syntacticAnalysis = 3;
-      repeated DetailedType appliedSpaceAnalysis = 6;
       optional TypeRelationshipAnalysis typeRelationshipAnalysis = 8;
+      repeated AppliedSpaceAnalysis appliedSpaceAnalysis = 9;
 
       message TypeRelationshipAnalysis {
          optional bool TisSubTypeR = 3;
@@ -62,8 +62,8 @@ message RMined{
       }
 
       message AppliedSpaceAnalysis {
+         required DetailedType removed = 3;
          required bool isTypeMigration =2;
-         required int32 numberOfTypeChanges = 1;
       }
 
       message NameSpaceAnalysis {
