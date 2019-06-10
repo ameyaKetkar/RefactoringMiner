@@ -40,7 +40,7 @@ public class VariableReplacementAnalysis {
 	private List<StatementObject> nonMappedLeavesT2;
 	private UMLOperation operation1;
 	private UMLOperation operation2;
-	private List<UMLOperationBodyMapper> additionalMappers;
+	private List<UMLOperationBodyMapper> childMappers;
 	private Set<Refactoring> refactorings;
 	private UMLOperation callSiteOperation;
 	private UMLOperationDiff operationDiff;
@@ -57,7 +57,7 @@ public class VariableReplacementAnalysis {
 		this.nonMappedLeavesT2 = mapper.getNonMappedLeavesT2();
 		this.operation1 = mapper.getOperation1();
 		this.operation2 = mapper.getOperation2();
-		this.additionalMappers = mapper.getAdditionalMappers();
+		this.childMappers = mapper.getChildMappers();
 		this.refactorings = refactorings;
 		this.callSiteOperation = mapper.getCallSiteOperation();
 		this.operationDiff = operationDiff;
@@ -73,18 +73,20 @@ public class VariableReplacementAnalysis {
 				AbstractExpression initializer = declaration.getInitializer();
 				if(initializer != null) {
 					for(String key : initializer.getCreationMap().keySet()) {
-						ObjectCreation creation = initializer.getCreationMap().get(key);
-						for(String argument : creation.arguments) {
-							SimpleEntry<VariableDeclaration, UMLOperation> v2 = getVariableDeclaration2(new Replacement("", argument, ReplacementType.VARIABLE_NAME));
-							SimpleEntry<VariableDeclaration, UMLOperation> v1 = getVariableDeclaration1(new Replacement(declaration.getVariableName(), "", ReplacementType.VARIABLE_NAME));
-							if(v2 != null && v1 != null) {
-								Set<AbstractCodeMapping> references = findReferences(v1.getKey(), v2.getKey());
-								RenameVariableRefactoring ref = new RenameVariableRefactoring(v1.getKey(), v2.getKey(), v1.getValue(), v2.getValue(), references);
-								if(!existsConflictingExtractVariableRefactoring(ref) && !existsConflictingMergeVariableRefactoring(ref) && !existsConflictingSplitVariableRefactoring(ref)) {
-									variableRenames.add(ref);
-									if(!v1.getKey().getType().equals(v2.getKey().getType())) {
-										ChangeVariableTypeRefactoring refactoring = new ChangeVariableTypeRefactoring(v1.getKey(), v2.getKey(), v1.getValue(), v2.getValue(), references);
-										refactorings.add(refactoring);
+						List<ObjectCreation> creations = initializer.getCreationMap().get(key);
+						for(ObjectCreation creation : creations) {
+							for(String argument : creation.arguments) {
+								SimpleEntry<VariableDeclaration, UMLOperation> v2 = getVariableDeclaration2(new Replacement("", argument, ReplacementType.VARIABLE_NAME));
+								SimpleEntry<VariableDeclaration, UMLOperation> v1 = getVariableDeclaration1(new Replacement(declaration.getVariableName(), "", ReplacementType.VARIABLE_NAME));
+								if(v2 != null && v1 != null) {
+									Set<AbstractCodeMapping> references = findReferences(v1.getKey(), v2.getKey());
+									RenameVariableRefactoring ref = new RenameVariableRefactoring(v1.getKey(), v2.getKey(), v1.getValue(), v2.getValue(), references);
+									if(!existsConflictingExtractVariableRefactoring(ref) && !existsConflictingMergeVariableRefactoring(ref) && !existsConflictingSplitVariableRefactoring(ref)) {
+										variableRenames.add(ref);
+										if(!v1.getKey().getType().equals(v2.getKey().getType())) {
+											ChangeVariableTypeRefactoring refactoring = new ChangeVariableTypeRefactoring(v1.getKey(), v2.getKey(), v1.getValue(), v2.getValue(), references);
+											refactorings.add(refactoring);
+										}
 									}
 								}
 							}
@@ -784,26 +786,30 @@ public class VariableReplacementAnalysis {
 
 	private boolean variableAppearsInExtractedMethod(VariableDeclaration v1, VariableDeclaration v2) {
 		if(v1 != null) {
-			for(UMLOperationBodyMapper mapper : additionalMappers) {
+			for(UMLOperationBodyMapper mapper : childMappers) {
 				for(AbstractCodeMapping mapping : mapper.getMappings()) {
 					if(mapping.getFragment1().getVariableDeclarations().contains(v1)) {
 						if(v2 != null && v2.getInitializer() != null) {
 							UMLOperation extractedMethod = mapper.getOperation2();
-							Map<String, OperationInvocation> methodInvocationMap = v2.getInitializer().getMethodInvocationMap();
-							for(OperationInvocation invocation : methodInvocationMap.values()) {
-								if(invocation.matchesOperation(extractedMethod, operation2.variableTypeMap(), null)) {
-									return false;
-								}
-								else {
-									//check if the extracted method is called in the initializer of a variable used in the initializer of v2
-									List<String> initializerVariables = v2.getInitializer().getVariables();
-									for(String variable : initializerVariables) {
-										for(VariableDeclaration declaration : operation2.getAllVariableDeclarations()) {
-											if(declaration.getVariableName().equals(variable) && declaration.getInitializer() != null) {
-												Map<String, OperationInvocation> methodInvocationMap2 = declaration.getInitializer().getMethodInvocationMap();
-												for(OperationInvocation invocation2 : methodInvocationMap2.values()) {
-													if(invocation2.matchesOperation(extractedMethod, operation2.variableTypeMap(), null)) {
-														return false;
+							Map<String, List<OperationInvocation>> methodInvocationMap = v2.getInitializer().getMethodInvocationMap();
+							for(String key : methodInvocationMap.keySet()) {
+								for(OperationInvocation invocation : methodInvocationMap.get(key)) {
+									if(invocation.matchesOperation(extractedMethod, operation2.variableTypeMap(), null)) {
+										return false;
+									}
+									else {
+										//check if the extracted method is called in the initializer of a variable used in the initializer of v2
+										List<String> initializerVariables = v2.getInitializer().getVariables();
+										for(String variable : initializerVariables) {
+											for(VariableDeclaration declaration : operation2.getAllVariableDeclarations()) {
+												if(declaration.getVariableName().equals(variable) && declaration.getInitializer() != null) {
+													Map<String, List<OperationInvocation>> methodInvocationMap2 = declaration.getInitializer().getMethodInvocationMap();
+													for(String key2 : methodInvocationMap2.keySet()) {
+														for(OperationInvocation invocation2 : methodInvocationMap2.get(key2)) {
+															if(invocation2.matchesOperation(extractedMethod, operation2.variableTypeMap(), null)) {
+																return false;
+															}
+														}
 													}
 												}
 											}

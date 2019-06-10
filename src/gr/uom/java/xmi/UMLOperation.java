@@ -119,10 +119,10 @@ public class UMLOperation implements Comparable<UMLOperation>, Serializable, Loc
 		this.testAnnotation = testAnnotation;
 	}
 
-	public Set<OperationInvocation> getAllOperationInvocations() {
+	public List<OperationInvocation> getAllOperationInvocations() {
 		if(operationBody != null)
 			return operationBody.getAllOperationInvocations();
-		return new LinkedHashSet<OperationInvocation>();
+		return new ArrayList<OperationInvocation>();
 	}
 
 	public List<String> getAllVariables() {
@@ -350,11 +350,13 @@ public class UMLOperation implements Comparable<UMLOperation>, Serializable, Loc
 			List<AbstractStatement> statements = getBody().getCompositeStatement().getStatements();
 			if(statements.size() == 1 && statements.get(0) instanceof StatementObject) {
 				StatementObject statement = (StatementObject)statements.get(0);
-				Map<String, OperationInvocation> operationInvocationMap = statement.getMethodInvocationMap();
+				Map<String, List<OperationInvocation>> operationInvocationMap = statement.getMethodInvocationMap();
 				for(String key : operationInvocationMap.keySet()) {
-					OperationInvocation operationInvocation = operationInvocationMap.get(key);
-					if(operationInvocation.matchesOperation(this, this.variableTypeMap(), null) || operationInvocation.getMethodName().equals(this.getName())) {
-						return operationInvocation;
+					List<OperationInvocation> operationInvocations = operationInvocationMap.get(key);
+					for(OperationInvocation operationInvocation : operationInvocations) {
+						if(operationInvocation.matchesOperation(this, this.variableTypeMap(), null) || operationInvocation.getMethodName().equals(this.getName())) {
+							return operationInvocation;
+						}
 					}
 				}
 			}
@@ -614,28 +616,28 @@ public class UMLOperation implements Comparable<UMLOperation>, Serializable, Loc
 
 	private boolean isEquals() {
 		List<UMLType> parameterTypeList = getParameterTypeList();
-		return getName().equals("equals") && getReturnParameter().getType().equals("boolean") &&
+		return getName().equals("equals") && getReturnParameter().getType().getClassType().equals("boolean") &&
 				parameterTypeList.size() == 1 && parameterTypeList.get(0).getClassType().equals("Object");
 	}
 
 	private boolean isHashCode() {
 		List<UMLType> parameterTypeList = getParameterTypeList();
-		return getName().equals("hashCode") && getReturnParameter().getType().equals("int") && parameterTypeList.size() == 0;
+		return getName().equals("hashCode") && getReturnParameter().getType().getClassType().equals("int") && parameterTypeList.size() == 0;
 	}
 
 	private boolean isToString() {
 		List<UMLType> parameterTypeList = getParameterTypeList();
-		return getName().equals("toString") && getReturnParameter().getType().equals("String") && parameterTypeList.size() == 0;
+		return getName().equals("toString") && getReturnParameter().getType().getClassType().equals("String") && parameterTypeList.size() == 0;
 	}
 
 	private boolean isClone() {
 		List<UMLType> parameterTypeList = getParameterTypeList();
-		return getName().equals("clone") && getReturnParameter().getType().equals("Object") && parameterTypeList.size() == 0;
+		return getName().equals("clone") && getReturnParameter().getType().getClassType().equals("Object") && parameterTypeList.size() == 0;
 	}
 
 	private boolean isCompareTo() {
 		List<UMLType> parameterTypeList = getParameterTypeList();
-		return getName().equals("compareTo") && getReturnParameter().getType().equals("int") && parameterTypeList.size() == 1;
+		return getName().equals("compareTo") && getReturnParameter().getType().getClassType().equals("int") && parameterTypeList.size() == 1;
 	}
 
 	public boolean compatibleSignature(UMLOperation removedOperation) {
