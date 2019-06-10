@@ -530,7 +530,7 @@ public class GitHistoryRefactoringMinerImpl implements GitHistoryRefactoringMine
 		return new SimpleImmutableEntry<>(new HashSet<>(), new HashSet<>());
 	}
 
-	public Optional<TypeWorld> getTypeWorld(GitService gitService, Repository repository, RevCommit currentCommit, String projectName)  {
+	public static  Optional<TypeWorld> getTypeWorld(GitService gitService, Repository repository, RevCommit currentCommit, String projectName)  {
 
 		try {
 			List<String> filePathsBefore = new ArrayList<>();
