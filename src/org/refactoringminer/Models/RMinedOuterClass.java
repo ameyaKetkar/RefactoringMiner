@@ -117,6 +117,15 @@ public final class RMinedOuterClass {
      */
     org.refactoringminer.Models.RMinedOuterClass.RMined.OtherRefactoringAnalysisOrBuilder getOtherRefactoringAnalysisOrBuilder(
         int index);
+
+    /**
+     * <code>optional bool tooBig = 7;</code>
+     */
+    boolean hasTooBig();
+    /**
+     * <code>optional bool tooBig = 7;</code>
+     */
+    boolean getTooBig();
   }
   /**
    * Protobuf type {@code Models.RMined}
@@ -136,6 +145,7 @@ public final class RMinedOuterClass {
       refactorings_ = java.util.Collections.emptyList();
       typeChangeAnalysis_ = java.util.Collections.emptyList();
       otherRefactoringAnalysis_ = java.util.Collections.emptyList();
+      tooBig_ = false;
     }
 
     @java.lang.Override
@@ -206,6 +216,11 @@ public final class RMinedOuterClass {
               }
               otherRefactoringAnalysis_.add(
                   input.readMessage(org.refactoringminer.Models.RMinedOuterClass.RMined.OtherRefactoringAnalysis.PARSER, extensionRegistry));
+              break;
+            }
+            case 56: {
+              bitField0_ |= 0x00000004;
+              tooBig_ = input.readBool();
               break;
             }
           }
@@ -1688,6 +1703,15 @@ public final class RMinedOuterClass {
        * <code>optional bool renamed = 9;</code>
        */
       boolean getRenamed();
+
+      /**
+       * <code>optional bool someError = 10;</code>
+       */
+      boolean hasSomeError();
+      /**
+       * <code>optional bool someError = 10;</code>
+       */
+      boolean getSomeError();
     }
     /**
      * Protobuf type {@code Models.RMined.TypeChange}
@@ -1708,6 +1732,7 @@ public final class RMinedOuterClass {
         classAftr_ = "";
         refactoringType_ = "";
         renamed_ = false;
+        someError_ = false;
       }
 
       @java.lang.Override
@@ -1800,6 +1825,11 @@ public final class RMinedOuterClass {
               case 72: {
                 bitField0_ |= 0x00000080;
                 renamed_ = input.readBool();
+                break;
+              }
+              case 80: {
+                bitField0_ |= 0x00000100;
+                someError_ = input.readBool();
                 break;
               }
             }
@@ -2094,6 +2124,21 @@ public final class RMinedOuterClass {
         return renamed_;
       }
 
+      public static final int SOMEERROR_FIELD_NUMBER = 10;
+      private boolean someError_;
+      /**
+       * <code>optional bool someError = 10;</code>
+       */
+      public boolean hasSomeError() {
+        return ((bitField0_ & 0x00000100) == 0x00000100);
+      }
+      /**
+       * <code>optional bool someError = 10;</code>
+       */
+      public boolean getSomeError() {
+        return someError_;
+      }
+
       private byte memoizedIsInitialized = -1;
       public final boolean isInitialized() {
         byte isInitialized = memoizedIsInitialized;
@@ -2162,6 +2207,9 @@ public final class RMinedOuterClass {
         if (((bitField0_ & 0x00000080) == 0x00000080)) {
           output.writeBool(9, renamed_);
         }
+        if (((bitField0_ & 0x00000100) == 0x00000100)) {
+          output.writeBool(10, someError_);
+        }
         unknownFields.writeTo(output);
       }
 
@@ -2196,6 +2244,10 @@ public final class RMinedOuterClass {
         if (((bitField0_ & 0x00000080) == 0x00000080)) {
           size += com.google.protobuf.CodedOutputStream
             .computeBoolSize(9, renamed_);
+        }
+        if (((bitField0_ & 0x00000100) == 0x00000100)) {
+          size += com.google.protobuf.CodedOutputStream
+            .computeBoolSize(10, someError_);
         }
         size += unknownFields.getSerializedSize();
         memoizedSize = size;
@@ -2253,6 +2305,11 @@ public final class RMinedOuterClass {
           result = result && (getRenamed()
               == other.getRenamed());
         }
+        result = result && (hasSomeError() == other.hasSomeError());
+        if (hasSomeError()) {
+          result = result && (getSomeError()
+              == other.getSomeError());
+        }
         result = result && unknownFields.equals(other.unknownFields);
         return result;
       }
@@ -2296,6 +2353,11 @@ public final class RMinedOuterClass {
           hash = (37 * hash) + RENAMED_FIELD_NUMBER;
           hash = (53 * hash) + com.google.protobuf.Internal.hashBoolean(
               getRenamed());
+        }
+        if (hasSomeError()) {
+          hash = (37 * hash) + SOMEERROR_FIELD_NUMBER;
+          hash = (53 * hash) + com.google.protobuf.Internal.hashBoolean(
+              getSomeError());
         }
         hash = (29 * hash) + unknownFields.hashCode();
         memoizedHashCode = hash;
@@ -2452,6 +2514,8 @@ public final class RMinedOuterClass {
           bitField0_ = (bitField0_ & ~0x00000040);
           renamed_ = false;
           bitField0_ = (bitField0_ & ~0x00000080);
+          someError_ = false;
+          bitField0_ = (bitField0_ & ~0x00000100);
           return this;
         }
 
@@ -2516,6 +2580,10 @@ public final class RMinedOuterClass {
             to_bitField0_ |= 0x00000080;
           }
           result.renamed_ = renamed_;
+          if (((from_bitField0_ & 0x00000100) == 0x00000100)) {
+            to_bitField0_ |= 0x00000100;
+          }
+          result.someError_ = someError_;
           result.bitField0_ = to_bitField0_;
           onBuilt();
           return result;
@@ -2591,6 +2659,9 @@ public final class RMinedOuterClass {
           }
           if (other.hasRenamed()) {
             setRenamed(other.getRenamed());
+          }
+          if (other.hasSomeError()) {
+            setSomeError(other.getSomeError());
           }
           this.mergeUnknownFields(other.unknownFields);
           onChanged();
@@ -3289,6 +3360,38 @@ public final class RMinedOuterClass {
         public Builder clearRenamed() {
           bitField0_ = (bitField0_ & ~0x00000080);
           renamed_ = false;
+          onChanged();
+          return this;
+        }
+
+        private boolean someError_ ;
+        /**
+         * <code>optional bool someError = 10;</code>
+         */
+        public boolean hasSomeError() {
+          return ((bitField0_ & 0x00000100) == 0x00000100);
+        }
+        /**
+         * <code>optional bool someError = 10;</code>
+         */
+        public boolean getSomeError() {
+          return someError_;
+        }
+        /**
+         * <code>optional bool someError = 10;</code>
+         */
+        public Builder setSomeError(boolean value) {
+          bitField0_ |= 0x00000100;
+          someError_ = value;
+          onChanged();
+          return this;
+        }
+        /**
+         * <code>optional bool someError = 10;</code>
+         */
+        public Builder clearSomeError() {
+          bitField0_ = (bitField0_ & ~0x00000100);
+          someError_ = false;
           onChanged();
           return this;
         }
@@ -17526,6 +17629,21 @@ public final class RMinedOuterClass {
       return otherRefactoringAnalysis_.get(index);
     }
 
+    public static final int TOOBIG_FIELD_NUMBER = 7;
+    private boolean tooBig_;
+    /**
+     * <code>optional bool tooBig = 7;</code>
+     */
+    public boolean hasTooBig() {
+      return ((bitField0_ & 0x00000004) == 0x00000004);
+    }
+    /**
+     * <code>optional bool tooBig = 7;</code>
+     */
+    public boolean getTooBig() {
+      return tooBig_;
+    }
+
     private byte memoizedIsInitialized = -1;
     public final boolean isInitialized() {
       byte isInitialized = memoizedIsInitialized;
@@ -17579,6 +17697,9 @@ public final class RMinedOuterClass {
       for (int i = 0; i < otherRefactoringAnalysis_.size(); i++) {
         output.writeMessage(6, otherRefactoringAnalysis_.get(i));
       }
+      if (((bitField0_ & 0x00000004) == 0x00000004)) {
+        output.writeBool(7, tooBig_);
+      }
       unknownFields.writeTo(output);
     }
 
@@ -17604,6 +17725,10 @@ public final class RMinedOuterClass {
       for (int i = 0; i < otherRefactoringAnalysis_.size(); i++) {
         size += com.google.protobuf.CodedOutputStream
           .computeMessageSize(6, otherRefactoringAnalysis_.get(i));
+      }
+      if (((bitField0_ & 0x00000004) == 0x00000004)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeBoolSize(7, tooBig_);
       }
       size += unknownFields.getSerializedSize();
       memoizedSize = size;
@@ -17637,6 +17762,11 @@ public final class RMinedOuterClass {
           .equals(other.getTypeChangeAnalysisList());
       result = result && getOtherRefactoringAnalysisList()
           .equals(other.getOtherRefactoringAnalysisList());
+      result = result && (hasTooBig() == other.hasTooBig());
+      if (hasTooBig()) {
+        result = result && (getTooBig()
+            == other.getTooBig());
+      }
       result = result && unknownFields.equals(other.unknownFields);
       return result;
     }
@@ -17667,6 +17797,11 @@ public final class RMinedOuterClass {
       if (getOtherRefactoringAnalysisCount() > 0) {
         hash = (37 * hash) + OTHERREFACTORINGANALYSIS_FIELD_NUMBER;
         hash = (53 * hash) + getOtherRefactoringAnalysisList().hashCode();
+      }
+      if (hasTooBig()) {
+        hash = (37 * hash) + TOOBIG_FIELD_NUMBER;
+        hash = (53 * hash) + com.google.protobuf.Internal.hashBoolean(
+            getTooBig());
       }
       hash = (29 * hash) + unknownFields.hashCode();
       memoizedHashCode = hash;
@@ -17822,6 +17957,8 @@ public final class RMinedOuterClass {
         } else {
           otherRefactoringAnalysisBuilder_.clear();
         }
+        tooBig_ = false;
+        bitField0_ = (bitField0_ & ~0x00000020);
         return this;
       }
 
@@ -17881,6 +18018,10 @@ public final class RMinedOuterClass {
         } else {
           result.otherRefactoringAnalysis_ = otherRefactoringAnalysisBuilder_.build();
         }
+        if (((from_bitField0_ & 0x00000020) == 0x00000020)) {
+          to_bitField0_ |= 0x00000004;
+        }
+        result.tooBig_ = tooBig_;
         result.bitField0_ = to_bitField0_;
         onBuilt();
         return result;
@@ -18010,6 +18151,9 @@ public final class RMinedOuterClass {
               otherRefactoringAnalysisBuilder_.addAllMessages(other.otherRefactoringAnalysis_);
             }
           }
+        }
+        if (other.hasTooBig()) {
+          setTooBig(other.getTooBig());
         }
         this.mergeUnknownFields(other.unknownFields);
         onChanged();
@@ -18931,6 +19075,38 @@ public final class RMinedOuterClass {
         }
         return otherRefactoringAnalysisBuilder_;
       }
+
+      private boolean tooBig_ ;
+      /**
+       * <code>optional bool tooBig = 7;</code>
+       */
+      public boolean hasTooBig() {
+        return ((bitField0_ & 0x00000020) == 0x00000020);
+      }
+      /**
+       * <code>optional bool tooBig = 7;</code>
+       */
+      public boolean getTooBig() {
+        return tooBig_;
+      }
+      /**
+       * <code>optional bool tooBig = 7;</code>
+       */
+      public Builder setTooBig(boolean value) {
+        bitField0_ |= 0x00000020;
+        tooBig_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>optional bool tooBig = 7;</code>
+       */
+      public Builder clearTooBig() {
+        bitField0_ = (bitField0_ & ~0x00000020);
+        tooBig_ = false;
+        onChanged();
+        return this;
+      }
       public final Builder setUnknownFields(
           final com.google.protobuf.UnknownFieldSet unknownFields) {
         return super.setUnknownFields(unknownFields);
@@ -19065,82 +19241,83 @@ public final class RMinedOuterClass {
   static {
     java.lang.String[] descriptorData = {
       "\n\014RMined.proto\022\006Models\032\022DetailedType.pro" +
-      "to\"\270\027\n\006RMined\022\017\n\007project\030\004 \002(\t\022\016\n\006commit" +
+      "to\"\333\027\n\006RMined\022\017\n\007project\030\004 \002(\t\022\016\n\006commit" +
       "\030\005 \002(\t\0225\n\014refactorings\030\001 \003(\0132\037.Models.RM" +
       "ined.RefactoringMined\022=\n\022typeChangeAnaly" +
       "sis\030\003 \003(\0132!.Models.RMined.TypeChangeAnal" +
       "ysis\022I\n\030otherRefactoringAnalysis\030\006 \003(\0132\'" +
-      ".Models.RMined.OtherRefactoringAnalysis\032" +
-      "\220\001\n\020RefactoringMined\022\027\n\017refactoringType\030" +
-      "\004 \002(\t\022\014\n\004name\030\005 \003(\t\022\021\n\tclassesB4\030\002 \003(\t\022\023" +
-      "\n\013classesAftr\030\001 \003(\t\022-\n\ntypeChange\030\003 \001(\0132" +
-      "\031.Models.RMined.TypeChange\032\306\001\n\nTypeChang" +
-      "e\022\"\n\004dtB4\030\001 \001(\0132\024.Models.DetailedType\022$\n" +
-      "\006dtAftr\030\002 \001(\0132\024.Models.DetailedType\022\016\n\006n" +
-      "ameb4\030\005 \002(\t\022\020\n\010nameaftr\030\006 \002(\t\022\017\n\007classb4" +
-      "\030\007 \002(\t\022\021\n\tclassAftr\030\010 \002(\t\022\027\n\017refactoring" +
-      "Type\030\003 \002(\t\022\017\n\007renamed\030\t \001(\010\032\222\001\n\030OtherRef" +
-      "actoringAnalysis\022\016\n\006nameb4\030\001 \001(\t\022\020\n\010name" +
-      "Aftr\030\002 \001(\t\022\024\n\014classRenamed\030\003 \002(\010\022\022\n\nclas" +
-      "sMoved\030\004 \002(\010\022\023\n\013qualifierb4\030\005 \001(\t\022\025\n\rqua" +
-      "lifierAftr\030\006 \001(\t\032\332\021\n\022TypeChangeAnalysis\022" +
-      " \n\002b4\030\001 \002(\0132\024.Models.DetailedType\022\"\n\004aft" +
-      "r\030\002 \002(\0132\024.Models.DetailedType\022N\n\021nameSpa" +
-      "ceAnalysis\030\004 \003(\01323.Models.RMined.TypeCha" +
-      "ngeAnalysis.NameSpaceAnalysis\022P\n\021syntact" +
-      "icAnalysis\030\003 \001(\01325.Models.RMined.TypeCha" +
-      "ngeAnalysis.SyntacticTypeChange\022\\\n\030typeR" +
-      "elationshipAnalysis\030\010 \001(\0132:.Models.RMine" +
-      "d.TypeChangeAnalysis.TypeRelationshipAna" +
-      "lysis\022T\n\024appliedSpaceAnalysis\030\t \003(\01326.Mo" +
-      "dels.RMined.TypeChangeAnalysis.AppliedSp" +
-      "aceAnalysis\032\253\001\n\030TypeRelationshipAnalysis" +
-      "\022\023\n\013TisSubTypeR\030\003 \001(\010\022\025\n\rTisSuperTypeR\030\001" +
-      " \001(\010\022\031\n\021TRcommonSuperType\030\002 \001(\t\022\022\n\nTcomp" +
-      "osesR\030\004 \001(\010\022\022\n\nRcomposesT\030\005 \001(\010\022\017\n\007Tnest" +
-      "sR\030\006 \001(\010\022\017\n\007RnestsT\030\007 \001(\010\032V\n\024AppliedSpac" +
-      "eAnalysis\022%\n\007removed\030\003 \002(\0132\024.Models.Deta" +
-      "iledType\022\027\n\017isTypeMigration\030\002 \002(\010\032\304\003\n\021Na" +
-      "meSpaceAnalysis\022R\n\013nameSpaceB4\030\001 \002(\0132=.M" +
-      "odels.RMined.TypeChangeAnalysis.NameSpac" +
-      "eAnalysis.NameSpace\022T\n\rnameSpaceAftr\030\002 \002" +
-      "(\0132=.Models.RMined.TypeChangeAnalysis.Na" +
-      "meSpaceAnalysis.NameSpace\022\022\n\nautoboxing\030" +
-      "\003 \001(\010\022U\n\016nameSpaceAdded\030\007 \003(\0132=.Models.R" +
-      "Mined.TypeChangeAnalysis.NameSpaceAnalys" +
-      "is.NameSpace\022W\n\020nameSpaceRemoved\030\010 \003(\0132=" +
-      ".Models.RMined.TypeChangeAnalysis.NameSp" +
-      "aceAnalysis.NameSpace\032A\n\tNameSpace\022\022\n\nty" +
-      "peOfType\030\001 \002(\t\022 \n\002dt\030\002 \002(\0132\024.Models.Deta" +
-      "iledType\032\332\010\n\023SyntacticTypeChange\022W\n\004kind" +
-      "\030\005 \002(\0162I.Models.RMined.TypeChangeAnalysi" +
-      "s.SyntacticTypeChange.SyntacticChangeKin" +
-      "d\022 \n\002b4\030\007 \001(\0132\024.Models.DetailedType\022\"\n\004a" +
-      "ftr\030\010 \001(\0132\024.Models.DetailedType\022K\n\003upd\030\001" +
-      " \001(\0132<.Models.RMined.TypeChangeAnalysis." +
-      "SyntacticTypeChange.UpdateH\000\022L\n\003aug\030\003 \001(" +
-      "\0132=.Models.RMined.TypeChangeAnalysis.Syn" +
-      "tacticTypeChange.AugmentH\000\022L\n\003enh\030\004 \001(\0132" +
-      "=.Models.RMined.TypeChangeAnalysis.Synta" +
-      "cticTypeChange.EnhanceH\000\022L\n\004chng\030\n \001(\0132<" +
-      ".Models.RMined.TypeChangeAnalysis.Syntac" +
-      "ticTypeChange.ChangeH\000\032\324\001\n\006Update\022`\n\nsyn" +
-      "typchng\030\001 \003(\0132L.Models.RMined.TypeChange" +
-      "Analysis.SyntacticTypeChange.Update.Synt" +
-      "ypchngEntry\032h\n\017SyntypchngEntry\022\013\n\003key\030\001 " +
-      "\001(\t\022D\n\005value\030\002 \001(\01325.Models.RMined.TypeC" +
-      "hangeAnalysis.SyntacticTypeChange:\0028\001\032X\n" +
-      "\006Change\022\014\n\004from\030\003 \001(\t\022\n\n\002to\030\004 \001(\t\022\030\n\020add" +
-      "edAnnotations\030\005 \003(\t\022\032\n\022removedAnnotation" +
-      "s\030\006 \003(\t\032T\n\007Augment\022$\n\006reuses\030\003 \003(\0132\024.Mod" +
-      "els.DetailedType\022#\n\005added\030\004 \003(\0132\024.Models" +
-      ".DetailedType\032{\n\007Enhance\022$\n\006reuses\030\003 \003(\013" +
-      "2\024.Models.DetailedType\022#\n\005added\030\004 \003(\0132\024." +
-      "Models.DetailedType\022%\n\007removed\030\005 \003(\0132\024.M" +
-      "odels.DetailedType\"R\n\023SyntacticChangeKin" +
-      "d\022\007\n\003Upd\020\001\022\010\n\004Repl\020\002\022\007\n\003Aug\020\004\022\007\n\003Enh\020\003\022\010" +
-      "\n\004Chng\020\007\022\014\n\010NoChange\020\005B\025\n\023syntacticTypeC" +
-      "hangeB\035\n\033org.refactoringminer.Models"
+      ".Models.RMined.OtherRefactoringAnalysis\022" +
+      "\016\n\006tooBig\030\007 \001(\010\032\220\001\n\020RefactoringMined\022\027\n\017" +
+      "refactoringType\030\004 \002(\t\022\014\n\004name\030\005 \003(\t\022\021\n\tc" +
+      "lassesB4\030\002 \003(\t\022\023\n\013classesAftr\030\001 \003(\t\022-\n\nt" +
+      "ypeChange\030\003 \001(\0132\031.Models.RMined.TypeChan" +
+      "ge\032\331\001\n\nTypeChange\022\"\n\004dtB4\030\001 \001(\0132\024.Models" +
+      ".DetailedType\022$\n\006dtAftr\030\002 \001(\0132\024.Models.D" +
+      "etailedType\022\016\n\006nameb4\030\005 \002(\t\022\020\n\010nameaftr\030" +
+      "\006 \002(\t\022\017\n\007classb4\030\007 \002(\t\022\021\n\tclassAftr\030\010 \002(" +
+      "\t\022\027\n\017refactoringType\030\003 \002(\t\022\017\n\007renamed\030\t " +
+      "\001(\010\022\021\n\tsomeError\030\n \001(\010\032\222\001\n\030OtherRefactor" +
+      "ingAnalysis\022\016\n\006nameb4\030\001 \001(\t\022\020\n\010nameAftr\030" +
+      "\002 \001(\t\022\024\n\014classRenamed\030\003 \002(\010\022\022\n\nclassMove" +
+      "d\030\004 \002(\010\022\023\n\013qualifierb4\030\005 \001(\t\022\025\n\rqualifie" +
+      "rAftr\030\006 \001(\t\032\332\021\n\022TypeChangeAnalysis\022 \n\002b4" +
+      "\030\001 \002(\0132\024.Models.DetailedType\022\"\n\004aftr\030\002 \002" +
+      "(\0132\024.Models.DetailedType\022N\n\021nameSpaceAna" +
+      "lysis\030\004 \003(\01323.Models.RMined.TypeChangeAn" +
+      "alysis.NameSpaceAnalysis\022P\n\021syntacticAna" +
+      "lysis\030\003 \001(\01325.Models.RMined.TypeChangeAn" +
+      "alysis.SyntacticTypeChange\022\\\n\030typeRelati" +
+      "onshipAnalysis\030\010 \001(\0132:.Models.RMined.Typ" +
+      "eChangeAnalysis.TypeRelationshipAnalysis" +
+      "\022T\n\024appliedSpaceAnalysis\030\t \003(\01326.Models." +
+      "RMined.TypeChangeAnalysis.AppliedSpaceAn" +
+      "alysis\032\253\001\n\030TypeRelationshipAnalysis\022\023\n\013T" +
+      "isSubTypeR\030\003 \001(\010\022\025\n\rTisSuperTypeR\030\001 \001(\010\022" +
+      "\031\n\021TRcommonSuperType\030\002 \001(\t\022\022\n\nTcomposesR" +
+      "\030\004 \001(\010\022\022\n\nRcomposesT\030\005 \001(\010\022\017\n\007TnestsR\030\006 " +
+      "\001(\010\022\017\n\007RnestsT\030\007 \001(\010\032V\n\024AppliedSpaceAnal" +
+      "ysis\022%\n\007removed\030\003 \002(\0132\024.Models.DetailedT" +
+      "ype\022\027\n\017isTypeMigration\030\002 \002(\010\032\304\003\n\021NameSpa" +
+      "ceAnalysis\022R\n\013nameSpaceB4\030\001 \002(\0132=.Models" +
+      ".RMined.TypeChangeAnalysis.NameSpaceAnal" +
+      "ysis.NameSpace\022T\n\rnameSpaceAftr\030\002 \002(\0132=." +
+      "Models.RMined.TypeChangeAnalysis.NameSpa" +
+      "ceAnalysis.NameSpace\022\022\n\nautoboxing\030\003 \001(\010" +
+      "\022U\n\016nameSpaceAdded\030\007 \003(\0132=.Models.RMined" +
+      ".TypeChangeAnalysis.NameSpaceAnalysis.Na" +
+      "meSpace\022W\n\020nameSpaceRemoved\030\010 \003(\0132=.Mode" +
+      "ls.RMined.TypeChangeAnalysis.NameSpaceAn" +
+      "alysis.NameSpace\032A\n\tNameSpace\022\022\n\ntypeOfT" +
+      "ype\030\001 \002(\t\022 \n\002dt\030\002 \002(\0132\024.Models.DetailedT" +
+      "ype\032\332\010\n\023SyntacticTypeChange\022W\n\004kind\030\005 \002(" +
+      "\0162I.Models.RMined.TypeChangeAnalysis.Syn" +
+      "tacticTypeChange.SyntacticChangeKind\022 \n\002" +
+      "b4\030\007 \001(\0132\024.Models.DetailedType\022\"\n\004aftr\030\010" +
+      " \001(\0132\024.Models.DetailedType\022K\n\003upd\030\001 \001(\0132" +
+      "<.Models.RMined.TypeChangeAnalysis.Synta" +
+      "cticTypeChange.UpdateH\000\022L\n\003aug\030\003 \001(\0132=.M" +
+      "odels.RMined.TypeChangeAnalysis.Syntacti" +
+      "cTypeChange.AugmentH\000\022L\n\003enh\030\004 \001(\0132=.Mod" +
+      "els.RMined.TypeChangeAnalysis.SyntacticT" +
+      "ypeChange.EnhanceH\000\022L\n\004chng\030\n \001(\0132<.Mode" +
+      "ls.RMined.TypeChangeAnalysis.SyntacticTy" +
+      "peChange.ChangeH\000\032\324\001\n\006Update\022`\n\nsyntypch" +
+      "ng\030\001 \003(\0132L.Models.RMined.TypeChangeAnaly" +
+      "sis.SyntacticTypeChange.Update.Syntypchn" +
+      "gEntry\032h\n\017SyntypchngEntry\022\013\n\003key\030\001 \001(\t\022D" +
+      "\n\005value\030\002 \001(\01325.Models.RMined.TypeChange" +
+      "Analysis.SyntacticTypeChange:\0028\001\032X\n\006Chan" +
+      "ge\022\014\n\004from\030\003 \001(\t\022\n\n\002to\030\004 \001(\t\022\030\n\020addedAnn" +
+      "otations\030\005 \003(\t\022\032\n\022removedAnnotations\030\006 \003" +
+      "(\t\032T\n\007Augment\022$\n\006reuses\030\003 \003(\0132\024.Models.D" +
+      "etailedType\022#\n\005added\030\004 \003(\0132\024.Models.Deta" +
+      "iledType\032{\n\007Enhance\022$\n\006reuses\030\003 \003(\0132\024.Mo" +
+      "dels.DetailedType\022#\n\005added\030\004 \003(\0132\024.Model" +
+      "s.DetailedType\022%\n\007removed\030\005 \003(\0132\024.Models" +
+      ".DetailedType\"R\n\023SyntacticChangeKind\022\007\n\003" +
+      "Upd\020\001\022\010\n\004Repl\020\002\022\007\n\003Aug\020\004\022\007\n\003Enh\020\003\022\010\n\004Chn" +
+      "g\020\007\022\014\n\010NoChange\020\005B\025\n\023syntacticTypeChange" +
+      "B\035\n\033org.refactoringminer.Models"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
         new com.google.protobuf.Descriptors.FileDescriptor.    InternalDescriptorAssigner() {
@@ -19160,7 +19337,7 @@ public final class RMinedOuterClass {
     internal_static_Models_RMined_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_Models_RMined_descriptor,
-        new java.lang.String[] { "Project", "Commit", "Refactorings", "TypeChangeAnalysis", "OtherRefactoringAnalysis", });
+        new java.lang.String[] { "Project", "Commit", "Refactorings", "TypeChangeAnalysis", "OtherRefactoringAnalysis", "TooBig", });
     internal_static_Models_RMined_RefactoringMined_descriptor =
       internal_static_Models_RMined_descriptor.getNestedTypes().get(0);
     internal_static_Models_RMined_RefactoringMined_fieldAccessorTable = new
@@ -19172,7 +19349,7 @@ public final class RMinedOuterClass {
     internal_static_Models_RMined_TypeChange_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_Models_RMined_TypeChange_descriptor,
-        new java.lang.String[] { "DtB4", "DtAftr", "Nameb4", "Nameaftr", "Classb4", "ClassAftr", "RefactoringType", "Renamed", });
+        new java.lang.String[] { "DtB4", "DtAftr", "Nameb4", "Nameaftr", "Classb4", "ClassAftr", "RefactoringType", "Renamed", "SomeError", });
     internal_static_Models_RMined_OtherRefactoringAnalysis_descriptor =
       internal_static_Models_RMined_descriptor.getNestedTypes().get(2);
     internal_static_Models_RMined_OtherRefactoringAnalysis_fieldAccessorTable = new

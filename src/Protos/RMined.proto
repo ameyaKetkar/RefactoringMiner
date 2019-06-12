@@ -13,6 +13,7 @@ message RMined{
    repeated RefactoringMined refactorings = 1;
    repeated TypeChangeAnalysis typeChangeAnalysis = 3;
    repeated OtherRefactoringAnalysis otherRefactoringAnalysis = 6;
+   optional bool tooBig = 7;
 
    message RefactoringMined{
       required string refactoringType = 4;
@@ -31,6 +32,7 @@ message RMined{
       required string classAftr = 8;
       required string refactoringType = 3;
       optional bool renamed = 9;
+      optional bool someError = 10;
    }
 
    // to handle renamed/&moved classes
