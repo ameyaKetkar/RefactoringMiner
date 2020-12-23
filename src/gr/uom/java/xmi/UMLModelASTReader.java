@@ -1,10 +1,9 @@
 package gr.uom.java.xmi;
 
-import java.util.ArrayList;
-import java.util.Enumeration;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
+import java.util.function.Function;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.TreeNode;
@@ -46,64 +45,68 @@ import gr.uom.java.xmi.decomposition.VariableDeclaration;
 
 public class UMLModelASTReader {
 	private static final String FREE_MARKER_GENERATED = "generated using freemarker";
-	private UMLModel umlModel;
+	private final UMLModel umlModel;
+	private static final int THRESHOLD_PARALLEL = 50;
 
 	public UMLModelASTReader(Map<String, String> javaFileContents, Set<String> repositoryDirectories) {
-		this.umlModel = new UMLModel(repositoryDirectories);
-		ASTParser parser = ASTParser.newParser(AST.JLS14);
-		for(String filePath : javaFileContents.keySet()) {
-			Map<String, String> options = JavaCore.getOptions();
-			options.put(JavaCore.COMPILER_CODEGEN_TARGET_PLATFORM, JavaCore.VERSION_1_8);
-			options.put(JavaCore.COMPILER_SOURCE, JavaCore.VERSION_1_8);
-			options.put(JavaCore.COMPILER_COMPLIANCE, JavaCore.VERSION_1_8);
-			parser.setCompilerOptions(options);
-			parser.setResolveBindings(false);
-			parser.setKind(ASTParser.K_COMPILATION_UNIT);
-			parser.setStatementsRecovery(true);
-			String javaFileContent = javaFileContents.get(filePath);
-			parser.setSource(javaFileContent.toCharArray());
-			if(javaFileContent.contains(FREE_MARKER_GENERATED)) {
-				return;
-			}
-			try {
-				CompilationUnit compilationUnit = (CompilationUnit)parser.createAST(null);
-				processCompilationUnit(filePath, compilationUnit, javaFileContent);
-			}
-			catch(Exception e) {
-				//e.printStackTrace();
-			}
-		}
+		List<UMLClass> umlClasses = (javaFileContents.size() > THRESHOLD_PARALLEL
+				? javaFileContents.entrySet().parallelStream()
+				: javaFileContents.entrySet().stream())
+				.flatMap(filepath_content -> {
+					ASTParser parser = ASTParser.newParser(AST.JLS14);
+					Map<String, String> options = JavaCore.getOptions();
+					options.put(JavaCore.COMPILER_CODEGEN_TARGET_PLATFORM, JavaCore.VERSION_1_8);
+					options.put(JavaCore.COMPILER_SOURCE, JavaCore.VERSION_1_8);
+					options.put(JavaCore.COMPILER_COMPLIANCE, JavaCore.VERSION_1_8);
+					parser.setCompilerOptions(options);
+					parser.setResolveBindings(false);
+					parser.setKind(ASTParser.K_COMPILATION_UNIT);
+					parser.setStatementsRecovery(true);
+					String javaFileContent = filepath_content.getValue();
+					parser.setSource(javaFileContent.toCharArray());
+					if (javaFileContent.contains(FREE_MARKER_GENERATED)) {
+						return Stream.empty();
+					}
+					try {
+						CompilationUnit compilationUnit = (CompilationUnit) parser.createAST(null);
+						return processCompilationUnit(filepath_content.getKey(), compilationUnit, javaFileContent);
+					} catch (Exception e) {
+						//e.printStackTrace();
+						return Stream.empty();
+					}
+				}).collect(Collectors.toList());
+
+		this.umlModel = new UMLModel(repositoryDirectories, umlClasses);
 	}
 
 	public UMLModel getUmlModel() {
 		return this.umlModel;
 	}
 
-	protected void processCompilationUnit(String sourceFilePath, CompilationUnit compilationUnit, String javaFileContent) {
+	protected Stream<UMLClass> processCompilationUnit(String sourceFilePath, CompilationUnit compilationUnit, String javaFileContent) {
 		List<UMLComment> comments = extractInternalComments(compilationUnit, sourceFilePath, javaFileContent);
 		PackageDeclaration packageDeclaration = compilationUnit.getPackage();
-		String packageName = null;
-		if(packageDeclaration != null)
-			packageName = packageDeclaration.getName().getFullyQualifiedName();
-		else
-			packageName = "";
+		String packageName = packageDeclaration != null ? packageDeclaration.getName().getFullyQualifiedName() : "";
 		
 		List<ImportDeclaration> imports = compilationUnit.imports();
 		List<String> importedTypes = new ArrayList<String>();
 		for(ImportDeclaration importDeclaration : imports) {
 			importedTypes.add(importDeclaration.getName().getFullyQualifiedName());
 		}
-		List<AbstractTypeDeclaration> topLevelTypeDeclarations = compilationUnit.types();
-        for(AbstractTypeDeclaration abstractTypeDeclaration : topLevelTypeDeclarations) {
+		Function<AbstractTypeDeclaration, Stream<UMLClass>> processTypesAndEnums = abstractTypeDeclaration -> {
         	if(abstractTypeDeclaration instanceof TypeDeclaration) {
         		TypeDeclaration topLevelTypeDeclaration = (TypeDeclaration)abstractTypeDeclaration;
-        		processTypeDeclaration(compilationUnit, topLevelTypeDeclaration, packageName, sourceFilePath, importedTypes);
+        		return processTypeDeclaration(compilationUnit, topLevelTypeDeclaration, packageName, sourceFilePath, importedTypes);
         	}
         	else if(abstractTypeDeclaration instanceof EnumDeclaration) {
         		EnumDeclaration enumDeclaration = (EnumDeclaration)abstractTypeDeclaration;
-        		processEnumDeclaration(compilationUnit, enumDeclaration, packageName, sourceFilePath, importedTypes);
+        		return processEnumDeclaration(compilationUnit, enumDeclaration, packageName, sourceFilePath, importedTypes);
         	}
-        }
+			return Stream.empty();
+		};
+		List<AbstractTypeDeclaration> topLevelTypeDeclarations = compilationUnit.types();
+		return topLevelTypeDeclarations.stream()
+				.flatMap(processTypesAndEnums);
 	}
 
 	private List<UMLComment> extractInternalComments(CompilationUnit cu, String sourceFile, String javaFileContent) {
@@ -147,11 +150,11 @@ public class UMLModelASTReader {
 		return doc;
 	}
 
-	private void processEnumDeclaration(CompilationUnit cu, EnumDeclaration enumDeclaration, String packageName, String sourceFile,
+	private Stream<UMLClass> processEnumDeclaration(CompilationUnit cu, EnumDeclaration enumDeclaration, String packageName, String sourceFile,
 			List<String> importedTypes) {
 		UMLJavadoc javadoc = generateJavadoc(cu, enumDeclaration, sourceFile);
 		if(javadoc != null && javadoc.containsIgnoreCase(FREE_MARKER_GENERATED)) {
-			return;
+			return Stream.empty();
 		}
 		String className = enumDeclaration.getName().getFullyQualifiedName();
 		LocationInfo locationInfo = generateLocationInfo(cu, sourceFile, enumDeclaration, CodeElementType.TYPE_DECLARATION);
@@ -176,10 +179,12 @@ public class UMLModelASTReader {
 		processModifiers(cu, sourceFile, enumDeclaration, umlClass);
 		
 		processBodyDeclarations(cu, enumDeclaration, packageName, sourceFile, importedTypes, umlClass);
+
+		Stream<UMLClass> innerTypes = processInnerTypes(cu, enumDeclaration, sourceFile, importedTypes, umlClass);
 		
 		processAnonymousClassDeclarations(cu, enumDeclaration, packageName, sourceFile, className, umlClass);
 		
-		this.getUmlModel().addClass(umlClass);
+		return Stream.concat(innerTypes, Stream.of(umlClass));
 	}
 
 	private void processBodyDeclarations(CompilationUnit cu, AbstractTypeDeclaration abstractTypeDeclaration, String packageName,
@@ -200,22 +205,32 @@ public class UMLModelASTReader {
 	    		operation.setClassName(umlClass.getName());
 	    		umlClass.addOperation(operation);
 			}
-			else if(bodyDeclaration instanceof TypeDeclaration) {
-				TypeDeclaration typeDeclaration = (TypeDeclaration)bodyDeclaration;
-				processTypeDeclaration(cu, typeDeclaration, umlClass.getName(), sourceFile, importedTypes);
-			}
-			else if(bodyDeclaration instanceof EnumDeclaration) {
-				EnumDeclaration enumDeclaration = (EnumDeclaration)bodyDeclaration;
-				processEnumDeclaration(cu, enumDeclaration, umlClass.getName(), sourceFile, importedTypes);
-			}
 		}
 	}
 
-	private void processTypeDeclaration(CompilationUnit cu, TypeDeclaration typeDeclaration, String packageName, String sourceFile,
-			List<String> importedTypes) {
+	private Stream<UMLClass> processInnerTypes(CompilationUnit cu, AbstractTypeDeclaration abstractTypeDeclaration,
+											   String sourceFile, List<String> importedTypes, UMLClass umlClass) {
+		List<BodyDeclaration> bodyDeclarations = abstractTypeDeclaration.bodyDeclarations();
+		return bodyDeclarations.stream()
+				.flatMap(bodyDeclaration -> {
+					if(bodyDeclaration instanceof TypeDeclaration) {
+						TypeDeclaration typeDeclaration = (TypeDeclaration)bodyDeclaration;
+						return processTypeDeclaration(cu, typeDeclaration, umlClass.getName(), sourceFile, importedTypes);
+					}
+					else if(bodyDeclaration instanceof EnumDeclaration) {
+						EnumDeclaration enumDeclaration = (EnumDeclaration)bodyDeclaration;
+						return processEnumDeclaration(cu, enumDeclaration, umlClass.getName(), sourceFile, importedTypes);
+					}
+					return Stream.empty();
+				});
+
+	}
+
+	private Stream<UMLClass> processTypeDeclaration(CompilationUnit cu, TypeDeclaration typeDeclaration, String packageName, String sourceFile,
+													List<String> importedTypes) {
 		UMLJavadoc javadoc = generateJavadoc(cu, typeDeclaration, sourceFile);
 		if(javadoc != null && javadoc.containsIgnoreCase(FREE_MARKER_GENERATED)) {
-			return;
+			return Stream.empty();
 		}
 		String className = typeDeclaration.getName().getFullyQualifiedName();
 		LocationInfo locationInfo = generateLocationInfo(cu, sourceFile, typeDeclaration, CodeElementType.TYPE_DECLARATION);
@@ -279,20 +294,16 @@ public class UMLModelASTReader {
     	
     	processAnonymousClassDeclarations(cu, typeDeclaration, packageName, sourceFile, className, umlClass);
     	
-    	this.getUmlModel().addClass(umlClass);
-		
-		TypeDeclaration[] types = typeDeclaration.getTypes();
-		for(TypeDeclaration type : types) {
-			processTypeDeclaration(cu, type, umlClass.getName(), sourceFile, importedTypes);
-		}
-		
+    	Stream<UMLClass> types = Arrays.stream(typeDeclaration.getTypes())
+				.flatMap(x -> processTypeDeclaration(cu, x, umlClass.getName(), sourceFile, importedTypes));
+
 		List<BodyDeclaration> bodyDeclarations = typeDeclaration.bodyDeclarations();
-		for(BodyDeclaration bodyDeclaration : bodyDeclarations) {
-			if(bodyDeclaration instanceof EnumDeclaration) {
-				EnumDeclaration enumDeclaration = (EnumDeclaration)bodyDeclaration;
-				processEnumDeclaration(cu, enumDeclaration, umlClass.getName(), sourceFile, importedTypes);
-			}
-		}
+		Stream<UMLClass> enums = bodyDeclarations.stream()
+				.filter(x -> x instanceof EnumDeclaration)
+				.flatMap(e -> processEnumDeclaration(cu, (EnumDeclaration) e,
+						umlClass.getName(), sourceFile, importedTypes));
+
+		return Stream.concat(Stream.concat(Stream.of(umlClass), types), enums);
 	}
 
 	private void processAnonymousClassDeclarations(CompilationUnit cu, AbstractTypeDeclaration typeDeclaration,
