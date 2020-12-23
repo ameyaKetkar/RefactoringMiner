@@ -25,8 +25,8 @@ public class UMLModel {
         realizationList = new ArrayList<UMLRealization>();
     }
 
-	public void addClass(UMLClass umlClass) {
-        classList.add(umlClass);
+	public void addClasses(List<UMLClass> umlClasses) {
+        classList.addAll(umlClasses);
     }
 
     public void addGeneralization(UMLGeneralization umlGeneralization) {
