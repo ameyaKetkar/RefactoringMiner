@@ -187,7 +187,7 @@ public class UMLModelDiff {
    }
 
    private List<UMLClassBaseDiff> getUMLClassDiffWithExistingAttributeAfter(Replacement pattern) {
-	   List<UMLClassBaseDiff> classDiffs = new ArrayList<UMLClassBaseDiff>();
+	   List<UMLClassBaseDiff> classDiffs = new ArrayList<>();
 	   for(UMLClassDiff classDiff : commonClassDiffList) {
 		   if(classDiff.findAttributeInOriginalClass(pattern.getAfter()) != null &&
 				   classDiff.findAttributeInNextClass(pattern.getAfter()) != null)

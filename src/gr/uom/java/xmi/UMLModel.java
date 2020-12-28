@@ -3,31 +3,50 @@ package gr.uom.java.xmi;
 import gr.uom.java.xmi.diff.UMLClassDiff;
 import gr.uom.java.xmi.diff.UMLModelDiff;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.ListIterator;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import org.refactoringminer.api.RefactoringMinerTimedOutException;
 
+import static java.util.stream.Collectors.*;
+
 public class UMLModel {
-	private Set<String> repositoryDirectories;
+	private final Set<String> repositoryDirectories;
     private final List<UMLClass> classList;
-    private List<UMLGeneralization> generalizationList;
-    private List<UMLRealization> realizationList;
+    private final List<UMLGeneralization> generalizationList;
+    private final List<UMLRealization> realizationList;
 
-    public UMLModel(Set<String> repositoryDirectories, List<UMLClass> umlClasses) {
+    public UMLModel(Set<String> repositoryDirectories, List<UMLClass> umlClasses, List<UMLGeneralization> generalizationList
+			, List<UMLRealization> realizationList) {
     	this.repositoryDirectories = repositoryDirectories;
-        classList = umlClasses;
-        generalizationList = new ArrayList<UMLGeneralization>();
-        realizationList = new ArrayList<UMLRealization>();
+        this.classList = umlClasses;
+		this.generalizationList = generalizationList;
+		this.realizationList = realizationList;
+
     }
 
-    public void addGeneralization(UMLGeneralization umlGeneralization) {
-        generalizationList.add(umlGeneralization);
-    }
+	public UMLModel(List<UMLClass> umlClasses) {
+    	this(new HashSet<>(), umlClasses, new ArrayList<>(), new ArrayList<>());
+	}
+
+	public UMLModel(Set<String> repositoryDirectories) {
+		this(repositoryDirectories, new ArrayList<>(), new ArrayList<>(), new ArrayList<>());
+	}
+
+    public static <T> List<T> merge(List<T> l1, List<T> l2){
+    	return Stream.concat(l1.stream(), l2.stream()).distinct().collect(toList());
+	}
+
+	public static <T> Set<T> merge(Set<T> l1, Set<T> l2){
+		return Stream.concat(l1.stream(), l2.stream()).collect(toSet());
+	}
+
+	public static UMLModel merge(UMLModel um1, UMLModel um2){
+    	return new UMLModel(merge(um1.repositoryDirectories, um2.repositoryDirectories),
+				merge(um1.classList, um2.classList), merge(um1.generalizationList, um2.generalizationList),
+				merge(um1.realizationList, um2.realizationList));
+	}
 
     public void addRealization(UMLRealization umlRealization) {
     	realizationList.add(umlRealization);
