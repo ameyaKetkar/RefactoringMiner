@@ -101,7 +101,11 @@ public class RefactoringPopulator {
 		RemoveMethodModifier(new BigInteger("295147905179352825856")),
 		AddAttributeModifier(new BigInteger("590295810358705651712")),
 		RemoveAttributeModifier(new BigInteger("1180591620717411303424")),
-		All(new BigInteger("2361183241434822606847"));
+		AddVariableModifier(new BigInteger("2361183241434822606848")),
+		AddParameterModifier(new BigInteger("4722366482869645213696")),
+		RemoveVariableModifier(new BigInteger("9444732965739290427392")),
+		RemoveParameterModifier(new BigInteger("18889465931478580854784")),
+		All(new BigInteger("37778931862957161709567"));
 
 		private BigInteger value;
 
