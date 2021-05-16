@@ -41,6 +41,7 @@ public class UMLOperation implements Comparable<UMLOperation>, Serializable, Loc
 	private List<UMLAnnotation> annotations;
 	private List<UMLComment> comments;
 	private Map<String, Set<VariableDeclaration>> variableDeclarationMap;
+	private List<String> importedTypes;
 	
 	public UMLOperation(String name, LocationInfo locationInfo) {
 		this.locationInfo = locationInfo;
@@ -280,6 +281,12 @@ public class UMLOperation implements Comparable<UMLOperation>, Serializable, Loc
 
 	public void setClassName(String className) {
 		this.className = className;
+	}
+
+	public List<String> getImportedTypes(){return this.importedTypes;}
+
+	public void setImportedTypes(List<String> importedTypes) {
+		this.importedTypes = importedTypes;
 	}
 
 	public void addParameter(UMLParameter parameter) {

@@ -24,6 +24,7 @@ public class UMLAttribute implements Comparable<UMLAttribute>, Serializable, Loc
 	private List<UMLAnonymousClass> anonymousClassList;
 	private UMLJavadoc javadoc;
 	private List<UMLComment> comments;
+	private List<String> importedTypes;
 
 	public UMLAttribute(String name, UMLType type, LocationInfo locationInfo) {
 		this.locationInfo = locationInfo;
@@ -220,5 +221,13 @@ public class UMLAttribute implements Comparable<UMLAttribute>, Serializable, Loc
 		int distance = StringDistance.editDistance(s1, s2);
 		double normalized = (double)distance/(double)Math.max(s1.length(), s2.length());
 		return normalized;
+	}
+
+	public List<String> getImportedTypes() {
+		return importedTypes;
+	}
+
+	public void setImportedTypes(List<String> importedTypes) {
+		this.importedTypes = importedTypes;
 	}
 }

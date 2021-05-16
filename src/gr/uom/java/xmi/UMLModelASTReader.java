@@ -238,7 +238,7 @@ public class UMLModelASTReader {
 		
 		processBodyDeclarations(cu, enumDeclaration, packageName, sourceFile, importedTypes, umlClass, comments);
 		
-		processAnonymousClassDeclarations(cu, enumDeclaration, packageName, sourceFile, className, umlClass);
+		processAnonymousClassDeclarations(cu, enumDeclaration, packageName, sourceFile, className, umlClass, importedTypes);
 		
 		this.getUmlModel().addClass(umlClass);
 		distributeComments(comments, locationInfo, umlClass.getComments());
@@ -253,6 +253,7 @@ public class UMLModelASTReader {
 				List<UMLAttribute> attributes = processFieldDeclaration(cu, fieldDeclaration, umlClass.isInterface(), sourceFile, comments);
 	    		for(UMLAttribute attribute : attributes) {
 	    			attribute.setClassName(umlClass.getName());
+	    			attribute.setImportedTypes(importedTypes);
 	    			umlClass.addAttribute(attribute);
 	    		}
 			}
@@ -260,6 +261,7 @@ public class UMLModelASTReader {
 				MethodDeclaration methodDeclaration = (MethodDeclaration)bodyDeclaration;
 				UMLOperation operation = processMethodDeclaration(cu, methodDeclaration, packageName, umlClass.isInterface(), sourceFile, comments);
 	    		operation.setClassName(umlClass.getName());
+				operation.setImportedTypes(importedTypes);
 	    		umlClass.addOperation(operation);
 			}
 			else if(bodyDeclaration instanceof TypeDeclaration) {
@@ -328,6 +330,7 @@ public class UMLModelASTReader {
     		List<UMLAttribute> attributes = processFieldDeclaration(cu, fieldDeclaration, umlClass.isInterface(), sourceFile, comments);
     		for(UMLAttribute attribute : attributes) {
     			attribute.setClassName(umlClass.getName());
+				attribute.setImportedTypes(importedTypes);
     			umlClass.addAttribute(attribute);
     		}
     	}
@@ -336,10 +339,11 @@ public class UMLModelASTReader {
     	for(MethodDeclaration methodDeclaration : methodDeclarations) {
     		UMLOperation operation = processMethodDeclaration(cu, methodDeclaration, packageName, umlClass.isInterface(), sourceFile, comments);
     		operation.setClassName(umlClass.getName());
+			operation.setImportedTypes(importedTypes);
     		umlClass.addOperation(operation);
     	}
     	
-    	processAnonymousClassDeclarations(cu, typeDeclaration, packageName, sourceFile, className, umlClass);
+    	processAnonymousClassDeclarations(cu, typeDeclaration, packageName, sourceFile, className, umlClass, importedTypes);
     	
     	this.getUmlModel().addClass(umlClass);
 		
@@ -359,7 +363,7 @@ public class UMLModelASTReader {
 	}
 
 	private void processAnonymousClassDeclarations(CompilationUnit cu, AbstractTypeDeclaration typeDeclaration,
-			String packageName, String sourceFile, String className, UMLClass umlClass) {
+			String packageName, String sourceFile, String className, UMLClass umlClass, List<String> importedTypes) {
 		AnonymousClassDeclarationVisitor visitor = new AnonymousClassDeclarationVisitor();
     	typeDeclaration.accept(visitor);
     	Set<AnonymousClassDeclaration> anonymousClassDeclarations = visitor.getAnonymousClassDeclarations();
@@ -401,7 +405,8 @@ public class UMLModelASTReader {
     			if(matchingOperation != null || matchingAttribute != null) {
 	    			String anonymousBinaryName = getAnonymousBinaryName(node);
 	    			String anonymousCodePath = getAnonymousCodePath(node);
-	    			UMLAnonymousClass anonymousClass = processAnonymousClassDeclaration(cu, anonymous, packageName + "." + className, anonymousBinaryName, anonymousCodePath, sourceFile, comments);
+	    			UMLAnonymousClass anonymousClass = processAnonymousClassDeclaration(cu, anonymous, packageName + "." + className, anonymousBinaryName, anonymousCodePath, sourceFile, comments
+							, importedTypes);
 	    			umlClass.addAnonymousClass(anonymousClass);
 	    			if(matchingOperation != null) {
 	    				matchingOperation.addAnonymousClass(anonymousClass);
@@ -558,6 +563,7 @@ public class UMLModelASTReader {
 			enumConstant.addArgument(argument.toString());
 		}
 		enumConstant.setClassName(umlClass.getName());
+		enumConstant.setImportedTypes(new ArrayList<>());
 		umlClass.addEnumConstant(enumConstant);
 	}
 
@@ -606,7 +612,8 @@ public class UMLModelASTReader {
 		return attributes;
 	}
 	
-	private UMLAnonymousClass processAnonymousClassDeclaration(CompilationUnit cu, AnonymousClassDeclaration anonymous, String packageName, String binaryName, String codePath, String sourceFile, List<UMLComment> comments) {
+	private UMLAnonymousClass processAnonymousClassDeclaration(CompilationUnit cu, AnonymousClassDeclaration anonymous, String packageName, String binaryName, String codePath, String sourceFile,
+															   List<UMLComment> comments, List<String> importedTypes) {
 		List<BodyDeclaration> bodyDeclarations = anonymous.bodyDeclarations();
 		LocationInfo locationInfo = generateLocationInfo(cu, sourceFile, anonymous, CodeElementType.ANONYMOUS_CLASS_DECLARATION);
 		UMLAnonymousClass anonymousClass = new UMLAnonymousClass(packageName, binaryName, codePath, locationInfo);
@@ -617,6 +624,7 @@ public class UMLModelASTReader {
 				List<UMLAttribute> attributes = processFieldDeclaration(cu, fieldDeclaration, false, sourceFile, comments);
 	    		for(UMLAttribute attribute : attributes) {
 	    			attribute.setClassName(anonymousClass.getCodePath());
+	    			attribute.setImportedTypes(importedTypes);
 	    			anonymousClass.addAttribute(attribute);
 	    		}
 			}
@@ -624,6 +632,7 @@ public class UMLModelASTReader {
 				MethodDeclaration methodDeclaration = (MethodDeclaration)bodyDeclaration;
 				UMLOperation operation = processMethodDeclaration(cu, methodDeclaration, packageName, false, sourceFile, comments);
 				operation.setClassName(anonymousClass.getCodePath());
+				operation.setImportedTypes(importedTypes);
 				anonymousClass.addOperation(operation);
 			}
 		}

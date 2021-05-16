@@ -6,6 +6,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.eclipse.jgit.lib.Repository;
 import org.refactoringminer.api.GitHistoryRefactoringMiner;
@@ -282,15 +283,20 @@ public class RefactoringMiner {
 			sb.append("\t").append("\"").append("url").append("\"").append(": ").append("\"").append(url).append("\"").append(",").append("\n");
 			sb.append("\t").append("\"").append("refactorings").append("\"").append(": ");
 			sb.append("[");
-			int counter = 0;
-			for(Refactoring refactoring : refactoringsAtRevision) {
-				sb.append(refactoring.toJSON());
-				if(counter < refactoringsAtRevision.size()-1) {
-					sb.append(",");
-				}
-				sb.append("\n");
-				counter++;
-			}
+			String s = refactoringsAtRevision.stream().map(RMinerUtils::getJsonForRelevant)
+					.filter(x->!x.isEmpty()).collect(Collectors.joining(",\n")) + "\n";
+			sb.append(s);
+//			for(Refactoring refactoring : refactoringsAtRevision) {
+//				String jsonForRelevant = RMinerUtils.getJsonForRelevant(refactoring);
+//				if(jsonForRelevant.isEmpty()) continue;
+//
+//				sb.append(jsonForRelevant);
+//				if(counter < refactoringsAtRevision.size()-1) {
+//					sb.append(",");
+//				}
+//				sb.append("\n");
+//				counter++;
+//			}
 			sb.append("]").append("\n");
 			sb.append("}");
 			try {
@@ -300,6 +306,8 @@ public class RefactoringMiner {
 			}
 		}
 	}
+
+
 
 	private static void betweenCommitsJSON() {
 		if(path != null) {
