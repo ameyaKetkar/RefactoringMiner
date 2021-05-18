@@ -8,15 +8,25 @@ import gr.uom.java.xmi.diff.*;
 import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.refactoringminer.api.Refactoring;
 
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.security.MessageDigest;
 import java.util.*;
 import java.util.stream.Collectors;
 
 public class RMinerUtils {
 
-        public static Path getProjectFolder(String project){
-            return Paths.get("/Users/ameya/Research/TypeChangeStudy/Corpus").resolve("Project_"+project).resolve(project);
+        public static class Response {
+            public List<CommitData> commits;
+        }
+
+        public static class CommitData {
+            public String repository;
+            public String sha1;
+            public String url;
+            public List<TypeChange> refactorings;
+
         }
 
         public static class TypeChange{
@@ -264,12 +274,23 @@ public class RMinerUtils {
         return json;
     }
 
-//
-//    public static void main(String[] a) throws Exception{
-//            getRelevantRefactorings("neo4j", "https://github.com/neo4j/neo4j.git", "77a5e62f9d5a56a48f82b6bdd8519b18275bef1d");
-//
-//
-//    }
+    public static String generateUrl(LocationInfo locationInfo, String cloneLink, String commit, String lOrR) {
+        String url = cloneLink.replace(".git", "/commit/" + commit + "?diff=split#diff-");
+        try {
+            MessageDigest md = MessageDigest.getInstance("MD5");
+            byte[] hash = md.digest(locationInfo.getFilePath().getBytes(StandardCharsets.UTF_8));
+            StringBuilder sb = new StringBuilder(2 * hash.length);
+            for (byte b : hash) {
+                sb.append(String.format("%02x", b & 0xff));
+            }
+            String val = sb.toString();
+            return url + val + lOrR + locationInfo.getStartLine();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return "";
+
+    }
 
 }
 
