@@ -9,8 +9,6 @@ import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.refactoringminer.api.Refactoring;
 
 import java.nio.charset.StandardCharsets;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.security.MessageDigest;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -41,17 +39,18 @@ public class RMinerUtils {
             private List<String> addedImportStatements;
             private List<String> removedImportStatements;
             private List<String> unchangedImportStatements;
-
+            private final String RefactoringKind;
             private List<Statement_Mapping> references;
 
-            public TypeChange(String beforeName, String afterName){
+            public TypeChange(String beforeName, String afterName, String refactoringKind){
                 this.beforeName = beforeName;
                 this.afterName = afterName;
+                RefactoringKind = refactoringKind;
             }
 
             public TypeChange(String beforeName, String afterName, ImmutablePair<String, String> beforeCu, ImmutablePair<String, String> afterCu, String b4Type,
                               String afterType, LocationInfo locationInfoBefore, LocationInfo locationInfoAfter, Statement_Mapping varDeclLoc, List<Statement_Mapping> references,
-                              List<String> addedImportStatements, List<String> removedImportStatements, List<String> unchangedImportStatements) {
+                              List<String> addedImportStatements, List<String> removedImportStatements, List<String> unchangedImportStatements, String refactoringKind) {
                 this.beforeName = beforeName;
                 this.afterName = afterName;
                 this.beforeCu = beforeCu;
@@ -64,6 +63,7 @@ public class RMinerUtils {
                 this.addedImportStatements = addedImportStatements;
                 this.removedImportStatements = removedImportStatements;
                 this.unchangedImportStatements = unchangedImportStatements;
+                RefactoringKind = refactoringKind;
                 if(varDeclLoc != null){
                     if(this.references.isEmpty()) {
                         this.references = List.of(varDeclLoc);
@@ -124,6 +124,10 @@ public class RMinerUtils {
 
             public List<String> getUnchangedImportStatements() {
                 return unchangedImportStatements;
+            }
+
+            public String getRefactoringKind() {
+                return RefactoringKind;
             }
         }
 
@@ -209,6 +213,7 @@ public class RMinerUtils {
 
     public static String getJsonForRelevant(Refactoring r) {
         String json = "";
+        String refactoringKind = r.getRefactoringType().toString();
         if(r instanceof ChangeReturnTypeRefactoring){
             ChangeReturnTypeRefactoring crt = (ChangeReturnTypeRefactoring) r;
             var tc = new TypeChange(crt.getOperationBefore().getName(), crt.getOperationAfter().getName()
@@ -219,7 +224,7 @@ public class RMinerUtils {
                     toStmtMapping(crt.getReturnReferences()),
                     difference(crt.getOperationAfter().getImportedTypes(), crt.getOperationBefore().getImportedTypes()),
                     difference(crt.getOperationBefore().getImportedTypes(), crt.getOperationAfter().getImportedTypes()),
-                    intersection(crt.getOperationAfter().getImportedTypes(), crt.getOperationBefore().getImportedTypes()));
+                    intersection(crt.getOperationAfter().getImportedTypes(), crt.getOperationBefore().getImportedTypes()), refactoringKind);
 
             json = new Gson().toJson(tc, TypeChange.class);
         }
@@ -232,7 +237,7 @@ public class RMinerUtils {
                     , cat.getOriginalAttribute().getLocationInfo(), cat.getChangedTypeAttribute().getLocationInfo(), null, toStmtMapping(cat.getAttributeReferences()),
                     difference(cat.getChangedTypeAttribute().getImportedTypes(),cat.getOriginalAttribute().getImportedTypes()),
                     difference(cat.getOriginalAttribute().getImportedTypes(),cat.getChangedTypeAttribute().getImportedTypes()),
-                    intersection(cat.getOriginalAttribute().getImportedTypes(),cat.getChangedTypeAttribute().getImportedTypes()));
+                    intersection(cat.getOriginalAttribute().getImportedTypes(),cat.getChangedTypeAttribute().getImportedTypes()), refactoringKind);
 
             json = new Gson().toJson(tc, TypeChange.class);
         }
@@ -247,28 +252,28 @@ public class RMinerUtils {
                     toStmtMapping(cvt.getVariableReferences()),
                     difference(cvt.getOperationAfter().getImportedTypes(), cvt.getOperationBefore().getImportedTypes()),
                     difference(cvt.getOperationBefore().getImportedTypes(), cvt.getOperationAfter().getImportedTypes()),
-                    intersection(cvt.getOperationBefore().getImportedTypes(), cvt.getOperationAfter().getImportedTypes()));
+                    intersection(cvt.getOperationBefore().getImportedTypes(), cvt.getOperationAfter().getImportedTypes()), refactoringKind);
 
             json = new Gson().toJson(tc, TypeChange.class);
         }
         if(r instanceof RenameAttributeRefactoring){
             RenameAttributeRefactoring rar = (RenameAttributeRefactoring) r;
-            var re = new TypeChange(rar.getOriginalAttribute().getName(), rar.getRenamedAttribute().getName());
+            var re = new TypeChange(rar.getOriginalAttribute().getName(), rar.getRenamedAttribute().getName(), refactoringKind);
             json = new Gson().toJson(re, TypeChange.class);
         }
         if(r instanceof RenameVariableRefactoring){
             RenameVariableRefactoring rar = (RenameVariableRefactoring) r;
-            var re = new TypeChange(rar.getOriginalVariable().getVariableName(), rar.getRenamedVariable().getVariableName());
+            var re = new TypeChange(rar.getOriginalVariable().getVariableName(), rar.getRenamedVariable().getVariableName(), refactoringKind);
             json = new Gson().toJson(re, TypeChange.class);
         }
         if(r instanceof RenameOperationRefactoring){
             RenameOperationRefactoring rar = (RenameOperationRefactoring) r;
-            var re = new TypeChange(rar.getOriginalOperation().getName(), rar.getRenamedOperation().getName());
+            var re = new TypeChange(rar.getOriginalOperation().getName(), rar.getRenamedOperation().getName(), refactoringKind);
             json = new Gson().toJson(re, TypeChange.class);
         }
         if(r instanceof RenameClassRefactoring){
             RenameClassRefactoring rar = (RenameClassRefactoring) r;
-            var re = new TypeChange(rar.getOriginalClassName(),  rar.getRenamedClassName());
+            var re = new TypeChange(rar.getOriginalClassName(),  rar.getRenamedClassName(), refactoringKind);
             json = new Gson().toJson(re, TypeChange.class);
         }
         return json;
