@@ -8,6 +8,9 @@ Table of Contents
    * [Research](#research)
       * [How to cite RefactoringMiner](#how-to-cite-refactoringminer)
       * [Papers based on RefactoringMiner](#papers-based-on-refactoringminer)
+   * [Support for other programming languages](#support-for-other-programming-languages)
+      * [Kotlin](#kotlin)
+      * [Python](#python)
    * [Contributors](#contributors)
    * [API usage guidelines](#api-usage-guidelines)
       * [With a locally cloned git repository](#with-a-locally-cloned-git-repository)
@@ -38,7 +41,7 @@ Currently, it supports the detection of the following refactorings:
 12. Move Class
 13. Rename Class
 14. Extract and Move Method
-15. Change Package (Move, Rename, Split, Merge)
+15. Rename Package ~~Change Package (Move, Rename, Split, Merge)~~
 
 **<ins>supported by RefactoringMiner 2.0</ins>**
 
@@ -96,6 +99,20 @@ Currently, it supports the detection of the following refactorings:
 64. Encapsulate Attribute
 65. Parameterize Attribute
 66. Replace Attribute with Variable
+67. Add Method Modifier (`final`, `static`, `abstract`, `synchronized`)
+68. Remove Method Modifier (`final`, `static`, `abstract`, `synchronized`)
+69. Add Attribute Modifier (`final`, `static`, `transient`, `volatile`)
+70. Remove Attribute Modifier (`final`, `static`, `transient`, `volatile`)
+71. Add Variable Modifier (`final`)
+72. Add Parameter Modifier (`final`)
+73. Remove Variable Modifier (`final`)
+74. Remove Parameter Modifier (`final`)
+75. Change Class Access Modifier
+76. Add Class Modifier (`final`, `static`, `abstract`)
+77. Remove Class Modifier (`final`, `static`, `abstract`)
+78. Move Package
+79. Split Package
+80. Merge Package
 
 # How to build RefactoringMiner
 
@@ -219,6 +236,14 @@ Refactorings and Commit Messages](https://doi.org/10.1109/SCAM.2019.00017)," *19
 54. Dong Jae Kim, Nikolaos Tsantalis, Tse-Hsun (Peter) Chen, and Jinqiu Yang, "Studying Test Annotation Maintenance in the Wild," *43rd International Conference on Software Engineering* (ICSE 2021), Madrid, Spain, May 25-28, 2021.
 55. Yanjie Jiang, Hui Liu, Nan Niu, Lu Zhang, and Yamin Hu, "Extracting Concise Bug-Fixing Patches from Human-Written Patches in Version Control Systems," *43rd International Conference on Software Engineering* (ICSE 2021), Madrid, Spain, May 25-28, 2021.
 56. Giovanni Rosa, Luca Pascarella, Simone Scalabrino, Rosalia Tufano, Gabriele Bavota, Michele Lanza, and Rocco Oliveto, "Evaluating SZZ Implementations Through a Developer-informed Oracle," *43rd International Conference on Software Engineering* (ICSE 2021), Madrid, Spain, May 25-28, 2021.
+
+# Support for other programming languages
+## Kotlin
+[KotlinRMiner](https://github.com/JetBrains-Research/kotlinRMiner) has been developed by [JetBrains Research](https://research.jetbrains.org/).
+The project is led and maintained by [Zarina Kurbatova](https://github.com/onewhl).
+
+## Python
+[Python-adapted RefactoringMiner](https://github.com/maldil/RefactoringMiner) has been developed by [Malinda Dilhara](https://maldil.github.io/), a Ph.D. student in the department of Computer Science at University of Colorado Boulder under the suprevision of [Danny Dig](https://dig.cs.illinois.edu/).
 
 # Contributors
 The code in package **gr.uom.java.xmi.*** is developed by [Nikolaos Tsantalis](https://github.com/tsantalis).

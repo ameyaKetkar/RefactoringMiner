@@ -41,7 +41,7 @@ public class RefactoringPopulator {
 		ExtractInterface(new BigInteger("256")),
 		ExtractSuperclass(new BigInteger("512")),
 		MoveClass(new BigInteger("1024")),
-		ChangePackage(new BigInteger("2048")),
+		RenamePackage(new BigInteger("2048")),
 		RenameMethod(new BigInteger("4096")),
 		ExtractAndMoveMethod(new BigInteger("8192")),
 		RenameClass(new BigInteger("16384")),
@@ -105,7 +105,13 @@ public class RefactoringPopulator {
 		AddParameterModifier(new BigInteger("4722366482869645213696")),
 		RemoveVariableModifier(new BigInteger("9444732965739290427392")),
 		RemoveParameterModifier(new BigInteger("18889465931478580854784")),
-		All(new BigInteger("37778931862957161709567"));
+		ChangeClassAccessModifier(new BigInteger("37778931862957161709568")),
+		AddClassModifier(new BigInteger("75557863725914323419136")),
+		RemoveClassModifier(new BigInteger("151115727451828646838272")),
+		SplitPackage(new BigInteger("302231454903657293676544")),
+		MergePackage(new BigInteger("604462909807314587353088")),
+		MovePackage(new BigInteger("1208925819614629174706176")),
+		All(new BigInteger("2417851639229258349412351"));
 
 		private BigInteger value;
 
