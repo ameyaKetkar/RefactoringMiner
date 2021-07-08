@@ -273,19 +273,29 @@ public class RefactoringMiner {
 		return maxArgLength;
 	}
 
-	public static void commitJSON(String cloneURL, String currentCommitId, List<Refactoring> refactoringsAtRevision) {
+	private static void commitJSON(String cloneURL, String currentCommitId, List<Refactoring> refactoringsAtRevision) {
 		if(path != null) {
-			StringBuilder sb = new StringBuilder();
-			sb.append("{").append("\n");
-			sb.append("\t").append("\"").append("repository").append("\"").append(": ").append("\"").append(cloneURL).append("\"").append(",").append("\n");
-			sb.append("\t").append("\"").append("sha1").append("\"").append(": ").append("\"").append(currentCommitId).append("\"").append(",").append("\n");
-			String url = GitHistoryRefactoringMinerImpl.extractCommitURL(cloneURL, currentCommitId);
-			sb.append("\t").append("\"").append("url").append("\"").append(": ").append("\"").append(url).append("\"").append(",").append("\n");
-			sb.append("\t").append("\"").append("refactorings").append("\"").append(": ");
-			sb.append("[");
-			String s = refactoringsAtRevision.stream().map(RMinerUtils::getJsonForRelevant)
-					.filter(x->!x.isEmpty()).collect(Collectors.joining(",\n")) + "\n";
-			sb.append(s);
+			String sb = commitJSONString(cloneURL, currentCommitId, refactoringsAtRevision).toString();
+			try {
+				Files.write(path, sb.getBytes(), StandardOpenOption.APPEND);
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
+	}
+
+	public static StringBuilder commitJSONString(String cloneURL, String currentCommitId, List<Refactoring> refactoringsAtRevision) {
+		StringBuilder sb = new StringBuilder();
+		sb.append("{").append("\n");
+		sb.append("\t").append("\"").append("repository").append("\"").append(": ").append("\"").append(cloneURL).append("\"").append(",").append("\n");
+		sb.append("\t").append("\"").append("sha1").append("\"").append(": ").append("\"").append(currentCommitId).append("\"").append(",").append("\n");
+		String url = GitHistoryRefactoringMinerImpl.extractCommitURL(cloneURL, currentCommitId);
+		sb.append("\t").append("\"").append("url").append("\"").append(": ").append("\"").append(url).append("\"").append(",").append("\n");
+		sb.append("\t").append("\"").append("refactorings").append("\"").append(": ");
+		sb.append("[");
+		String s = refactoringsAtRevision.stream().map(RMinerUtils::getJsonForRelevant)
+				.filter(x->!x.isEmpty()).collect(Collectors.joining(",\n")) + "\n";
+		sb.append(s);
 //			for(Refactoring refactoring : refactoringsAtRevision) {
 //				String jsonForRelevant = RMinerUtils.getJsonForRelevant(refactoring);
 //				if(jsonForRelevant.isEmpty()) continue;
@@ -297,16 +307,10 @@ public class RefactoringMiner {
 //				sb.append("\n");
 //				counter++;
 //			}
-			sb.append("]").append("\n");
-			sb.append("}");
-			try {
-				Files.write(path, sb.toString().getBytes(), StandardOpenOption.APPEND);
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-		}
+		sb.append("]").append("\n");
+		sb.append("}");
+		return sb;
 	}
-
 
 
 	private static void betweenCommitsJSON() {
