@@ -273,7 +273,7 @@ public class RefactoringMiner {
 		return maxArgLength;
 	}
 
-	private static void commitJSON(String cloneURL, String currentCommitId, List<Refactoring> refactoringsAtRevision) {
+	public static void commitJSON(String cloneURL, String currentCommitId, List<Refactoring> refactoringsAtRevision) {
 		if(path != null) {
 			StringBuilder sb = new StringBuilder();
 			sb.append("{").append("\n");

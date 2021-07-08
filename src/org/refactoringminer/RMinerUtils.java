@@ -278,25 +278,6 @@ public class RMinerUtils {
         }
         return json;
     }
-
-    public static String generateUrl(LocationInfo locationInfo, String cloneLink, String commit, String lOrR) {
-        String url = cloneLink.replace(".git", "/commit/" + commit + "?diff=split#diff-");
-        try {
-            MessageDigest md = MessageDigest.getInstance("MD5");
-            byte[] hash = md.digest(locationInfo.getFilePath().getBytes(StandardCharsets.UTF_8));
-            StringBuilder sb = new StringBuilder(2 * hash.length);
-            for (byte b : hash) {
-                sb.append(String.format("%02x", b & 0xff));
-            }
-            String val = sb.toString();
-            return url + val + lOrR + locationInfo.getStartLine();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return "";
-
-    }
-
 }
 
 
