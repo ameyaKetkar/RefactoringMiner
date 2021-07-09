@@ -20,15 +20,17 @@ public class ChangeAttributeTypeRefactoring implements Refactoring {
 	private String classNameAfter;
 	private Set<AbstractCodeMapping> attributeReferences;
 	private Set<Refactoring> relatedRefactorings;
+	private Set<AbstractCodeMapping> initializerMappings;
 	
 	public ChangeAttributeTypeRefactoring(UMLAttribute originalAttribute,
-										  UMLAttribute changedTypeAttribute, Set<AbstractCodeMapping> attributeReferences) {
+										  UMLAttribute changedTypeAttribute, Set<AbstractCodeMapping> attributeReferences, Set<AbstractCodeMapping> initializerMappings) {
 		this.originalAttribute = originalAttribute;
 		this.changedTypeAttribute = changedTypeAttribute;
 		this.classNameBefore = originalAttribute.getClassName();
 		this.classNameAfter = changedTypeAttribute.getClassName();
 		this.attributeReferences = attributeReferences;
 		this.relatedRefactorings = new LinkedHashSet<Refactoring>();
+		this.initializerMappings = initializerMappings;
 	}
 
 	public void addRelatedRefactoring(Refactoring refactoring) {
@@ -161,5 +163,9 @@ public class ChangeAttributeTypeRefactoring implements Refactoring {
 				.setDescription("changed-type attribute declaration")
 				.setCodeElement(changedTypeAttribute.getVariableDeclaration().toString()));
 		return ranges;
+	}
+
+	public Set<AbstractCodeMapping> getInitializerMappings() {
+		return initializerMappings;
 	}
 }

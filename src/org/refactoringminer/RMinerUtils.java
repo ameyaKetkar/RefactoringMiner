@@ -12,6 +12,7 @@ import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.util.*;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class RMinerUtils {
 
@@ -178,6 +179,11 @@ public class RMinerUtils {
     }
 
 
+    public static List<Statement_Mapping> toStmtMapping(ChangeAttributeTypeRefactoring cat){
+         return Stream.concat(cat.getAttributeReferences().stream(), cat.getInitializerMappings().stream())
+                 .map(RMinerUtils::toStmtMapping).collect(Collectors.toList());
+    }
+
     public static Statement_Mapping toStmtMapping(AbstractCodeMapping acm){
             return new Statement_Mapping(acm.getFragment1().getString(), acm.getFragment2().getString(),
                     acm.getFragment1().getLocationInfo(),acm.getFragment2().getLocationInfo(),
@@ -234,7 +240,7 @@ public class RMinerUtils {
                     ,cat.getInvolvedClassesBeforeRefactoring().iterator().next()
                     ,cat.getInvolvedClassesAfterRefactoring().iterator().next()
                     ,cat.getOriginalAttribute().getType().toQualifiedString(), cat.getChangedTypeAttribute().getType().toQualifiedString()
-                    , cat.getOriginalAttribute().getLocationInfo(), cat.getChangedTypeAttribute().getLocationInfo(), null, toStmtMapping(cat.getAttributeReferences()),
+                    , cat.getOriginalAttribute().getLocationInfo(), cat.getChangedTypeAttribute().getLocationInfo(), null, toStmtMapping(cat),
                     difference(cat.getChangedTypeAttribute().getImportedTypes(),cat.getOriginalAttribute().getImportedTypes()),
                     difference(cat.getOriginalAttribute().getImportedTypes(),cat.getChangedTypeAttribute().getImportedTypes()),
                     intersection(cat.getOriginalAttribute().getImportedTypes(),cat.getChangedTypeAttribute().getImportedTypes()), refactoringKind);
